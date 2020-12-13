@@ -3,7 +3,13 @@
   <entry>
     <title>IDA调试方法与常见技巧</title>
     <url>/2020/12/13/CTF-re-IDA-tips/</url>
-    <content><![CDATA[<h1 id="如何使用IDA进行调试"><a href="#如何使用IDA进行调试" class="headerlink" title="如何使用IDA进行调试"></a>如何使用IDA进行调试</h1><p>在Windows系统上使用IDA调试，需要用到两个文件<code>win32_remote.exe</code>和<code>win64_remote.exe</code>（在文件夹<code>\IDA 7.0\dbgsrv</code>中）:</p>
+    <content><![CDATA[<ul>
+<li>使用IDA Remote Windows Debugger进行调试；</li>
+<li>断点。</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="如何使用IDA进行调试"><a href="#如何使用IDA进行调试" class="headerlink" title="如何使用IDA进行调试"></a>如何使用IDA进行调试</h1><p>在Windows系统上使用IDA调试，需要用到两个文件<code>win32_remote.exe</code>和<code>win64_remote.exe</code>（在文件夹<code>\IDA 7.0\dbgsrv</code>中）:</p>
 <img src="/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png" alt="image-20201213183001919" style="zoom: 80%;">
 
 <p>这两个文件分别对应32位的IDA和64位的IDA，<strong>在调试过程中，IDA和remote文件需要对应</strong>。</p>
@@ -689,6 +695,54 @@
       </categories>
       <tags>
         <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用IDA的技巧汇总</title>
+    <url>/2020/12/13/CTF-re-tipsForIDA/</url>
+    <content><![CDATA[<p><strong>本文汇总了一些使用IDA调试的技巧。掌握这些技巧可以极大方便日常使用。</strong></p>
+<a id="more"></a>
+
+<h1 id="自定义类型和变量"><a href="#自定义类型和变量" class="headerlink" title="自定义类型和变量"></a>自定义类型和变量</h1><h2 id="修改变量标识符"><a href="#修改变量标识符" class="headerlink" title="修改变量标识符"></a>修改变量标识符</h2><p>例如在反汇编状态下有如下的一个函数：</p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213192949341.png" alt="image-20201213192949341"></p>
+<p>可以看出以下的一些信息：</p>
+<blockquote>
+<p><code>a1</code>是函数形参，并且是一个<code>char</code>类型的数组；</p>
+<p><code>v4</code>表示了数组<code>a1</code>的长度；</p>
+</blockquote>
+<p>因此，为了便于我们阅读，我们可以修改这些变量的标识符。<strong>其方法为将光标放在需要修改的变量上，右键，可以看到<code>Rename Ival</code>选项，单击该选项，（也可以直接使用快捷键<code>N</code>）即可以进行修改。</strong></p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213193630775.png" alt="image-20201213193630775"></p>
+<p>下面是修改后的代码：</p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213193802256.png" alt="image-20201213193802256"></p>
+<h2 id="修改变量类型"><a href="#修改变量类型" class="headerlink" title="修改变量类型"></a>修改变量类型</h2><p>再看下面的函数：</p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213194334019.png" alt="image-20201213194334019"></p>
+<p>我们可以发现：<strong>虽然<code>v9</code>在这里是一个<code>long long </code>类型的变量，但是后续的使用全部将其看作<code>char</code>类型数组进行访问。</strong>因此我们有必要，也完全可以将其进行类型转换。**转换方法和前述相同，在右键菜单中选择<code>Set Ival type</code>，或者使用快捷键<code>y</code>**。下面是转换过后的函数代码：</p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213194911482.png" alt="image-20201213194911482"></p>
+<p>可以看到，转换后的代码更加清晰明了。</p>
+<h2 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h2><p>例如如下代码：</p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213195145545.png" alt="image-20201213195145545"></p>
+<p>我们可以看到如下的信息：</p>
+<blockquote>
+<p><code>Dst</code>是一个16字节的变量，初始状态下为0。<code>v5</code>（一个指向内存大小为16个字节的指针）指向<code>Dst</code>的地址。在循环中，<code>v1</code>同样是一个16字节的变量，其前八个字节被定义为一个变量，值为<code>Str[i]</code>，后八个字节被设置为全0.而<code>v5</code>的后八个字节存储着<code>v1</code>的地址。之后<code>v5</code>更新为<code>v1</code>，在后续的循环中<code>v1</code>又重新声明内存。</p>
+</blockquote>
+<p>因此我们猜测这是一个添加链表元素的过程。因此我们可以在IDA中新建一个结构体，显式地定义List结构体。</p>
+<p><strong>打开<code>View-Open subviews-Local types</code>窗口</strong></p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213201115105.png" alt="image-20201213201115105"></p>
+<p><strong>点<code>insert</code>，在新出现的窗口输入希望创建的结构体对应的C代码</strong></p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213201441268.png" alt="image-20201213201441268"></p>
+<p>之后，就可以将其看作正常的结构，使用上面的方法进行修改。</p>
+<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213201630912.png" alt="image-20201213201630912"></p>
+<p>可以看到，在使用自定义结构体之后，整个函数就变得非常简洁明了。</p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>Reverse_逆向</category>
+        <category>IDA</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>REVERSE</tag>
+        <tag>IDA</tag>
       </tags>
   </entry>
 </search>
