@@ -22,23 +22,33 @@
     var CONFIG = {"hostname":"juvenile-sdu.github.io","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="My First blogMy first blog.  —— Juvenile @ Niujuxin">
+  <meta name="description" content="如何使用IDA进行调试在Windows系统上使用IDA调试，需要用到两个文件win32_remote.exe和win64_remote.exe（在文件夹\IDA 7.0\dbgsrv中）:   这两个文件分别对应32位的IDA和64位的IDA，在调试过程中，IDA和remote文件需要对应。 （以64位为例）首先打开remote文件（之后将其最小化即可）：   在IDA界面选择Remote Win">
 <meta property="og:type" content="article">
-<meta property="og:title" content="My First Blog">
-<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/11/title-md/index.html">
+<meta property="og:title" content="IDA调试方法与常见技巧">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/index.html">
 <meta property="og:site_name" content="JuvenileBlog">
-<meta property="og:description" content="My First blogMy first blog.  —— Juvenile @ Niujuxin">
+<meta property="og:description" content="如何使用IDA进行调试在Windows系统上使用IDA调试，需要用到两个文件win32_remote.exe和win64_remote.exe（在文件夹\IDA 7.0\dbgsrv中）:   这两个文件分别对应32位的IDA和64位的IDA，在调试过程中，IDA和remote文件需要对应。 （以64位为例）首先打开remote文件（之后将其最小化即可）：   在IDA界面选择Remote Win">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/11/title-md/github.png">
-<meta property="article:published_time" content="2020-12-11T13:58:16.000Z">
-<meta property="article:modified_time" content="2020-12-11T14:03:32.817Z">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213185817136.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190129549.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190615181.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190544390.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190816616.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213191034981.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213191147562.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213191329335.png">
+<meta property="article:published_time" content="2020-12-13T10:18:56.000Z">
+<meta property="article:modified_time" content="2020-12-13T11:15:22.872Z">
 <meta property="article:author" content="Juvenile@NiuJuxin">
-<meta property="article:tag" content="Test">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="REVERSE">
+<meta property="article:tag" content="IDA">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/11/title-md/github.png">
+<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png">
 
 
-<link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/11/title-md/">
+<link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/">
 
 
 <script class="page-configurations">
@@ -51,7 +61,7 @@
   };
 </script>
 
-  <title>My First Blog | JuvenileBlog</title>
+  <title>IDA调试方法与常见技巧 | JuvenileBlog</title>
   
 
 
@@ -136,12 +146,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">4</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">5</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -178,7 +188,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#My-First-blog"><span class="nav-number">1.</span> <span class="nav-text">My First blog</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-Test"><span class="nav-number">1.1.</span> <span class="nav-text">Code Test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pic-Test"><span class="nav-number">1.2.</span> <span class="nav-text">Pic Test</span></a></li></ol></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">如何使用IDA进行调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%AD%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">断点</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -199,13 +209,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -241,7 +251,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/11/title-md/">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -257,7 +267,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          My First Blog
+          IDA调试方法与常见技巧
         </h1>
 
         <div class="post-meta-container">
@@ -269,7 +279,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-12-11 21:58:16 / 修改时间：22:03:32" itemprop="dateCreated datePublished" datetime="2020-12-11T21:58:16+08:00">2020-12-11</time>
+      <time title="创建时间：2020-12-13 18:18:56 / 修改时间：19:15:22" itemprop="dateCreated datePublished" datetime="2020-12-13T18:18:56+08:00">2020-12-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -277,11 +287,15 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Test/" itemprop="url" rel="index"><span itemprop="name">Test</span></a>
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Test/MyFirstBlog/" itemprop="url" rel="index"><span itemprop="name">MyFirstBlog</span></a>
+          <a href="/categories/CTF/Reverse-%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Reverse_逆向</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/Reverse-%E9%80%86%E5%90%91/IDA/" itemprop="url" rel="index"><span itemprop="name">IDA</span></a>
         </span>
     </span>
 
@@ -295,16 +309,31 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="My-First-blog"><a href="#My-First-blog" class="headerlink" title="My First blog"></a>My First blog</h1><p>My first blog.  —— Juvenile @ Niujuxin</p>
-<a id="more"></a>
+        <h1 id="如何使用IDA进行调试"><a href="#如何使用IDA进行调试" class="headerlink" title="如何使用IDA进行调试"></a>如何使用IDA进行调试</h1><p>在Windows系统上使用IDA调试，需要用到两个文件<code>win32_remote.exe</code>和<code>win64_remote.exe</code>（在文件夹<code>\IDA 7.0\dbgsrv</code>中）:</p>
+<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png" alt="image-20201213183001919" style="zoom: 80%;">
 
-<h2 id="Code-Test"><a href="#Code-Test" class="headerlink" title="Code Test"></a>Code Test</h2><p>C++ code:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a, b, c;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b &gt;&gt; c;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a + b + c &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个文件分别对应32位的IDA和64位的IDA，<strong>在调试过程中，IDA和remote文件需要对应</strong>。</p>
+<p>（以64位为例）首先打开remote文件（之后将其最小化即可）：</p>
+<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213185817136.png" alt="image-20201213185817136" style="zoom: 67%;">
 
-<p>Python code:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a, b, c = <span class="built_in">input</span>(<span class="string">&quot;Enter a:&quot;</span>), <span class="built_in">input</span>(<span class="string">&quot;Enter b:&quot;</span>), <span class="built_in">input</span>(<span class="string">&quot;Enter c&quot;</span>)</span><br><span class="line">print(<span class="string">&quot;a + b + c = &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">int</span>(a) + <span class="built_in">int</span>(b) + <span class="built_in">int</span>(c)))</span><br></pre></td></tr></table></figure>
+<p>在IDA界面选择<code>Remote Windows debugger</code>，</p>
+<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190129549.png" alt="image-20201213190129549" style="zoom:80%;">
 
-<h2 id="Pic-Test"><a href="#Pic-Test" class="headerlink" title="Pic Test"></a>Pic Test</h2><p><img src="/2020/12/11/title-md/github.png" alt="github"></p>
+<p>点击左侧绿色的箭头开始调试。在第一次调试时可能会出现下面的错误：</p>
+<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190615181.png" alt="image-20201213190615181" style="zoom:80%;">
+
+<p>不断点确定，会出现一个setup窗口。其中<code>Application</code>和<code>Input File</code>均填写待调试文件的<strong>绝对路径</strong>，<code>Directory</code>填写待调试文件所在的文件夹，<code>Hostname</code>填写<code>127.0.0.1</code>表示当前主机。</p>
+<p><strong>为了防止之后每次调试都设置一遍，可以将<code>Save network settings as default</code>选中，保存网络设置。</strong>完整的填写示例如下：</p>
+<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190544390.png" alt="image-20201213190544390"></p>
+<p>之后即可正常出现调试界面。</p>
+<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190816616.png" alt="image-20201213190816616"></p>
+<h1 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h1><p>在反编译模式（F5）下，可以点击代码左侧的蓝色按钮设置（多个）断点，如下：</p>
+<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191034981.png" alt="image-20201213191034981"></p>
+<p>之后，进入调试，可以看到，程序在执行到断点的位置后会停止。</p>
+<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191147562.png" alt="image-20201213191147562"></p>
+<p>此时，可以将鼠标悬停到某个变量实时预览变量的值，也可以进行其他工作。</p>
+<p>在菜单<code>debuger</code>处可以执行各种和调试有关的操作（例如继续执行、结束调试等等）。<strong>通常在界面上方的工具栏也有这些选项</strong>。</p>
+<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191329335.png" alt="image-20201213191329335"></p>
 
     </div>
 
@@ -314,18 +343,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Test/" rel="tag"># Test</a>
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/REVERSE/" rel="tag"># REVERSE</a>
+              <a href="/tags/IDA/" rel="tag"># IDA</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2020/12/11/cpp-chapter2/" rel="prev" title="C++ Reference Chapter 2 复合类型">
+                  <i class="fa fa-chevron-left"></i> C++ Reference Chapter 2 复合类型
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/12/11/cpp-chapter1-md/" rel="next" title="C++ Reference Chapter 1 变量和基本类型">
-                  C++ Reference Chapter 1 变量和基本类型 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
