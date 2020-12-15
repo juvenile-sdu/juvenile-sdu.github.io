@@ -990,6 +990,7 @@
     <content><![CDATA[<p><strong>CrackMe.exe  2020年12月15日</strong></p>
 <ul>
 <li>通过引导字符串确定关键函数；</li>
+<li>常见的比较字符串相同的函数；</li>
 <li>使用断点调试确定函数功能；</li>
 <li>Base 64加密。</li>
 </ul>
@@ -1009,7 +1010,7 @@
 <p>因此， 我们可以初步得出程序的结构，即</p>
 <p><strong>程序输入一个字符串<code>v5</code>后，通过函数<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>得到一个字符串<code>v6</code>，如果该字符串为<code>&quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;</code>,则说明该字符串为最后的flag。</strong></p>
 <p>因此，我们需要重点关注<code>sub_401500(aAbcdefghijklmn)</code>和<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>函数。</p>
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="sub-401500-aAbcdefghijklmn"><a href="#sub-401500-aAbcdefghijklmn" class="headerlink" title="sub_401500(aAbcdefghijklmn)"></a><code>sub_401500(aAbcdefghijklmn)</code></h2><p>通过IDA可以看到：</p>
+<h1 id="函数逆向"><a href="#函数逆向" class="headerlink" title="函数逆向"></a>函数逆向</h1><h2 id="sub-401500-aAbcdefghijklmn"><a href="#sub-401500-aAbcdefghijklmn" class="headerlink" title="sub_401500(aAbcdefghijklmn)"></a><code>sub_401500(aAbcdefghijklmn)</code></h2><p>通过IDA可以看到：</p>
 <figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">.data:<span class="number">00403040</span> aAbcdefghijklmn db &#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<span class="number">0123456789</span>+/&#x27;,<span class="number">0</span></span><br></pre></td></tr></table></figure>
 
 <p>变量<code>aAbcdefghijklmn</code>是一个字符串。该函数如下：</p>
