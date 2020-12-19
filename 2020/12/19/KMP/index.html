@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219204344861.png">
 <meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219210301510.png">
 <meta property="article:published_time" content="2020-12-19T11:54:26.000Z">
-<meta property="article:modified_time" content="2020-12-19T13:04:17.193Z">
+<meta property="article:modified_time" content="2020-12-19T13:12:05.419Z">
 <meta property="article:author" content="Juvenile@NiuJuxin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219201107723.png">
@@ -149,7 +149,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a>
 
   </li>
   </ul>
@@ -195,7 +195,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -272,7 +272,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-12-19 19:54:26 / 修改时间：21:04:17" itemprop="dateCreated datePublished" datetime="2020-12-19T19:54:26+08:00">2020-12-19</time>
+      <time title="创建时间：2020-12-19 19:54:26 / 修改时间：21:12:05" itemprop="dateCreated datePublished" datetime="2020-12-19T19:54:26+08:00">2020-12-19</time>
     </span>
 
   
@@ -301,7 +301,8 @@
 <p>换句话说，我们希望知道**$P[1…q]$的是$P[1…q]$的真后缀的最长真前缀**。</p>
 <img src="/2020/12/19/KMP/image-20201219203554704.png" alt="image-20201219203554704" style="zoom:80%;">
 
-<p>而前缀函数$\pi$并不直接定义为上面的$k$。其形式化定义为<br>$$<br>\pi [q]=max(k:k&lt;q且P[1…k]是P[1…m]的后缀)<br>$$<br>也就是<br>$$<br>\pi [q]=q-k<br>$$<br>即<strong>如果在$P[q+1]$的位置匹配失败了（即$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置），那么将模式$P$的指针移动到$P[\pi[q]]=P[q-k]$尝试下一次匹配</strong>。</p>
+<p>而**前缀函数$\pi$并不直接定义为上面的$k$**。其形式化定义为<br>$$<br>\pi [q]=max(k:0\leq k&lt;q且P[1…k]是P[1…m]的后缀)<br>$$<br>也就是说，如果可以找到前述的最小偏移量$k$，那么<br>$$<br>\pi [q]=q-k<br>$$<br>否则<br>$$<br>\pi [q]=0<br>$$</p>
+<p>即<strong>在$P[q+1]$的位置匹配失败了（即$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置）后，如果位置$q$的前缀函数不为0，那么可以在不移动文本$T$的指针的情况下将模式$P$的指针移动到$P[\pi[q]]=P[q-k]$继续尝试匹配</strong>。</p>
 <p>例如对于模式串$P=ababaca$，其前缀函数为</p>
 <img src="/2020/12/19/KMP/image-20201219204344861.png" alt="image-20201219204344861" style="zoom:67%;">
 
@@ -326,6 +327,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2020/12/19/KMP/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
