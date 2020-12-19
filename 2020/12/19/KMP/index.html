@@ -22,33 +22,26 @@
     var CONFIG = {"hostname":"juvenile-sdu.github.io","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
 
-  <meta name="description" content="使用IDA Remote Windows Debugger进行调试； 断点。">
+  <meta name="description" content="KMP算法是由Knuth、Morris和Pratt三人设计的线性时间字符串匹配算法。该算法通过预先计算辅助函数$\pi$使匹配时间减少一个因子$n$。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IDA调试方法与常见技巧">
-<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/index.html">
+<meta property="og:title" content="字符串匹配——KMP算法">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/19/KMP/index.html">
 <meta property="og:site_name" content="JuvenileBlog">
-<meta property="og:description" content="使用IDA Remote Windows Debugger进行调试； 断点。">
+<meta property="og:description" content="KMP算法是由Knuth、Morris和Pratt三人设计的线性时间字符串匹配算法。该算法通过预先计算辅助函数$\pi$使匹配时间减少一个因子$n$。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213185817136.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190129549.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190615181.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190544390.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213190816616.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213191034981.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213191147562.png">
-<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213191329335.png">
-<meta property="article:published_time" content="2020-12-13T10:18:56.000Z">
-<meta property="article:modified_time" content="2020-12-13T11:19:56.359Z">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219201107723.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219201605890.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219203554704.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219204344861.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219210301510.png">
+<meta property="article:published_time" content="2020-12-19T11:54:26.000Z">
+<meta property="article:modified_time" content="2020-12-19T13:04:17.193Z">
 <meta property="article:author" content="Juvenile@NiuJuxin">
-<meta property="article:tag" content="CTF">
-<meta property="article:tag" content="REVERSE">
-<meta property="article:tag" content="IDA">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png">
+<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/19/KMP/image-20201219201107723.png">
 
 
-<link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/">
+<link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/19/KMP/">
 
 
 <script class="page-configurations">
@@ -61,7 +54,7 @@
   };
 </script>
 
-  <title>IDA调试方法与常见技巧 | JuvenileBlog</title>
+  <title>字符串匹配——KMP算法 | JuvenileBlog</title>
   
 
 
@@ -188,7 +181,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">如何使用IDA进行调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%AD%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">断点</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0-pi"><span class="nav-number">1.</span> <span class="nav-text">模式的前缀函数 $\pi$</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%89%8D%E7%BC%80%E5%87%BD%E6%95%B0-pi"><span class="nav-number">1.1.</span> <span class="nav-text">什么是前缀函数 $\pi$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">定义</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -251,7 +244,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/13/CTF-re-IDA-tips/">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/19/KMP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -267,7 +260,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          IDA调试方法与常见技巧
+          字符串匹配——KMP算法
         </h1>
 
         <div class="post-meta-container">
@@ -279,24 +272,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-12-13 18:18:56 / 修改时间：19:19:56" itemprop="dateCreated datePublished" datetime="2020-12-13T18:18:56+08:00">2020-12-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CTF/Reverse-%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Reverse_逆向</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CTF/Reverse-%E9%80%86%E5%90%91/IDA/" itemprop="url" rel="index"><span itemprop="name">IDA</span></a>
-        </span>
+      <time title="创建时间：2020-12-19 19:54:26 / 修改时间：21:04:17" itemprop="dateCreated datePublished" datetime="2020-12-19T19:54:26+08:00">2020-12-19</time>
     </span>
 
   
@@ -309,37 +285,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <ul>
-<li>使用IDA Remote Windows Debugger进行调试；</li>
-<li>断点。</li>
-</ul>
+        <p><strong>KMP算法是由Knuth、Morris和Pratt三人设计的线性时间字符串匹配算法。该算法通过预先计算辅助函数$\pi$使匹配时间减少一个因子$n$。</strong></p>
 <a id="more"></a>
 
-<h1 id="如何使用IDA进行调试"><a href="#如何使用IDA进行调试" class="headerlink" title="如何使用IDA进行调试"></a>如何使用IDA进行调试</h1><p>在Windows系统上使用IDA调试，需要用到两个文件<code>win32_remote.exe</code>和<code>win64_remote.exe</code>（在文件夹<code>\IDA 7.0\dbgsrv</code>中）:</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png" alt="image-20201213183001919" style="zoom: 80%;">
+<h1 id="模式的前缀函数-pi"><a href="#模式的前缀函数-pi" class="headerlink" title="模式的前缀函数 $\pi$"></a>模式的前缀函数 $\pi$</h1><h2 id="什么是前缀函数-pi"><a href="#什么是前缀函数-pi" class="headerlink" title="什么是前缀函数 $\pi$"></a>什么是前缀函数 $\pi$</h2><p>首先考虑朴素的字符串匹配算法的操作过程。假设文本$T$和模式$P=ababaca$.在下面这个情况下，模式$P$的前5个字符已经匹配成功，但是在匹配第6个字符时失败了。</p>
+<img src="/2020/12/19/KMP/image-20201219201107723.png" alt="image-20201219201229846" style="zoom:80%;">
 
-<p>这两个文件分别对应32位的IDA和64位的IDA，<strong>在调试过程中，IDA和remote文件需要对应</strong>。</p>
-<p>（以64位为例）首先打开remote文件（之后将其最小化即可）：</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213185817136.png" alt="image-20201213185817136" style="zoom: 67%;">
+<p>对于朴素的字符串匹配算法来说，下一次匹配将尝试匹配$P[1]$和$T[4]$。但是，在该实例里面，尝试将$P[1]$和$T[4]$进行匹配一定是失败的。此外，我们还可以看出来，下一个可能的匹配过程出现在将$P$右移两个单位处，因为<strong>如果将模式串向右移动两个距离，匹配失败的位置之前的模式字串依然是匹配的</strong>。</p>
+<img src="/2020/12/19/KMP/image-20201219201605890.png" alt="image-20201219201605890" style="zoom:80%;">
 
-<p>在IDA界面选择<code>Remote Windows debugger</code>，</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190129549.png" alt="image-20201213190129549" style="zoom:80%;">
+<p>在这种情况下，我们无需让文本$T$上的指针向前移动，而是可以继续匹配当前位置上的字符（因为我们可以确定之前的位置都是匹配的）。</p>
+<p>如果对于模式匹配到的每一个位置，我们都知道<strong>在某个位置如果出现不匹配之后，需要将$P$向右移动多少各单位，保证该位置前的模式字串依然是匹配的</strong>话，我们就可以避免文本$T$上的指针向前移动的过程，从而将匹配复杂度降低到线性。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>设文本是一个长度为$n$的数组$T[1…n]$，而模式是一个长度为$m$的数组$P[1…m]$。则一般地来说，我们希望知道</p>
+<p><strong>如果$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置（即$P[q+1]\neq T[s+q+1]$），那么满足</strong><br>$$<br>P[1…q-k]=T[s+1+k…s+q]<br>$$<br><strong>的最小的偏移量$k$是多少。</strong></p>
+<p>换句话说，我们希望知道**$P[1…q]$的是$P[1…q]$的真后缀的最长真前缀**。</p>
+<img src="/2020/12/19/KMP/image-20201219203554704.png" alt="image-20201219203554704" style="zoom:80%;">
 
-<p>点击左侧绿色的箭头开始调试。在第一次调试时可能会出现下面的错误：</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190615181.png" alt="image-20201213190615181" style="zoom:80%;">
+<p>而前缀函数$\pi$并不直接定义为上面的$k$。其形式化定义为<br>$$<br>\pi [q]=max(k:k&lt;q且P[1…k]是P[1…m]的后缀)<br>$$<br>也就是<br>$$<br>\pi [q]=q-k<br>$$<br>即<strong>如果在$P[q+1]$的位置匹配失败了（即$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置），那么将模式$P$的指针移动到$P[\pi[q]]=P[q-k]$尝试下一次匹配</strong>。</p>
+<p>例如对于模式串$P=ababaca$，其前缀函数为</p>
+<img src="/2020/12/19/KMP/image-20201219204344861.png" alt="image-20201219204344861" style="zoom:67%;">
 
-<p>不断点确定，会出现一个setup窗口。其中<code>Application</code>和<code>Input File</code>均填写待调试文件的<strong>绝对路径</strong>，<code>Directory</code>填写待调试文件所在的文件夹，<code>Hostname</code>填写<code>127.0.0.1</code>表示当前主机。</p>
-<p><strong>为了防止之后每次调试都设置一遍，可以将<code>Save network settings as default</code>选中，保存网络设置。</strong>完整的填写示例如下：</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190544390.png" alt="image-20201213190544390"></p>
-<p>之后即可正常出现调试界面。</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190816616.png" alt="image-20201213190816616"></p>
-<h1 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h1><p>在反编译模式（F5）下，可以点击代码左侧的蓝色按钮设置（多个）断点，如下：</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191034981.png" alt="image-20201213191034981"></p>
-<p>之后，进入调试，可以看到，程序在执行到断点的位置后会停止。</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191147562.png" alt="image-20201213191147562"></p>
-<p>此时，可以将鼠标悬停到某个变量实时预览变量的值，也可以进行其他工作。</p>
-<p>在菜单<code>debuger</code>处可以执行各种和调试有关的操作（例如继续执行、结束调试等等）。<strong>通常在界面上方的工具栏也有这些选项</strong>。</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191329335.png" alt="image-20201213191329335"></p>
+<p>即</p>
+<img src="/2020/12/19/KMP/image-20201219210301510.png" alt="image-20201219210301510" style="zoom:80%;">
+
 
     </div>
 
@@ -348,24 +316,16 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/CTF/" rel="tag"># CTF</a>
-              <a href="/tags/REVERSE/" rel="tag"># REVERSE</a>
-              <a href="/tags/IDA/" rel="tag"># IDA</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/12/11/cpp-chapter2/" rel="prev" title="C++ Reference Chapter 2 复合类型">
-                  <i class="fa fa-chevron-left"></i> C++ Reference Chapter 2 复合类型
+                <a href="/2020/12/15/CTF-RE-WP-CRACKME/" rel="prev" title="【WP】逆向-CrackMe">
+                  <i class="fa fa-chevron-left"></i> 【WP】逆向-CrackMe
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/12/13/CTF-re-tipsForIDA/" rel="next" title="使用IDA的技巧汇总">
-                  使用IDA的技巧汇总 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
