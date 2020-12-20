@@ -1058,10 +1058,10 @@
 <p>因此，我们的目的是，对于模式的每一个位置，我们都可以知道<strong>在该位置如果出现不匹配之后，需要将$P$向右移动多少各单位，保证该位置前的模式字串依然是匹配的</strong>，这就是前缀函数$\pi$的目的。</p>
 <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>设文本是一个长度为$n$的数组$T[1…n]$，而模式是一个长度为$m$的数组$P[1…m]$。则一般地来说，我们希望知道</p>
 <p><strong>如果$P[q]$和$T[s+q]$是最后一个匹配的位置（即$P[1…q]=T[s+1…s+q]，P[q+1]\neq T[s+q+1]$），那么满足</strong><br>$$<br>P[1…q-k]=T[s+1+k…s+q]<br>$$<br><strong>的最小的偏移量$k$是多少。</strong></p>
-<p>换句话说，我们希望知道**$P[1…q]$的是$P[1…q]$的真后缀的最长真前缀**。</p>
+<p>换句话说，**我们希望知道 $P[1…q]$的是$P[1…q]$的真后缀的最长真前缀 **。</p>
 <img src="/2020/12/19/KMP/image-20201219203554704.png" alt="image-20201219203554704" style="zoom:80%;">
 
-<p>而**前缀函数$\pi$并不直接定义为上面的$k$ .**其形式化定义为<br>$$<br>\pi [q]=max(k:0\leq k&lt;q且P[1…k]是P[1…m]的后缀)<br>$$<br>也就是说，如果可以找到前述的最小偏移量$k$，那么<br>$$<br>\pi [q]=q-k<br>$$<br>否则<br>$$<br>\pi [q]=0<br>$$</p>
+<p>而<strong>前缀函数$\pi$并不直接定义为上面的$k$ 。</strong>其形式化定义为<br>$$<br>\pi [q]=max(k:0\leq k&lt;q且P[1…k]是P[1…q]的后缀)<br>$$<br>也就是说，如果可以找到前述的最小偏移量$k$，那么<br>$$<br>\pi [q]=q-k<br>$$<br>否则<br>$$<br>\pi [q]=0<br>$$</p>
 <p>即<strong>在$P[q+1]$的位置匹配失败了（即$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置）后，如果位置$q$的前缀函数不为0，那么可以在不移动文本$T$的指针的情况下将模式$P$的指针移动到$P[\pi[q]]=P[q-k]$继续尝试匹配</strong>。</p>
 <p>例如对于模式串$P=ababaca$，其前缀函数为</p>
 <img src="/2020/12/19/KMP/image-20201219204344861.png" alt="image-20201219204344861" style="zoom: 80%;">
@@ -1092,6 +1092,21 @@
 
 <h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kmp_match</span>(<span class="params">text, pat, start = <span class="number">0</span>, end = -<span class="number">1</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> (<span class="built_in">isinstance</span>(text, <span class="built_in">str</span>) <span class="keyword">and</span> <span class="built_in">isinstance</span>(pat, <span class="built_in">str</span>)):</span><br><span class="line">        <span class="keyword">raise</span> TypeError</span><br><span class="line">    n, m = <span class="built_in">len</span>(text), <span class="built_in">len</span>(pat)</span><br><span class="line">    pat = <span class="string">&quot; &quot;</span> + pat     <span class="comment">#Start at 1</span></span><br><span class="line">    </span><br><span class="line">    k = <span class="number">0</span></span><br><span class="line">    prefix_func = [<span class="number">0</span>] * (m + <span class="number">1</span>)     <span class="comment">#Start at 1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, m + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> (k <span class="keyword">and</span> pat[k + <span class="number">1</span>] != pat[i]):</span><br><span class="line">            k = prefix_func[k]</span><br><span class="line">        <span class="keyword">if</span> pat[k + <span class="number">1</span>] == pat[i]:</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">        prefix_func[i] = k</span><br><span class="line"></span><br><span class="line">    matched, ind = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> text[start:end]:</span><br><span class="line">        <span class="keyword">if</span> (matched <span class="keyword">and</span> pat[matched + <span class="number">1</span>] != i):</span><br><span class="line">            matched = prefix_func[matched]</span><br><span class="line">        <span class="keyword">if</span> pat[matched + <span class="number">1</span>] ==i:</span><br><span class="line">            matched += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> matched == m:</span><br><span class="line">            <span class="keyword">return</span> start + ind - m + <span class="number">1</span></span><br><span class="line">        ind += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
 
-]]></content>
+<h1 id="字符串的特征向量-next-i"><a href="#字符串的特征向量-next-i" class="headerlink" title="字符串的特征向量 $next[i]$"></a>字符串的特征向量 $next[i]$</h1><p>《数据结构与算法》在讲到KMP算法时没有使用前缀函数$\pi$，而是字符串的特征向量 $next[i]$。使用特征向量在理解上要困难与前缀函数，但<strong>使用字符串的特征向量遵守了在绝大多数编程语言中，数组（包括字符串）下标从0开始的约定，并且减少了不匹配情况出现时的循环次数</strong>，使得在实际实现时更方便一些。</p>
+<h2 id="优化前的特征向量"><a href="#优化前的特征向量" class="headerlink" title="优化前的特征向量"></a>优化前的特征向量</h2><p>字符串的特征向量定义为<br>$$<br>next[i]=<br>\begin{cases}<br>-1,如果i=0,\<br>max(k:0&lt;k&lt;i并且P[0…k-1]=P[i-k…i-1]),如果k存在,\<br>0,otherwise.<br>\end{cases}<br>$$</p>
+<p>和前缀函数进行比较，<strong>在含义上，除了$next[0]$之外，$next[i]$表示如果在位置$i$处匹配失败，则应该将模式$P$上的指针移动到哪一个位置（的下标）</strong>。</p>
+<p>对于模式串$P=abcdaabcab$，其特征向量和前缀函数为</p>
+<img src="/2020/12/19/KMP/image-20201220103510586.png" alt="image-20201220103510586" style="zoom:80%;">
+
+<h2 id="特征向量的优化"><a href="#特征向量的优化" class="headerlink" title="特征向量的优化"></a>特征向量的优化</h2><p>假设求出的$next[i]=k$，当匹配时发现$P[i] \neq T[j]$，按照特征向量的定义，需要把模式向右移动$i-k$位，即用$P[k]$与$T[j]$进行比较。<strong>如果$P[i]=P[k]$，则$T[j] \neq P[k]$。</strong></p>
+<p>因此，在按照上面的步骤计算出特征向量之后，再遍历一次特征向量，不断比较$P[i]$和$P[next[i]]$，如果$P[i]=P[next[i]]$，则令$next[i]=next[next[i]]$，直到$P[i] \neq P[next[i]]$或者$next[i]=-1$。</p>
+<p>对于模式串$P=abcdaabcab$，其特征向量和优化后的特征向量为</p>
+<img src="/2020/12/19/KMP/image-20201220105721483.png" alt="image-20201220105721483" style="zoom:80%;">]]></content>
+      <categories>
+        <category>Algorithm</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
+      </tags>
   </entry>
 </search>
