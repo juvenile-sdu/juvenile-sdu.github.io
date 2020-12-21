@@ -1109,4 +1109,93 @@
         <tag>Algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Python函数参数的提供和接收方式</title>
+    <url>/2020/12/21/python-param/</url>
+    <content><![CDATA[<p><strong>本文包括Python函数参数的提供和接收方式。</strong></p>
+<p>包括位置参数、关键字参数和默认值、参数收集等。</p>
+<a id="more"></a>
+
+<h1 id="各种参数提供和接收方式的介绍"><a href="#各种参数提供和接收方式的介绍" class="headerlink" title="各种参数提供和接收方式的介绍"></a>各种参数提供和接收方式的介绍</h1><h2 id="位置参数"><a href="#位置参数" class="headerlink" title="位置参数"></a>位置参数</h2><p>最常见的Python参数的提供和接收方式是使用<strong>位置参数</strong>，使用方法和绝大多数其他编程语言（如C++）相同。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c, d</span>):</span></span><br><span class="line">    print(a, b, c, d)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="关键字参数"><a href="#关键字参数" class="headerlink" title="关键字参数"></a>关键字参数</h2><p>随着程序规模的扩大，记住各个函数的参数的位置会更加困难。因此Python引入了<strong>关键字参数</strong>，将<strong>参数名称</strong>作为判断依据（而不是位置参数中的参数的位置）。</p>
+<p>和位置参数相比，定义使用关键字参数的函数并不需要对原函数进行任何修改，向函数传递形参时，需要使用类似于赋值语句的形式将值显式地交给某个参数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c, d</span>):</span></span><br><span class="line">    print(a, b, c, d)</span><br><span class="line"></span><br><span class="line">func(a=<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">func(a=<span class="number">1</span>, c=<span class="number">2</span>, b=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">func(a=<span class="number">1</span>, b=<span class="number">2</span>, d=<span class="number">3</span>, c=<span class="number">4</span>)</span><br><span class="line">func(d=<span class="number">1</span>, c=<span class="number">2</span>, b=<span class="number">3</span>, a=<span class="number">4</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>在使用关键字参数的情况下，参数的顺序就无关轻重了。Python将根据参数名称进行匹配赋值（即使顺序和定义函数时的顺序不一致）。</strong></p>
+<h2 id="默认值参数"><a href="#默认值参数" class="headerlink" title="默认值参数"></a>默认值参数</h2><p>在C++语言中，有默认值参数。例如</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">array_print</span><span class="params">(<span class="keyword">int</span>* beg, <span class="keyword">int</span>* ed, <span class="keyword">unsigned</span> <span class="keyword">int</span> gap = <span class="number">1</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>* i = beg; i != ed; i += gap)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *i &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在Python中，也有同样的用法，即<strong>默认值参数</strong>。例如</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rabin_miller</span>(<span class="params">num, s=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Choose s random numbers ranging from 1 to (num - 1) to test WITNESS.&quot;&quot;&quot;</span></span><br><span class="line">    t, u = <span class="number">0</span>, num - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> u % <span class="number">2</span> == <span class="number">0</span>:  t, u = t + <span class="number">1</span>, u // <span class="number">2</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(s):</span><br><span class="line">        a = random.randrange(<span class="number">1</span>, num)</span><br><span class="line">        au1, au2 = <span class="number">0</span>, <span class="built_in">pow</span>(a, u, num)</span><br><span class="line">        <span class="keyword">for</span> __ <span class="keyword">in</span> <span class="built_in">range</span>(t):</span><br><span class="line">            au1, au2 = au2, <span class="built_in">pow</span>(au2, <span class="number">2</span>, num)</span><br><span class="line">            <span class="keyword">if</span> au2 == <span class="number">1</span> <span class="keyword">and</span> au1 != <span class="number">1</span> <span class="keyword">and</span> au1 != num - <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> au2 != <span class="number">1</span>:    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup=<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在定义了默认值参数后，<strong>如果调用该函数而跳过默认值参数（不论是位置参数还是关键字参数），则程序将使用该默认值。如果现实地传递了参数，将按照传入的参数为准</strong>。</p>
+<p>实际上，Python很多内置函数就是使用了默认值参数，例如<code>range(start, stop[, step=1])</code>等。</p>
+<p>在使用默认值参数时，有一个需要注意的地方，即<strong>默认值应该设置为不可变的量（例如字符串、整型、元组等），而不应该设置为可变的量（如列表、字典等）</strong>。</p>
+<blockquote>
+<p>在每个程序里，Python函数的默认值仅被声明一次。因此如果多次调用使用默认值参数的函数，并且函数内的操作会修改该（可变的）默认值，那么在下一次调用该函数时，该默认值将是修改后的值。</p>
+<p>例如下面的python代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">val, arr=[]</span>):</span></span><br><span class="line">    arr.append(val)</span><br><span class="line">    print(arr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>)</span><br><span class="line">func(<span class="number">2</span>)</span><br><span class="line">func(<span class="number">3</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>的运行结果是</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="分配和收集参数（-和-的使用）"><a href="#分配和收集参数（-和-的使用）" class="headerlink" title="分配和收集参数（*和**的使用）"></a>分配和收集参数（<code>*</code>和<code>**</code>的使用）</h2><h3 id="收集参数（对应函数形参）"><a href="#收集参数（对应函数形参）" class="headerlink" title="收集参数（对应函数形参）"></a>收集参数（对应函数形参）</h3><p>有时候，允许用户提供任意数量的参数很有用。（对于C++和其他编程语言来说，想实现这样的功能很困难，并且条件非常苛刻，但是）使用Python实现这样的功能并不困难。</p>
+<p>函数<strong>形参上的（在这里需要严格区分形参和实参）</strong><code>*</code>和<code>**</code>用于<strong>将任意多个传入的形参进行封装</strong>。</p>
+<p><strong>对于一个星号<code>*</code>来说，其用于收集位置参数，将所有值都放在一个元组中，也就是说将这些值收集起来。如果没有可供收集的参数，该参数将会是一个空元组（也就是说无论如何该位置都是一个储存着所有传递给它的参数的元组）。</strong></p>
+<p><strong>对于两个星号<code>**</code>来说，其用于收集关键字参数，将所有的关键字实参<code>name=val</code>按照<code>&#123;str(name): val&#125;</code>的形式放入一个字典中。同样的，如果没有可供收集的参数，该参数将是一个空字典。</strong></p>
+<p><code>*</code>和<code>**</code>是有区别并且严格区分的。也就是说，**<code>**</code>不能用来收集位置参数，而<code>*</code>不能用来收集关键字参数**。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_params</span>(<span class="params">*argv, **argd</span>):</span></span><br><span class="line">    print(argv)</span><br><span class="line">    print(argd)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print_params(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, a=<span class="number">4</span>, b=<span class="number">5</span>, e=<span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight gcode"><table><tr><td class="code"><pre><span class="line"><span class="comment">(1, 2, 3)</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">6</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分配参数（对应函数实参）"><a href="#分配参数（对应函数实参）" class="headerlink" title="分配参数（对应函数实参）"></a>分配参数（对应函数实参）</h3><p>前面介绍的是如何将参数收集到元组和字典中。同样的两个运算符也可以执行相反的操作。</p>
+<p><strong>一个星号<code>*</code>用于将可迭代序列解包，并形成位置参数。两个星号<code>**</code>用于将字典解包，并形成关键字参数。</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a, b, c</span>):</span></span><br><span class="line">    print(<span class="string">&quot;%d + %d + %d = %d.&quot;</span> % (a, b, c, a + b + c))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add(*(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>))</span><br><span class="line">add(*[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line">add(**&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">9</span>&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1 </span>+ <span class="number">3</span> + <span class="number">5</span> = <span class="number">9</span>.</span><br><span class="line"><span class="symbol">3 </span>+ <span class="number">4</span> + <span class="number">5</span> = <span class="number">12</span>.</span><br><span class="line"><span class="symbol">3 </span>+ <span class="number">2</span> + <span class="number">9</span> = <span class="number">14</span>.</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="同时使用多种参数"><a href="#同时使用多种参数" class="headerlink" title="同时使用多种参数"></a>同时使用多种参数</h1><h2 id="混用原则"><a href="#混用原则" class="headerlink" title="混用原则"></a>混用原则</h2><p><strong>不论同时使用哪几种参数，首先要满足的一点是，函数的每个（非默认值）实参都需要被赋值，并且实参最多能被显式赋值一次。</strong></p>
+<blockquote>
+<p>下面的函数调用都是错误的：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c=<span class="number">2</span></span>):</span></span><br><span class="line">    print(a, b, c)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, c=<span class="number">1</span>)        	<span class="comment">#b没有被赋值</span></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, a=<span class="number">3</span>)     	<span class="comment">#a被重复赋值</span></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, c=<span class="number">3</span>)		<span class="comment">#c被重复赋值（形参中c=2不属于显式赋值）</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>如果一个函数中仅有位置参数和关键字参数，则关键字参数必须在位置参数之后</strong>。</p>
+<blockquote>
+<p>如果关键字参数在位置参数之前，Python在遇到关键字参数后的位置参数时无法解释是跳过关键字参数还是对关键字参数进行了多次重复赋值。</p>
+</blockquote>
+<p><strong>如果在函数形参中有<code>*</code>，并且星号之后有其他的参数，则后面的参数只能使用关键字参数</strong>。</p>
+<blockquote>
+<p>由于<code>*</code>具有贪心的性质（即吸收直到无法继续吸收），因此只能使用关键字参数防止被星号吸收。</p>
+</blockquote>
+<p><strong>如果在一个函数形参中同时使用<code>**</code>，则<code>**</code>必须放在所有参数的最后一个，即<code>**</code>之后不能再有任何位置参数或关键字参数</strong>。</p>
+<blockquote>
+<p><code>**</code>之后不能有位置参数，否则将会与“关键字参数必须在位置参数之后”这一原则相矛盾。</p>
+<p>由于<code>**</code>有贪心的性质（即吸收直到无法继续吸收）。因此即使其后面又有关键字参数，也无法被赋值。因此Python规定了这样的操作是非法的。</p>
+</blockquote>
+<p>如果将所有类型的参数都混合在一起，他们的形式一定为</p>
+<figure class="highlight autoit"><table><tr><td class="code"><pre><span class="line">def <span class="function"><span class="keyword">func</span><span class="params">(位置参数, 带默认值的关键字参数, *元组参数收集, （带默认值的）关键字参数, **字典参数收集)</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c=<span class="number">3</span>, *argv, e=<span class="number">3</span>, f=<span class="number">3</span>, g, **argd</span>):</span></span><br><span class="line">    print(a, b, c, argv, e, f, g, argd, sep= <span class="string">&#x27; # &#x27;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, g=<span class="number">3</span>)  <span class="comment">#g的关键字赋值必不可少，然而e和f可以使用默认值</span></span><br><span class="line">func(<span class="number">19</span>, <span class="number">54</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, g=<span class="number">10</span>, h=<span class="number">2</span>, i=<span class="number">3</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1 </span># <span class="number">2</span> # <span class="number">3</span> # (<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>) # <span class="number">3</span> # <span class="number">3</span> # <span class="number">3</span> # &#123;&#125;</span><br><span class="line"><span class="symbol">19 </span># <span class="number">54</span> # [<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>] # (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) # <span class="number">3</span> # <span class="number">3</span> # <span class="number">10</span> # &#123;<span class="comment">&#x27;h&#x27;: 2, &#x27;i&#x27;: 3&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
 </search>
