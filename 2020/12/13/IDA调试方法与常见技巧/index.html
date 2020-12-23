@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"juvenile-sdu.github.io","root":"/","scheme":"Mist","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+
+  <meta name="description" content="使用IDA Remote Windows Debugger进行调试； 断点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDA调试方法与常见技巧">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/index.html">
+<meta property="og:site_name" content="JuvenileBlog">
+<meta property="og:description" content="使用IDA Remote Windows Debugger进行调试； 断点。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213183001919.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213185817136.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190129549.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190615181.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190544390.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190816616.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191034981.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191147562.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191329335.png">
+<meta property="article:published_time" content="2020-12-13T10:18:56.000Z">
+<meta property="article:modified_time" content="2020-12-23T01:30:12.721Z">
+<meta property="article:author" content="Juvenile@NiuJuxin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="REVERSE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213183001919.png">
+
+
+<link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>IDA调试方法与常见技巧 | JuvenileBlog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">JuvenileBlog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">9</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">如何使用IDA进行调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%AD%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">断点</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Juvenile@NiuJuxin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Juvenile@NiuJuxin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JuvenileBlog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IDA调试方法与常见技巧
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-13 18:18:56" itemprop="dateCreated datePublished" datetime="2020-12-13T18:18:56+08:00">2020-12-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-12-23 09:30:12" itemprop="dateModified" datetime="2020-12-23T09:30:12+08:00">2020-12-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/REVERSE/" itemprop="url" rel="index"><span itemprop="name">REVERSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <ul>
+<li>使用IDA Remote Windows Debugger进行调试；</li>
+<li>断点。</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="如何使用IDA进行调试"><a href="#如何使用IDA进行调试" class="headerlink" title="如何使用IDA进行调试"></a>如何使用IDA进行调试</h1><p>在Windows系统上使用IDA调试，需要用到两个文件<code>win32_remote.exe</code>和<code>win64_remote.exe</code>（在文件夹<code>\IDA 7.0\dbgsrv</code>中）:</p>
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213183001919.png" alt="image-20201213183001919" style="zoom: 80%;">
+
+<p>这两个文件分别对应32位的IDA和64位的IDA，<strong>在调试过程中，IDA和remote文件需要对应</strong>。</p>
+<p>（以64位为例）首先打开remote文件（之后将其最小化即可）：</p>
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213185817136.png" alt="image-20201213185817136" style="zoom: 67%;">
+
+<p>在IDA界面选择<code>Remote Windows debugger</code>，</p>
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190129549.png" alt="image-20201213190129549" style="zoom:80%;">
+
+<p>点击左侧绿色的箭头开始调试。在第一次调试时可能会出现下面的错误：</p>
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190615181.png" alt="image-20201213190615181" style="zoom:80%;">
+
+<p>不断点确定，会出现一个setup窗口。其中<code>Application</code>和<code>Input File</code>均填写待调试文件的<strong>绝对路径</strong>，<code>Directory</code>填写待调试文件所在的文件夹，<code>Hostname</code>填写<code>127.0.0.1</code>表示当前主机。</p>
+<p><strong>为了防止之后每次调试都设置一遍，可以将<code>Save network settings as default</code>选中，保存网络设置。</strong>完整的填写示例如下：</p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190544390.png" alt="image-20201213190544390"></p>
+<p>之后即可正常出现调试界面。</p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190816616.png" alt="image-20201213190816616"></p>
+<h1 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h1><p>在反编译模式（F5）下，可以点击代码左侧的蓝色按钮设置（多个）断点，如下：</p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191034981.png" alt="image-20201213191034981"></p>
+<p>之后，进入调试，可以看到，程序在执行到断点的位置后会停止。</p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191147562.png" alt="image-20201213191147562"></p>
+<p>此时，可以将鼠标悬停到某个变量实时预览变量的值，也可以进行其他工作。</p>
+<p>在菜单<code>debuger</code>处可以执行各种和调试有关的操作（例如继续执行、结束调试等等）。<strong>通常在界面上方的工具栏也有这些选项</strong>。</p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191329335.png" alt="image-20201213191329335"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/REVERSE/" rel="tag"># REVERSE</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/11/C++%20Reference%20Chapter%202%20%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B/" rel="prev" title="C++ Reference Chapter 2 复合类型">
+                  <i class="fa fa-chevron-left"></i> C++ Reference Chapter 2 复合类型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/" rel="next" title="使用IDA的技巧汇总">
+                  使用IDA的技巧汇总 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Juvenile@NiuJuxin</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

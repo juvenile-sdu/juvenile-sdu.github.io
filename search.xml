@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>IDA调试方法与常见技巧</title>
-    <url>/2020/12/13/CTF-re-IDA-tips/</url>
+    <url>/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/</url>
     <content><![CDATA[<ul>
 <li>使用IDA Remote Windows Debugger进行调试；</li>
 <li>断点。</li>
@@ -10,45 +10,561 @@
 <a id="more"></a>
 
 <h1 id="如何使用IDA进行调试"><a href="#如何使用IDA进行调试" class="headerlink" title="如何使用IDA进行调试"></a>如何使用IDA进行调试</h1><p>在Windows系统上使用IDA调试，需要用到两个文件<code>win32_remote.exe</code>和<code>win64_remote.exe</code>（在文件夹<code>\IDA 7.0\dbgsrv</code>中）:</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213183001919.png" alt="image-20201213183001919" style="zoom: 80%;">
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213183001919.png" alt="image-20201213183001919" style="zoom: 80%;">
 
 <p>这两个文件分别对应32位的IDA和64位的IDA，<strong>在调试过程中，IDA和remote文件需要对应</strong>。</p>
 <p>（以64位为例）首先打开remote文件（之后将其最小化即可）：</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213185817136.png" alt="image-20201213185817136" style="zoom: 67%;">
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213185817136.png" alt="image-20201213185817136" style="zoom: 67%;">
 
 <p>在IDA界面选择<code>Remote Windows debugger</code>，</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190129549.png" alt="image-20201213190129549" style="zoom:80%;">
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190129549.png" alt="image-20201213190129549" style="zoom:80%;">
 
 <p>点击左侧绿色的箭头开始调试。在第一次调试时可能会出现下面的错误：</p>
-<img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190615181.png" alt="image-20201213190615181" style="zoom:80%;">
+<img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190615181.png" alt="image-20201213190615181" style="zoom:80%;">
 
 <p>不断点确定，会出现一个setup窗口。其中<code>Application</code>和<code>Input File</code>均填写待调试文件的<strong>绝对路径</strong>，<code>Directory</code>填写待调试文件所在的文件夹，<code>Hostname</code>填写<code>127.0.0.1</code>表示当前主机。</p>
 <p><strong>为了防止之后每次调试都设置一遍，可以将<code>Save network settings as default</code>选中，保存网络设置。</strong>完整的填写示例如下：</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190544390.png" alt="image-20201213190544390"></p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190544390.png" alt="image-20201213190544390"></p>
 <p>之后即可正常出现调试界面。</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213190816616.png" alt="image-20201213190816616"></p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213190816616.png" alt="image-20201213190816616"></p>
 <h1 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h1><p>在反编译模式（F5）下，可以点击代码左侧的蓝色按钮设置（多个）断点，如下：</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191034981.png" alt="image-20201213191034981"></p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191034981.png" alt="image-20201213191034981"></p>
 <p>之后，进入调试，可以看到，程序在执行到断点的位置后会停止。</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191147562.png" alt="image-20201213191147562"></p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191147562.png" alt="image-20201213191147562"></p>
 <p>此时，可以将鼠标悬停到某个变量实时预览变量的值，也可以进行其他工作。</p>
 <p>在菜单<code>debuger</code>处可以执行各种和调试有关的操作（例如继续执行、结束调试等等）。<strong>通常在界面上方的工具栏也有这些选项</strong>。</p>
-<p><img src="/2020/12/13/CTF-re-IDA-tips/image-20201213191329335.png" alt="image-20201213191329335"></p>
+<p><img src="/2020/12/13/IDA%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B8%B8%E8%A7%81%E6%8A%80%E5%B7%A7/image-20201213191329335.png" alt="image-20201213191329335"></p>
 ]]></content>
       <categories>
         <category>CTF</category>
-        <category>Reverse_逆向</category>
-        <category>IDA</category>
+        <category>REVERSE</category>
       </categories>
       <tags>
         <tag>CTF</tag>
         <tag>REVERSE</tag>
-        <tag>IDA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python函数参数的提供和接收方式</title>
+    <url>/2020/12/21/Python%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E6%8F%90%E4%BE%9B%E5%92%8C%E6%8E%A5%E6%94%B6%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<p><strong>本文包括Python函数参数的提供和接收方式。</strong></p>
+<p>包括位置参数、关键字参数和默认值、参数收集等。</p>
+<a id="more"></a>
+
+<h1 id="各种参数提供和接收方式的介绍"><a href="#各种参数提供和接收方式的介绍" class="headerlink" title="各种参数提供和接收方式的介绍"></a>各种参数提供和接收方式的介绍</h1><h2 id="位置参数"><a href="#位置参数" class="headerlink" title="位置参数"></a>位置参数</h2><p>最常见的Python参数的提供和接收方式是使用<strong>位置参数</strong>，使用方法和绝大多数其他编程语言（如C++）相同。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c, d</span>):</span></span><br><span class="line">    print(a, b, c, d)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="关键字参数"><a href="#关键字参数" class="headerlink" title="关键字参数"></a>关键字参数</h2><p>随着程序规模的扩大，记住各个函数的参数的位置会更加困难。因此Python引入了<strong>关键字参数</strong>，将<strong>参数名称</strong>作为判断依据（而不是位置参数中的参数的位置）。</p>
+<p>和位置参数相比，定义使用关键字参数的函数并不需要对原函数进行任何修改，向函数传递形参时，需要使用类似于赋值语句的形式将值显式地交给某个参数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c, d</span>):</span></span><br><span class="line">    print(a, b, c, d)</span><br><span class="line"></span><br><span class="line">func(a=<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">func(a=<span class="number">1</span>, c=<span class="number">2</span>, b=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">func(a=<span class="number">1</span>, b=<span class="number">2</span>, d=<span class="number">3</span>, c=<span class="number">4</span>)</span><br><span class="line">func(d=<span class="number">1</span>, c=<span class="number">2</span>, b=<span class="number">3</span>, a=<span class="number">4</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>在使用关键字参数的情况下，参数的顺序就无关轻重了。Python将根据参数名称进行匹配赋值（即使顺序和定义函数时的顺序不一致）。</strong></p>
+<h2 id="默认值参数"><a href="#默认值参数" class="headerlink" title="默认值参数"></a>默认值参数</h2><p>在C++语言中，有默认值参数。例如</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">array_print</span><span class="params">(<span class="keyword">int</span>* beg, <span class="keyword">int</span>* ed, <span class="keyword">unsigned</span> <span class="keyword">int</span> gap = <span class="number">1</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>* i = beg; i != ed; i += gap)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *i &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在Python中，也有同样的用法，即<strong>默认值参数</strong>。例如</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rabin_miller</span>(<span class="params">num, s=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Choose s random numbers ranging from 1 to (num - 1) to test WITNESS.&quot;&quot;&quot;</span></span><br><span class="line">    t, u = <span class="number">0</span>, num - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> u % <span class="number">2</span> == <span class="number">0</span>:  t, u = t + <span class="number">1</span>, u // <span class="number">2</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(s):</span><br><span class="line">        a = random.randrange(<span class="number">1</span>, num)</span><br><span class="line">        au1, au2 = <span class="number">0</span>, <span class="built_in">pow</span>(a, u, num)</span><br><span class="line">        <span class="keyword">for</span> __ <span class="keyword">in</span> <span class="built_in">range</span>(t):</span><br><span class="line">            au1, au2 = au2, <span class="built_in">pow</span>(au2, <span class="number">2</span>, num)</span><br><span class="line">            <span class="keyword">if</span> au2 == <span class="number">1</span> <span class="keyword">and</span> au1 != <span class="number">1</span> <span class="keyword">and</span> au1 != num - <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> au2 != <span class="number">1</span>:    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup=<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在定义了默认值参数后，<strong>如果调用该函数而跳过默认值参数（不论是位置参数还是关键字参数），则程序将使用该默认值。如果现实地传递了参数，将按照传入的参数为准</strong>。</p>
+<p>实际上，Python很多内置函数就是使用了默认值参数，例如<code>range(start, stop[, step=1])</code>等。</p>
+<p>在使用默认值参数时，有一个需要注意的地方，即<strong>默认值应该设置为不可变的量（例如字符串、整型、元组等），而不应该设置为可变的量（如列表、字典等）</strong>。</p>
+<blockquote>
+<p>在每个程序里，Python函数的默认值仅被声明一次。因此如果多次调用使用默认值参数的函数，并且函数内的操作会修改该（可变的）默认值，那么在下一次调用该函数时，该默认值将是修改后的值。</p>
+<p>例如下面的python代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">val, arr=[]</span>):</span></span><br><span class="line">    arr.append(val)</span><br><span class="line">    print(arr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>)</span><br><span class="line">func(<span class="number">2</span>)</span><br><span class="line">func(<span class="number">3</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>的运行结果是</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="分配和收集参数（-和-的使用）"><a href="#分配和收集参数（-和-的使用）" class="headerlink" title="分配和收集参数（*和**的使用）"></a>分配和收集参数（<code>*</code>和<code>**</code>的使用）</h2><h3 id="收集参数（对应函数形参）"><a href="#收集参数（对应函数形参）" class="headerlink" title="收集参数（对应函数形参）"></a>收集参数（对应函数形参）</h3><p>有时候，允许用户提供任意数量的参数很有用。（对于C++和其他编程语言来说，想实现这样的功能很困难，并且条件非常苛刻，但是）使用Python实现这样的功能并不困难。</p>
+<p>函数<strong>形参上的（在这里需要严格区分形参和实参）</strong><code>*</code>和<code>**</code>用于<strong>将任意多个传入的形参进行封装</strong>。</p>
+<p><strong>对于一个星号<code>*</code>来说，其用于收集位置参数，将所有值都放在一个元组中，也就是说将这些值收集起来。如果没有可供收集的参数，该参数将会是一个空元组（也就是说无论如何该位置都是一个储存着所有传递给它的参数的元组）。</strong></p>
+<p><strong>对于两个星号<code>**</code>来说，其用于收集关键字参数，将所有的关键字实参<code>name=val</code>按照<code>&#123;str(name): val&#125;</code>的形式放入一个字典中。同样的，如果没有可供收集的参数，该参数将是一个空字典。</strong></p>
+<p><code>*</code>和<code>**</code>是有区别并且严格区分的。也就是说，**<code>**</code>不能用来收集位置参数，而<code>*</code>不能用来收集关键字参数**。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_params</span>(<span class="params">*argv, **argd</span>):</span></span><br><span class="line">    print(argv)</span><br><span class="line">    print(argd)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print_params(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, a=<span class="number">4</span>, b=<span class="number">5</span>, e=<span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight gcode"><table><tr><td class="code"><pre><span class="line"><span class="comment">(1, 2, 3)</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">6</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分配参数（对应函数实参）"><a href="#分配参数（对应函数实参）" class="headerlink" title="分配参数（对应函数实参）"></a>分配参数（对应函数实参）</h3><p>前面介绍的是如何将参数收集到元组和字典中。同样的两个运算符也可以执行相反的操作。</p>
+<p><strong>一个星号<code>*</code>用于将可迭代序列解包，并形成位置参数。两个星号<code>**</code>用于将字典解包，并形成关键字参数。</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a, b, c</span>):</span></span><br><span class="line">    print(<span class="string">&quot;%d + %d + %d = %d.&quot;</span> % (a, b, c, a + b + c))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add(*(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>))</span><br><span class="line">add(*[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line">add(**&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">9</span>&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1 </span>+ <span class="number">3</span> + <span class="number">5</span> = <span class="number">9</span>.</span><br><span class="line"><span class="symbol">3 </span>+ <span class="number">4</span> + <span class="number">5</span> = <span class="number">12</span>.</span><br><span class="line"><span class="symbol">3 </span>+ <span class="number">2</span> + <span class="number">9</span> = <span class="number">14</span>.</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="同时使用多种参数"><a href="#同时使用多种参数" class="headerlink" title="同时使用多种参数"></a>同时使用多种参数</h1><h2 id="混用原则"><a href="#混用原则" class="headerlink" title="混用原则"></a>混用原则</h2><p><strong>不论同时使用哪几种参数，首先要满足的一点是，函数的每个（非默认值）实参都需要被赋值，并且实参最多能被显式赋值一次。</strong></p>
+<blockquote>
+<p>下面的函数调用都是错误的：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c=<span class="number">2</span></span>):</span></span><br><span class="line">    print(a, b, c)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, c=<span class="number">1</span>)        	<span class="comment">#b没有被赋值</span></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, a=<span class="number">3</span>)     	<span class="comment">#a被重复赋值</span></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, c=<span class="number">3</span>)		<span class="comment">#c被重复赋值（形参中c=2不属于显式赋值）</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>如果一个函数中仅有位置参数和关键字参数，则关键字参数必须在位置参数之后</strong>。</p>
+<blockquote>
+<p>如果关键字参数在位置参数之前，Python在遇到关键字参数后的位置参数时无法解释是跳过关键字参数还是对关键字参数进行了多次重复赋值。</p>
+</blockquote>
+<p><strong>如果在函数形参中有<code>*</code>，并且星号之后有其他的参数，则后面的参数只能使用关键字参数</strong>。</p>
+<blockquote>
+<p>由于<code>*</code>具有贪心的性质（即吸收直到无法继续吸收），因此只能使用关键字参数防止被星号吸收。</p>
+</blockquote>
+<p><strong>如果在一个函数形参中同时使用<code>**</code>，则<code>**</code>必须放在所有参数的最后一个，即<code>**</code>之后不能再有任何位置参数或关键字参数</strong>。</p>
+<blockquote>
+<p><code>**</code>之后不能有位置参数，否则将会与“关键字参数必须在位置参数之后”这一原则相矛盾。</p>
+<p>由于<code>**</code>有贪心的性质（即吸收直到无法继续吸收）。因此即使其后面又有关键字参数，也无法被赋值。因此Python规定了这样的操作是非法的。</p>
+</blockquote>
+<p>如果将所有类型的参数都混合在一起，他们的形式一定为</p>
+<figure class="highlight autoit"><table><tr><td class="code"><pre><span class="line">def <span class="function"><span class="keyword">func</span><span class="params">(位置参数, 带默认值的关键字参数, *元组参数收集, （带默认值的）关键字参数, **字典参数收集)</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c=<span class="number">3</span>, *argv, e=<span class="number">3</span>, f=<span class="number">3</span>, g, **argd</span>):</span></span><br><span class="line">    print(a, b, c, argv, e, f, g, argd, sep= <span class="string">&#x27; # &#x27;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, g=<span class="number">3</span>)  <span class="comment">#g的关键字赋值必不可少，然而e和f可以使用默认值</span></span><br><span class="line">func(<span class="number">19</span>, <span class="number">54</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, g=<span class="number">10</span>, h=<span class="number">2</span>, i=<span class="number">3</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行结果为</p>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1 </span># <span class="number">2</span> # <span class="number">3</span> # (<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>) # <span class="number">3</span> # <span class="number">3</span> # <span class="number">3</span> # &#123;&#125;</span><br><span class="line"><span class="symbol">19 </span># <span class="number">54</span> # [<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>] # (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) # <span class="number">3</span> # <span class="number">3</span> # <span class="number">10</span> # &#123;<span class="comment">&#x27;h&#x27;: 2, &#x27;i&#x27;: 3&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>PYTHON</category>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>PYTHON</tag>
+        <tag>其他</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【WP】逆向-CrackMe</title>
+    <url>/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/</url>
+    <content><![CDATA[<p><strong>CrackMe.exe  2020年12月15日</strong></p>
+<ul>
+<li>通过引导字符串确定关键函数；</li>
+<li>常见的比较字符串相同的函数；</li>
+<li>使用断点调试确定函数功能；</li>
+<li>Base 64加密。</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="确定关键函数"><a href="#确定关键函数" class="headerlink" title="确定关键函数"></a>确定关键函数</h1><p>在IDA中打开CrackMe.exe文件，进入反编译窗口，可以看到主函数：</p>
+<p><img src="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/image-20201215192616383.png" alt="image-20201215192616383"></p>
+<p>主函数中有</p>
+<figure class="highlight lisp"><table><tr><td class="code"><pre><span class="line">puts(<span class="string">&quot;input your flag:&quot;</span>)<span class="comment">;</span></span><br><span class="line">scanf(<span class="string">&quot;%s&quot;</span>, <span class="symbol">&amp;v5</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>非常明显的标志，因此可以看出<code>sub_4020A0()</code>函数没有实际用途，并且<code>v5</code>是输入的字符串。</p>
+<p>此外，进入函数<code>sub_401540(&amp;v6, &quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;)</code>，可以看到：</p>
+<p><img src="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/image-20201215192952032.png" alt="image-20201215192952032"></p>
+<p>下面的语句是<strong>常见的比较两个字符串是相同的</strong>函数。</p>
+<figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">if</span> ( *<span class="built_in">a1</span> == *<span class="built_in">a2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">v3</span> = <span class="number">0</span><span class="comment">;</span></span><br><span class="line">    <span class="meta">while</span> ( len != ++<span class="built_in">v3</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="meta">if</span> ( <span class="built_in">a1</span>[<span class="built_in">v3</span>] != <span class="built_in">a2</span>[<span class="built_in">v3</span>] )</span><br><span class="line">        return puts(<span class="string">&quot;wrong!&quot;</span>)<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    return puts(<span class="string">&quot;you win!!&quot;</span>)<span class="comment">;</span></span><br><span class="line">  &#125;</span><br><span class="line">  return puts(<span class="string">&quot;wrong!&quot;</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>因此， 我们可以初步得出程序的结构，即</p>
+<p><strong>程序输入一个字符串<code>v5</code>后，通过函数<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>得到一个字符串<code>v6</code>，如果该字符串为<code>&quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;</code>,则说明该字符串为最后的flag。</strong></p>
+<p>因此，我们需要重点关注<code>sub_401500(aAbcdefghijklmn)</code>和<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>函数。</p>
+<h1 id="函数逆向"><a href="#函数逆向" class="headerlink" title="函数逆向"></a>函数逆向</h1><h2 id="sub-401500-aAbcdefghijklmn"><a href="#sub-401500-aAbcdefghijklmn" class="headerlink" title="sub_401500(aAbcdefghijklmn)"></a><code>sub_401500(aAbcdefghijklmn)</code></h2><p>通过IDA可以看到：</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">.data:<span class="number">00403040</span> aAbcdefghijklmn db &#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<span class="number">0123456789</span>+/&#x27;,<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>变量<code>aAbcdefghijklmn</code>是一个字符串。该函数如下：</p>
+<p><img src="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/image-20201215194438600.png" alt="image-20201215194438600"></p>
+<p>该函数对传入的数组进行了一些修改。<strong>由于我们传入的是一个已知的字符串变量，因此我们可以利用调试查出执行该函数后的变量值</strong>。</p>
+<p><img src="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/image-20201215194802943.png" alt="image-20201215194802943"></p>
+<p>从这里可以看出，修改后的变量为</p>
+<p><code>ghijklmnopqrstuvxxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef</code></p>
+<h2 id="sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4"><a href="#sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4" class="headerlink" title="sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)"></a><code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code></h2><p><strong>如果对Base 64编码比较熟悉的话， 从上一个函数得到的字符串来看，包括A-Z、a-z、0-9以及+和/，很容易想到这可能是一个Base 64的换表加密。再加上一些比较明显的标记，例如</strong></p>
+<p><img src="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/image-20201215195712853.png" alt="image-20201215195712853"></p>
+<p><strong>和</strong></p>
+<p><img src="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/image-20201215195755086.png" alt="image-20201215195755086"></p>
+<p><strong>应该可以确定该函数就是一个换表Base 64加密</strong>。</p>
+<p>我们可以利用将最后一个函数的比较字符串通过换表Base 64函数还原到原字符串来确定我们猜测的正确性。</p>
+<p>经过换表Base 64的反编码，我们得到了字符串</p>
+<p><code>flag&#123;th1s_1s_base64_exc1ange!&#125;</code></p>
+<p>我们能够断定我们的猜测是正确的。</p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>REVERSE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>������������</title>
+    <url>/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>MATHMATIC &amp; ALGORITHM</category>
+        <category>���ݽṹ</category>
+        <category>����ͼ</category>
+      </categories>
+      <tags>
+        <tag>MATHMATIC &amp; ALGORITHM</tag>
+        <tag>���ݽṹ</tag>
+        <tag>����ͼ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用IDA的技巧汇总</title>
+    <url>/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<p><strong>本文汇总了一些使用IDA调试的技巧。掌握这些技巧可以极大方便日常使用。</strong></p>
+<a id="more"></a>
+
+<h1 id="自定义类型和变量"><a href="#自定义类型和变量" class="headerlink" title="自定义类型和变量"></a>自定义类型和变量</h1><h2 id="修改变量标识符"><a href="#修改变量标识符" class="headerlink" title="修改变量标识符"></a>修改变量标识符</h2><p>例如在反汇编状态下有如下的一个函数：</p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213192949341.png" alt="image-20201213192949341"></p>
+<p>可以看出以下的一些信息：</p>
+<blockquote>
+<p><code>a1</code>是函数形参，并且是一个<code>char</code>类型的数组；</p>
+<p><code>v4</code>表示了数组<code>a1</code>的长度；</p>
+</blockquote>
+<p>因此，为了便于我们阅读，我们可以修改这些变量的标识符。<strong>其方法为将光标放在需要修改的变量上，右键，可以看到<code>Rename Ival</code>选项，单击该选项，（也可以直接使用快捷键<code>N</code>）即可以进行修改。</strong></p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213193630775.png" alt="image-20201213193630775"></p>
+<p>下面是修改后的代码：</p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213193802256.png" alt="image-20201213193802256"></p>
+<h2 id="修改变量类型"><a href="#修改变量类型" class="headerlink" title="修改变量类型"></a>修改变量类型</h2><p>再看下面的函数：</p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213194334019.png" alt="image-20201213194334019"></p>
+<p>我们可以发现：<strong>虽然<code>v9</code>在这里是一个<code>long long </code>类型的变量，但是后续的使用全部将其看作<code>char</code>类型数组进行访问。</strong>因此我们有必要，也完全可以将其进行类型转换。**转换方法和前述相同，在右键菜单中选择<code>Set Ival type</code>，或者使用快捷键<code>y</code>**。下面是转换过后的函数代码：</p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213194911482.png" alt="image-20201213194911482"></p>
+<p>可以看到，转换后的代码更加清晰明了。</p>
+<h2 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h2><p>例如如下代码：</p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213195145545.png" alt="image-20201213195145545"></p>
+<p>我们可以看到如下的信息：</p>
+<blockquote>
+<p><code>Dst</code>是一个16字节的变量，初始状态下为0。<code>v5</code>（一个指向内存大小为16个字节的指针）指向<code>Dst</code>的地址。在循环中，<code>v1</code>同样是一个16字节的变量，其前八个字节被定义为一个变量，值为<code>Str[i]</code>，后八个字节被设置为全0.而<code>v5</code>的后八个字节存储着<code>v1</code>的地址。之后<code>v5</code>更新为<code>v1</code>，在后续的循环中<code>v1</code>又重新声明内存。</p>
+</blockquote>
+<p>因此我们猜测这是一个添加链表元素的过程。因此我们可以在IDA中新建一个结构体，显式地定义List结构体。</p>
+<p><strong>打开<code>View-Open subviews-Local types</code>窗口</strong></p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213201115105.png" alt="image-20201213201115105"></p>
+<p><strong>点<code>insert</code>，在新出现的窗口输入希望创建的结构体对应的C代码</strong></p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213201441268.png" alt="image-20201213201441268"></p>
+<p>之后，就可以将其看作正常的结构，使用上面的方法进行修改。</p>
+<p><img src="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/image-20201213201630912.png" alt="image-20201213201630912"></p>
+<p>可以看到，在使用自定义结构体之后，整个函数就变得非常简洁明了。</p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>REVERSE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>字符串匹配——KMP算法</title>
+    <url>/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p><strong>KMP算法是由Knuth、Morris和Pratt三人设计的线性时间字符串匹配算法。该算法通过预先计算辅助函数$\pi$使匹配时间减少一个因子$n$，总的复杂度为$O(N)$。</strong></p>
+<p>参考《算法导论》。</p>
+<a id="more"></a>
+
+<h1 id="模式的前缀函数-pi"><a href="#模式的前缀函数-pi" class="headerlink" title="模式的前缀函数 $\pi$"></a>模式的前缀函数 $\pi$</h1><h2 id="什么是前缀函数-pi"><a href="#什么是前缀函数-pi" class="headerlink" title="什么是前缀函数 $\pi$"></a>什么是前缀函数 $\pi$</h2><p>首先考虑朴素的字符串匹配算法的操作过程。</p>
+<p>假设文本$T$和模式$P=ababaca$.在下面这个情况下，模式$P$的前5个字符已经匹配成功，但是在匹配第6个字符时失败了。对于朴素的字符串匹配算法来说，下一次匹配将尝试匹配$P[1]$和$T[4]$。</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201219201107723.png" alt="image-20201219201229846" style="zoom:80%;">
+
+<p>但是，在该实例里面，利用我们已知的信息（即模式串$P$和文本串$T[1…7]$），我们可以知道，将$P[1]$和$T[4]$进行匹配一定是失败的，因为在这个偏移量下，<strong>在重新匹配到$T[8]$位置前就会发生失败</strong>。此外，我们还可以看出来，下一个可能的匹配过程出现在将$P$右移两个单位处，因为<strong>如果将模式串向右移动两个距离，直到匹配到$T[7]$，该位置之前的模式字串依然是匹配的</strong>。</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201219201605890.png" alt="image-20201219201605890" style="zoom:80%;">
+
+<p>从上面的例子抽象出我们的目的，<strong>在朴素字符串匹配过程中，当我们检测到偏移量$s$是无效的时，我们忽略了检测无效$s$时所获得的信息（即当前匹配位置前的字串）。因此，如果我们能够有效地利用我们已知的信息，计算出可能匹配成功的偏移量，我们就能提高匹配的效率。</strong>这种情况下，我们无需让文本$T$上的指针向前移动，而是可以继续匹配当前位置上的字符（因为我们可以确定之前的位置都是匹配的）。</p>
+<p>因此，我们的目的是，对于模式的每一个位置，我们都可以知道<strong>在该位置如果出现不匹配之后，需要将$P$向右移动多少各单位，保证该位置前的模式字串依然是匹配的</strong>，这就是前缀函数$\pi$的目的。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>设文本是一个长度为$n$的数组$T[1…n]$，而模式是一个长度为$m$的数组$P[1…m]$。则一般地来说，我们希望知道</p>
+<p><strong>如果$P[q]$和$T[s+q]$是最后一个匹配的位置（即$P[1…q]=T[s+1…s+q]，P[q+1]\neq T[s+q+1]$），那么满足</strong><br>$$<br>P[1…q-k]=T[s+1+k…s+q]<br>$$<br><strong>的最小的偏移量$k$是多少。</strong></p>
+<p>换句话说，**我们希望知道 $P[1…q]$的是$P[1…q]$的真后缀的最长真前缀 **。</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201219203554704.png" alt="image-20201219203554704" style="zoom:80%;">
+
+<p>而<strong>前缀函数$\pi$并不直接定义为上面的$k$ 。</strong>其形式化定义为<br>$$<br>\pi [q]=max(k:0\leq k&lt;q且P[1…k]是P[1…q]的后缀)<br>$$<br>也就是说，如果可以找到前述的最小偏移量$k$，那么<br>$$<br>\pi [q]=q-k<br>$$<br>否则<br>$$<br>\pi [q]=0<br>$$</p>
+<p>即<strong>在$P[q+1]$的位置匹配失败了（即$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置）后，如果位置$q$的前缀函数不为0，那么可以在不移动文本$T$的指针的情况下将模式$P$的指针移动到$P[\pi[q]]=P[q-k]$继续尝试匹配</strong>。</p>
+<p>例如对于模式串$P=ababaca$，其前缀函数为</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201219204344861.png" alt="image-20201219204344861" style="zoom: 80%;">
+
+<p>即</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201219210301510.png" alt="image-20201219210301510" style="zoom:80%;">
+
+<h1 id="如何利用前缀函数-pi-进行字符串匹配"><a href="#如何利用前缀函数-pi-进行字符串匹配" class="headerlink" title="如何利用前缀函数 $\pi$ 进行字符串匹配"></a>如何利用前缀函数 $\pi$ 进行字符串匹配</h1><p>利用前缀函数$\pi$进行字符串匹配的KMP算法的伪代码如下。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">KMP-MATCHER(T, P):</span><br><span class="line">	n = T.length()</span><br><span class="line">	m = P.length()</span><br><span class="line">	PI[<span class="number">1.</span>..m] <span class="keyword">is</span> prefix function.</span><br><span class="line">	</span><br><span class="line">	matched_num = <span class="number">0</span>	<span class="comment">#number of characters matched.</span></span><br><span class="line">	<span class="keyword">for</span> (t_ptr=<span class="number">1</span> to n):</span><br><span class="line">		<span class="keyword">while</span> (P[matched_num + <span class="number">1</span>] != T[t_ptr] <span class="keyword">and</span> matched_num &gt; <span class="number">0</span>):</span><br><span class="line">            matched_num = PI[matched_num]</span><br><span class="line">        <span class="keyword">if</span> (P[matched_num + <span class="number">1</span>] == T[t_ptr]):</span><br><span class="line">           	matched_num += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> (matched_num == m):</span><br><span class="line">            <span class="string">&#x27;MATCH_SUCCESSFULLY&#x27;</span></span><br><span class="line">        	matched_num = PI[matched_num]	<span class="comment">#Next mathch.      </span></span><br></pre></td></tr></table></figure>
+
+<p>该算法中，<code>t_ptr</code>是文本$T$的指针，<code>matched_num</code>是当前已经匹配的字串长度。在每层循环中，如果该位置匹配失败，则利用前缀函数寻找下一个可能的匹配位置，不断重复直到已匹配字串为空或者该位置匹配成功。</p>
+<p>以$T=ababababaca，P=ababaca$为例的KMP匹配过程如下。 </p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201220000604237.png" alt="image-20201220000911132" style="zoom: 67%;">
+
+<h1 id="如何计算前缀函数-pi"><a href="#如何计算前缀函数-pi" class="headerlink" title="如何计算前缀函数 $\pi$"></a>如何计算前缀函数 $\pi$</h1><p>实际上计算前缀函数的过程类似于模式串和自身进行匹配的过程，因此他和KMP算法的形式非常类似。计算前缀函数的伪代码如下。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">COMPUTE-PREFIX-FUNCTION(P):</span><br><span class="line">    let PI[<span class="number">1.</span>..m] be a new array.</span><br><span class="line">    PI[<span class="number">1</span>] = <span class="number">0</span></span><br><span class="line">    k = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">2</span> to m):</span><br><span class="line">        <span class="keyword">while</span> (k &gt; <span class="number">0</span> <span class="keyword">and</span> P[k+<span class="number">1</span>] != P[q]):</span><br><span class="line">            k = PI[k]	<span class="comment">#如果当前位置不匹配，利用已经计算出的PI函数进行偏移，以寻找下一个可能的匹配。</span></span><br><span class="line">        <span class="keyword">if</span> (P[k+<span class="number">1</span>] == P[i])</span><br><span class="line">        	k += <span class="number">1</span></span><br><span class="line">        <span class="comment"># 此时，如果P[k+1] == P[q]，则k为模式与自身在该位置之前的最大匹配串长度 + 1</span></span><br><span class="line">        <span class="comment"># 否则，k=0，表示该位置前没有可以匹配的字串</span></span><br><span class="line">      	PI[i] = k</span><br></pre></td></tr></table></figure>
+
+<p>以$P=ababaca$为例的前缀函数计算过程如下。 </p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201220002442115.png" alt="image-20201220002442115" style="zoom:80%;">
+
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201220002709819.png" alt="image-20201220002709819" style="zoom:80%;">
+
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><p><code>Kmp.h</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> KMP_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KMP_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Kmp</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">string</span> pat;</span><br><span class="line">	<span class="keyword">int</span>* prefix_func;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Kmp(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Pat);</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">search_in</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Text, <span class="keyword">const</span> <span class="keyword">int</span>&amp; _Start = <span class="number">0</span>)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// !KMP_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>Kmp.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;KMP.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">Kmp::Kmp(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Pat)</span><br><span class="line">&#123;</span><br><span class="line">	pat = <span class="string">&quot; &quot;</span> + _Pat;	<span class="comment">// Start at pat[1]</span></span><br><span class="line">	<span class="keyword">int</span> m = _Pat.size();</span><br><span class="line">	prefix_func = <span class="keyword">new</span> <span class="keyword">int</span>[m + <span class="number">1</span>];	<span class="comment">//Start at prefix_func[1]</span></span><br><span class="line">	prefix_func[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> matched = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= m; i++) &#123;</span><br><span class="line">		<span class="keyword">while</span> (matched &amp;&amp; pat[matched + <span class="number">1</span>] != pat[i])</span><br><span class="line">			matched = prefix_func[matched];</span><br><span class="line">		<span class="keyword">if</span> (pat[matched + <span class="number">1</span>] == pat[i])</span><br><span class="line">			matched++;</span><br><span class="line">		prefix_func[i] = matched;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Kmp::search_in</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Text, <span class="keyword">const</span> <span class="keyword">int</span>&amp; _Start)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n = _Text.size();</span><br><span class="line">	<span class="keyword">int</span> matched = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = _Start; i &lt; n; i++) &#123;</span><br><span class="line">		<span class="keyword">while</span> (matched &amp;&amp; _Text[i] != pat[matched + <span class="number">1</span>])</span><br><span class="line">			matched = prefix_func[matched];</span><br><span class="line">		<span class="keyword">if</span> (_Text[i] == pat[matched + <span class="number">1</span>])</span><br><span class="line">			matched++;</span><br><span class="line">		<span class="keyword">if</span> (matched == pat.size() - <span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> i - (pat.size() - <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kmp_match</span>(<span class="params">text, pat, start = <span class="number">0</span>, end = -<span class="number">1</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> (<span class="built_in">isinstance</span>(text, <span class="built_in">str</span>) <span class="keyword">and</span> <span class="built_in">isinstance</span>(pat, <span class="built_in">str</span>)):</span><br><span class="line">        <span class="keyword">raise</span> TypeError</span><br><span class="line">    n, m = <span class="built_in">len</span>(text), <span class="built_in">len</span>(pat)</span><br><span class="line">    pat = <span class="string">&quot; &quot;</span> + pat     <span class="comment">#Start at 1</span></span><br><span class="line">    </span><br><span class="line">    k = <span class="number">0</span></span><br><span class="line">    prefix_func = [<span class="number">0</span>] * (m + <span class="number">1</span>)     <span class="comment">#Start at 1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, m + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> (k <span class="keyword">and</span> pat[k + <span class="number">1</span>] != pat[i]):</span><br><span class="line">            k = prefix_func[k]</span><br><span class="line">        <span class="keyword">if</span> pat[k + <span class="number">1</span>] == pat[i]:</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">        prefix_func[i] = k</span><br><span class="line"></span><br><span class="line">    matched, ind = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> text[start:end]:</span><br><span class="line">        <span class="keyword">if</span> (matched <span class="keyword">and</span> pat[matched + <span class="number">1</span>] != i):</span><br><span class="line">            matched = prefix_func[matched]</span><br><span class="line">        <span class="keyword">if</span> pat[matched + <span class="number">1</span>] ==i:</span><br><span class="line">            matched += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> matched == m:</span><br><span class="line">            <span class="keyword">return</span> start + ind - m + <span class="number">1</span></span><br><span class="line">        ind += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="字符串的特征向量-next-i"><a href="#字符串的特征向量-next-i" class="headerlink" title="字符串的特征向量 $next[i]$"></a>字符串的特征向量 $next[i]$</h1><p>《数据结构与算法》在讲到KMP算法时没有使用前缀函数$\pi$，而是字符串的特征向量 $next[i]$。使用特征向量在理解上要困难与前缀函数，但<strong>使用字符串的特征向量遵守了在绝大多数编程语言中，数组（包括字符串）下标从0开始的约定，并且减少了不匹配情况出现时的循环次数</strong>，使得在实际实现时更方便一些。</p>
+<h2 id="优化前的特征向量"><a href="#优化前的特征向量" class="headerlink" title="优化前的特征向量"></a>优化前的特征向量</h2><p>字符串的特征向量定义为<br>$$<br>next[i]=<br>\begin{cases}<br>-1,如果i=0,\<br>max(k:0&lt;k&lt;i并且P[0…k-1]=P[i-k…i-1]),如果k存在,\<br>0,otherwise.<br>\end{cases}<br>$$</p>
+<p>和前缀函数进行比较，<strong>在含义上，除了$next[0]$之外，$next[i]$表示如果在位置$i$处匹配失败，则应该将模式$P$上的指针移动到哪一个位置（的下标）</strong>。</p>
+<p>对于模式串$P=abcdaabcab$，其特征向量和前缀函数为</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201220103510586.png" alt="image-20201220103510586" style="zoom:80%;">
+
+<h2 id="特征向量的优化"><a href="#特征向量的优化" class="headerlink" title="特征向量的优化"></a>特征向量的优化</h2><p>假设求出的$next[i]=k$，当匹配时发现$P[i] \neq T[j]$，按照特征向量的定义，需要把模式向右移动$i-k$位，即用$P[k]$与$T[j]$进行比较。<strong>如果$P[i]=P[k]$，则$T[j] \neq P[k]$。</strong></p>
+<p>因此，在按照上面的步骤计算出特征向量之后，再遍历一次特征向量，不断比较$P[i]$和$P[next[i]]$，如果$P[i]=P[next[i]]$，则令$next[i]=next[next[i]]$，直到$P[i] \neq P[next[i]]$或者$next[i]=-1$。</p>
+<p>对于模式串$P=abcdaabcab$，其特征向量和优化后的特征向量为</p>
+<img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201220105721483.png" alt="image-20201220105721483" style="zoom:80%;">]]></content>
+      <categories>
+        <category>MATHMATIC &amp; ALGORITHM</category>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>其他</tag>
+        <tag>MATHMATIC &amp; ALGORITHM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>编码算法——Base 64</title>
+    <url>/2020/12/13/%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Base%2064/</url>
+    <content><![CDATA[<p><strong>Base 64编码算法详解</strong></p>
+<a id="more"></a>
+
+<h1 id="编码原理"><a href="#编码原理" class="headerlink" title="编码原理"></a>编码原理</h1><p>在计算机中。字符一般使用8位（即1个字节）大小的内存进行存储，该1个字节大小的内存可以表示从0到255之间的整数。而ASCII编码表在这里就定义了数字到字符的一一对应关系。因此，给定一个二进制串，计算机可以按照每八位为一个单位，查表得到整个字符串；反过来，给定一个字符串，也可以查表得到该字符串对应的二进制串。</p>
+<p><strong>而对于Base 64来说，其使用六位来表示一个字符</strong>。因此，编码后的字符串仅包括64个不同的字符（还有一个字符<code>=</code>用于补位，因此准确地说是65个不同的字符）。下面通过实例来说明Base 64的编码原理。</p>
+<p>标准的Base 64也有一个<strong>编码表</strong>，通常表示为</p>
+<p><code>lookup = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</code></p>
+<p>具体如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center"><strong>A</strong></td>
+<td align="center">17</td>
+<td align="center"><strong>R</strong></td>
+<td align="center">34</td>
+<td align="center"><strong>i</strong></td>
+<td align="center">51</td>
+<td align="center"><strong>z</strong></td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>B</strong></td>
+<td align="center">18</td>
+<td align="center"><strong>S</strong></td>
+<td align="center">35</td>
+<td align="center"><strong>j</strong></td>
+<td align="center">52</td>
+<td align="center"><strong>0</strong></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>C</strong></td>
+<td align="center">19</td>
+<td align="center"><strong>T</strong></td>
+<td align="center">36</td>
+<td align="center"><strong>k</strong></td>
+<td align="center">53</td>
+<td align="center"><strong>1</strong></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>D</strong></td>
+<td align="center">20</td>
+<td align="center"><strong>U</strong></td>
+<td align="center">37</td>
+<td align="center"><strong>l</strong></td>
+<td align="center">54</td>
+<td align="center"><strong>2</strong></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>E</strong></td>
+<td align="center">21</td>
+<td align="center"><strong>V</strong></td>
+<td align="center">38</td>
+<td align="center"><strong>m</strong></td>
+<td align="center">55</td>
+<td align="center"><strong>3</strong></td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>F</strong></td>
+<td align="center">22</td>
+<td align="center"><strong>W</strong></td>
+<td align="center">39</td>
+<td align="center"><strong>n</strong></td>
+<td align="center">56</td>
+<td align="center"><strong>4</strong></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><strong>G</strong></td>
+<td align="center">23</td>
+<td align="center"><strong>X</strong></td>
+<td align="center">40</td>
+<td align="center"><strong>o</strong></td>
+<td align="center">57</td>
+<td align="center"><strong>5</strong></td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><strong>H</strong></td>
+<td align="center">24</td>
+<td align="center"><strong>Y</strong></td>
+<td align="center">41</td>
+<td align="center"><strong>p</strong></td>
+<td align="center">58</td>
+<td align="center"><strong>6</strong></td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center"><strong>I</strong></td>
+<td align="center">25</td>
+<td align="center"><strong>Z</strong></td>
+<td align="center">42</td>
+<td align="center"><strong>q</strong></td>
+<td align="center">59</td>
+<td align="center"><strong>7</strong></td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center"><strong>J</strong></td>
+<td align="center">26</td>
+<td align="center"><strong>a</strong></td>
+<td align="center">43</td>
+<td align="center"><strong>r</strong></td>
+<td align="center">60</td>
+<td align="center"><strong>8</strong></td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center"><strong>K</strong></td>
+<td align="center">27</td>
+<td align="center"><strong>b</strong></td>
+<td align="center">44</td>
+<td align="center"><strong>s</strong></td>
+<td align="center">61</td>
+<td align="center"><strong>9</strong></td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center"><strong>L</strong></td>
+<td align="center">28</td>
+<td align="center"><strong>c</strong></td>
+<td align="center">45</td>
+<td align="center"><strong>t</strong></td>
+<td align="center">62</td>
+<td align="center"><strong>+</strong></td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center"><strong>M</strong></td>
+<td align="center">29</td>
+<td align="center"><strong>d</strong></td>
+<td align="center">46</td>
+<td align="center"><strong>u</strong></td>
+<td align="center">63</td>
+<td align="center"><strong>/</strong></td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center"><strong>N</strong></td>
+<td align="center">30</td>
+<td align="center"><strong>e</strong></td>
+<td align="center">47</td>
+<td align="center"><strong>v</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center"><strong>O</strong></td>
+<td align="center">31</td>
+<td align="center"><strong>f</strong></td>
+<td align="center">48</td>
+<td align="center"><strong>w</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center"><strong>P</strong></td>
+<td align="center">32</td>
+<td align="center"><strong>g</strong></td>
+<td align="center">49</td>
+<td align="center"><strong>x</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="center"><strong>Q</strong></td>
+<td align="center">33</td>
+<td align="center"><strong>h</strong></td>
+<td align="center">50</td>
+<td align="center"><strong>y</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101</code></p>
+<p>如果我们将其按照三个一组进行分组，就可以得到<code>001 110 101 110 101 011 101 011 101 010 000 101</code></p>
+<p>现在，我们每两组作为一个单位，可以得到<code>\14\46\43\43\42\5</code></p>
+<p>通过查表，既可以得到编码后的字符串为**<code>OurrqF</code>**</p>
+</blockquote>
+<p>上面说的是理想的情况，通常情况下，<strong>字符串对应的二进制串的长度是8的倍数，但很有可不是6的倍数</strong>。为了解决这个办法，Base 64要求在原二进制串后填0，将该字符串扩充为长度是6的倍数，并使用字符<code>=</code>进行补位（等号的个数取决于补位的0的数量）。补位有两种可能出现的情况，接下来将分别说明。</p>
+<blockquote>
+<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111 1110</code></p>
+<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 111 10</code></p>
+<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
+<p><strong><code>001110 101110 101011 101011 101010 000101 111111 10[0000]</code></strong></p>
+<p>另一种情况，假设我们有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111</code></p>
+<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 1</code></p>
+<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
+<p><strong><code>001110 101110 101011 101011 101010 000101 1111[00]</code></strong></p>
+</blockquote>
+<p>实际上我们可以证明，补位仅有两种情况。因此Base 64编码规定，如果在二进制串末尾补0的个数为2，则在编码后字符串末尾添加一个等号<code>=</code>。如果补0的个数为4，则添加两个等号<code>==</code>。</p>
+<blockquote>
+<p>因此，上面两个二进制串经过编码得到的字符串为：</p>
+<p><strong><code>OurrqF/g==</code>**和</strong><code>OurrqF8=</code>**</p>
+</blockquote>
+<p>在知道编码原理之后，解码的过程就容易理解了。</p>
+<h1 id="换表Base-64"><a href="#换表Base-64" class="headerlink" title="换表Base 64"></a>换表Base 64</h1><p>由上面的讨论可以看出，如果知道了Base 64的检索表，就可以完全将编码反编码。因此，为了保证更高的安全性（或者提高问题的难度），通常会使用新的检索表（而不是标准检索表）。</p>
+<p>对于换表Base 64，一种方法是在函数中定义新的检索表，直接进行编码和文本之间的转换，另一种方法是做两次变换，将换表Base 64看作<strong>Text &lt;-&gt; 旧表下的Code &lt;-&gt;新表下的Code</strong>这样的函数的复合。</p>
+<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><p><strong><a href="https://base64.us/">在线编码网站</a></strong></p>
+<p>Python中内置了Base 64编码库：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;加密&quot;&quot;&quot;</span></span><br><span class="line">byte_text = text.encode()   </span><br><span class="line">		<span class="comment">#base64模块使用byte而不是str类型</span></span><br><span class="line">code = base64.b64encode(byte_text).decode()</span><br><span class="line">		<span class="comment">#b64encode()函数用于将字符串进行转换，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(code)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;解密&quot;&quot;&quot;</span></span><br><span class="line">de_text = base64.b64decode(code.encode()).decode()   </span><br><span class="line">		<span class="comment">#b64decode()函数是b64encode()的逆过程，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(de_text)</span><br></pre></td></tr></table></figure>
+
+<p>Python函数实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_decode</span>(<span class="params">code, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(code, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> code[-<span class="number">2</span>] == <span class="string">&#x27;=&#x27;</span>:    code = code[<span class="number">0</span>:-<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">elif</span> code[-<span class="number">1</span>] == <span class="string">&#x27;=&#x27;</span>:  code = code[<span class="number">0</span>:-<span class="number">1</span>]</span><br><span class="line">    bin_code = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">6</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> code])</span><br><span class="line">    text = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_code) // <span class="number">8</span>):</span><br><span class="line">        text += <span class="built_in">chr</span>(<span class="built_in">int</span>(bin_code[i * <span class="number">8</span>: i * <span class="number">8</span> + <span class="number">8</span>], <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>MATHMATIC &amp; ALGORITHM</category>
+        <category>CRYPTO</category>
+        <category>数论、密码与编码</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>MATHMATIC &amp; ALGORITHM</tag>
+        <tag>CRYPTO</tag>
+        <tag>数论、密码与编码</tag>
       </tags>
   </entry>
   <entry>
     <title>C++ Reference Chapter 1 变量和基本类型</title>
-    <url>/2020/12/11/cpp-chapter1/</url>
+    <url>/2020/12/11/C++%20Reference%20Chapter%201%20%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<p><strong>Description</strong></p>
 <ul>
 <li>C++中常用的算术类型介绍</li>
@@ -493,15 +1009,16 @@
 ]]></content>
       <categories>
         <category>C++</category>
-        <category>C++ Primer Reference</category>
+        <category>C++ Reference</category>
       </categories>
       <tags>
         <tag>C++</tag>
+        <tag>C++ Reference</tag>
       </tags>
   </entry>
   <entry>
     <title>C++ Reference Chapter 2 复合类型</title>
-    <url>/2020/12/11/cpp-chapter2/</url>
+    <url>/2020/12/11/C++%20Reference%20Chapter%202%20%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<p><strong>Description</strong></p>
 <ul>
 <li>计算机存储与对象地址</li>
@@ -691,511 +1208,11 @@
 ]]></content>
       <categories>
         <category>C++</category>
-        <category>C++ Primer Reference</category>
+        <category>C++ Reference</category>
       </categories>
       <tags>
         <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用IDA的技巧汇总</title>
-    <url>/2020/12/13/CTF-re-tipsForIDA/</url>
-    <content><![CDATA[<p><strong>本文汇总了一些使用IDA调试的技巧。掌握这些技巧可以极大方便日常使用。</strong></p>
-<a id="more"></a>
-
-<h1 id="自定义类型和变量"><a href="#自定义类型和变量" class="headerlink" title="自定义类型和变量"></a>自定义类型和变量</h1><h2 id="修改变量标识符"><a href="#修改变量标识符" class="headerlink" title="修改变量标识符"></a>修改变量标识符</h2><p>例如在反汇编状态下有如下的一个函数：</p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213192949341.png" alt="image-20201213192949341"></p>
-<p>可以看出以下的一些信息：</p>
-<blockquote>
-<p><code>a1</code>是函数形参，并且是一个<code>char</code>类型的数组；</p>
-<p><code>v4</code>表示了数组<code>a1</code>的长度；</p>
-</blockquote>
-<p>因此，为了便于我们阅读，我们可以修改这些变量的标识符。<strong>其方法为将光标放在需要修改的变量上，右键，可以看到<code>Rename Ival</code>选项，单击该选项，（也可以直接使用快捷键<code>N</code>）即可以进行修改。</strong></p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213193630775.png" alt="image-20201213193630775"></p>
-<p>下面是修改后的代码：</p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213193802256.png" alt="image-20201213193802256"></p>
-<h2 id="修改变量类型"><a href="#修改变量类型" class="headerlink" title="修改变量类型"></a>修改变量类型</h2><p>再看下面的函数：</p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213194334019.png" alt="image-20201213194334019"></p>
-<p>我们可以发现：<strong>虽然<code>v9</code>在这里是一个<code>long long </code>类型的变量，但是后续的使用全部将其看作<code>char</code>类型数组进行访问。</strong>因此我们有必要，也完全可以将其进行类型转换。**转换方法和前述相同，在右键菜单中选择<code>Set Ival type</code>，或者使用快捷键<code>y</code>**。下面是转换过后的函数代码：</p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213194911482.png" alt="image-20201213194911482"></p>
-<p>可以看到，转换后的代码更加清晰明了。</p>
-<h2 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h2><p>例如如下代码：</p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213195145545.png" alt="image-20201213195145545"></p>
-<p>我们可以看到如下的信息：</p>
-<blockquote>
-<p><code>Dst</code>是一个16字节的变量，初始状态下为0。<code>v5</code>（一个指向内存大小为16个字节的指针）指向<code>Dst</code>的地址。在循环中，<code>v1</code>同样是一个16字节的变量，其前八个字节被定义为一个变量，值为<code>Str[i]</code>，后八个字节被设置为全0.而<code>v5</code>的后八个字节存储着<code>v1</code>的地址。之后<code>v5</code>更新为<code>v1</code>，在后续的循环中<code>v1</code>又重新声明内存。</p>
-</blockquote>
-<p>因此我们猜测这是一个添加链表元素的过程。因此我们可以在IDA中新建一个结构体，显式地定义List结构体。</p>
-<p><strong>打开<code>View-Open subviews-Local types</code>窗口</strong></p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213201115105.png" alt="image-20201213201115105"></p>
-<p><strong>点<code>insert</code>，在新出现的窗口输入希望创建的结构体对应的C代码</strong></p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213201441268.png" alt="image-20201213201441268"></p>
-<p>之后，就可以将其看作正常的结构，使用上面的方法进行修改。</p>
-<p><img src="/2020/12/13/CTF-re-tipsForIDA/image-20201213201630912.png" alt="image-20201213201630912"></p>
-<p>可以看到，在使用自定义结构体之后，整个函数就变得非常简洁明了。</p>
-]]></content>
-      <categories>
-        <category>CTF</category>
-        <category>Reverse_逆向</category>
-        <category>IDA</category>
-      </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>REVERSE</tag>
-        <tag>IDA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>编码算法:Base 64</title>
-    <url>/2020/12/13/base64/</url>
-    <content><![CDATA[<p><strong>Base 64编码算法详解</strong></p>
-<a id="more"></a>
-
-<h1 id="编码原理"><a href="#编码原理" class="headerlink" title="编码原理"></a>编码原理</h1><p>在计算机中。字符一般使用8位（即1个字节）大小的内存进行存储，该1个字节大小的内存可以表示从0到255之间的整数。而ASCII编码表在这里就定义了数字到字符的一一对应关系。因此，给定一个二进制串，计算机可以按照每八位为一个单位，查表得到整个字符串；反过来，给定一个字符串，也可以查表得到该字符串对应的二进制串。</p>
-<p><strong>而对于Base 64来说，其使用六位来表示一个字符</strong>。因此，编码后的字符串仅包括64个不同的字符（还有一个字符<code>=</code>用于补位，因此准确地说是65个不同的字符）。下面通过实例来说明Base 64的编码原理。</p>
-<p>标准的Base 64也有一个<strong>编码表</strong>，通常表示为</p>
-<p><code>lookup = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</code></p>
-<p>具体如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">0</td>
-<td align="center"><strong>A</strong></td>
-<td align="center">17</td>
-<td align="center"><strong>R</strong></td>
-<td align="center">34</td>
-<td align="center"><strong>i</strong></td>
-<td align="center">51</td>
-<td align="center"><strong>z</strong></td>
-</tr>
-<tr>
-<td align="center">1</td>
-<td align="center"><strong>B</strong></td>
-<td align="center">18</td>
-<td align="center"><strong>S</strong></td>
-<td align="center">35</td>
-<td align="center"><strong>j</strong></td>
-<td align="center">52</td>
-<td align="center"><strong>0</strong></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><strong>C</strong></td>
-<td align="center">19</td>
-<td align="center"><strong>T</strong></td>
-<td align="center">36</td>
-<td align="center"><strong>k</strong></td>
-<td align="center">53</td>
-<td align="center"><strong>1</strong></td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><strong>D</strong></td>
-<td align="center">20</td>
-<td align="center"><strong>U</strong></td>
-<td align="center">37</td>
-<td align="center"><strong>l</strong></td>
-<td align="center">54</td>
-<td align="center"><strong>2</strong></td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"><strong>E</strong></td>
-<td align="center">21</td>
-<td align="center"><strong>V</strong></td>
-<td align="center">38</td>
-<td align="center"><strong>m</strong></td>
-<td align="center">55</td>
-<td align="center"><strong>3</strong></td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center"><strong>F</strong></td>
-<td align="center">22</td>
-<td align="center"><strong>W</strong></td>
-<td align="center">39</td>
-<td align="center"><strong>n</strong></td>
-<td align="center">56</td>
-<td align="center"><strong>4</strong></td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center"><strong>G</strong></td>
-<td align="center">23</td>
-<td align="center"><strong>X</strong></td>
-<td align="center">40</td>
-<td align="center"><strong>o</strong></td>
-<td align="center">57</td>
-<td align="center"><strong>5</strong></td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center"><strong>H</strong></td>
-<td align="center">24</td>
-<td align="center"><strong>Y</strong></td>
-<td align="center">41</td>
-<td align="center"><strong>p</strong></td>
-<td align="center">58</td>
-<td align="center"><strong>6</strong></td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center"><strong>I</strong></td>
-<td align="center">25</td>
-<td align="center"><strong>Z</strong></td>
-<td align="center">42</td>
-<td align="center"><strong>q</strong></td>
-<td align="center">59</td>
-<td align="center"><strong>7</strong></td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="center"><strong>J</strong></td>
-<td align="center">26</td>
-<td align="center"><strong>a</strong></td>
-<td align="center">43</td>
-<td align="center"><strong>r</strong></td>
-<td align="center">60</td>
-<td align="center"><strong>8</strong></td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="center"><strong>K</strong></td>
-<td align="center">27</td>
-<td align="center"><strong>b</strong></td>
-<td align="center">44</td>
-<td align="center"><strong>s</strong></td>
-<td align="center">61</td>
-<td align="center"><strong>9</strong></td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="center"><strong>L</strong></td>
-<td align="center">28</td>
-<td align="center"><strong>c</strong></td>
-<td align="center">45</td>
-<td align="center"><strong>t</strong></td>
-<td align="center">62</td>
-<td align="center"><strong>+</strong></td>
-</tr>
-<tr>
-<td align="center">12</td>
-<td align="center"><strong>M</strong></td>
-<td align="center">29</td>
-<td align="center"><strong>d</strong></td>
-<td align="center">46</td>
-<td align="center"><strong>u</strong></td>
-<td align="center">63</td>
-<td align="center"><strong>/</strong></td>
-</tr>
-<tr>
-<td align="center">13</td>
-<td align="center"><strong>N</strong></td>
-<td align="center">30</td>
-<td align="center"><strong>e</strong></td>
-<td align="center">47</td>
-<td align="center"><strong>v</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">14</td>
-<td align="center"><strong>O</strong></td>
-<td align="center">31</td>
-<td align="center"><strong>f</strong></td>
-<td align="center">48</td>
-<td align="center"><strong>w</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">15</td>
-<td align="center"><strong>P</strong></td>
-<td align="center">32</td>
-<td align="center"><strong>g</strong></td>
-<td align="center">49</td>
-<td align="center"><strong>x</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">16</td>
-<td align="center"><strong>Q</strong></td>
-<td align="center">33</td>
-<td align="center"><strong>h</strong></td>
-<td align="center">50</td>
-<td align="center"><strong>y</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101</code></p>
-<p>如果我们将其按照三个一组进行分组，就可以得到<code>001 110 101 110 101 011 101 011 101 010 000 101</code></p>
-<p>现在，我们每两组作为一个单位，可以得到<code>\14\46\43\43\42\5</code></p>
-<p>通过查表，既可以得到编码后的字符串为**<code>OurrqF</code>**</p>
-</blockquote>
-<p>上面说的是理想的情况，通常情况下，<strong>字符串对应的二进制串的长度是8的倍数，但很有可不是6的倍数</strong>。为了解决这个办法，Base 64要求在原二进制串后填0，将该字符串扩充为长度是6的倍数，并使用字符<code>=</code>进行补位（等号的个数取决于补位的0的数量）。补位有两种可能出现的情况，接下来将分别说明。</p>
-<blockquote>
-<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111 1110</code></p>
-<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 111 10</code></p>
-<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
-<p><strong><code>001110 101110 101011 101011 101010 000101 111111 10[0000]</code></strong></p>
-<p>另一种情况，假设我们有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111</code></p>
-<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 1</code></p>
-<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
-<p><strong><code>001110 101110 101011 101011 101010 000101 1111[00]</code></strong></p>
-</blockquote>
-<p>实际上我们可以证明，补位仅有两种情况。因此Base 64编码规定，如果在二进制串末尾补0的个数为2，则在编码后字符串末尾添加一个等号<code>=</code>。如果补0的个数为4，则添加两个等号<code>==</code>。</p>
-<blockquote>
-<p>因此，上面两个二进制串经过编码得到的字符串为：</p>
-<p><strong><code>OurrqF/g==</code>**和</strong><code>OurrqF8=</code>**</p>
-</blockquote>
-<p>在知道编码原理之后，解码的过程就容易理解了。</p>
-<h1 id="换表Base-64"><a href="#换表Base-64" class="headerlink" title="换表Base 64"></a>换表Base 64</h1><p>由上面的讨论可以看出，如果知道了Base 64的检索表，就可以完全将编码反编码。因此，为了保证更高的安全性（或者提高问题的难度），通常会使用新的检索表（而不是标准检索表）。</p>
-<p>对于换表Base 64，一种方法是在函数中定义新的检索表，直接进行编码和文本之间的转换，另一种方法是做两次变换，将换表Base 64看作<strong>Text &lt;-&gt; 旧表下的Code &lt;-&gt;新表下的Code</strong>这样的函数的复合。</p>
-<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><p><strong><a href="https://base64.us/">在线编码网站</a></strong></p>
-<p>Python中内置了Base 64编码库：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;加密&quot;&quot;&quot;</span></span><br><span class="line">byte_text = text.encode()   </span><br><span class="line">		<span class="comment">#base64模块使用byte而不是str类型</span></span><br><span class="line">code = base64.b64encode(byte_text).decode()</span><br><span class="line">		<span class="comment">#b64encode()函数用于将字符串进行转换，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(code)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;解密&quot;&quot;&quot;</span></span><br><span class="line">de_text = base64.b64decode(code.encode()).decode()   </span><br><span class="line">		<span class="comment">#b64decode()函数是b64encode()的逆过程，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(de_text)</span><br></pre></td></tr></table></figure>
-
-<p>Python函数实现：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_decode</span>(<span class="params">code, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(code, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> code[-<span class="number">2</span>] == <span class="string">&#x27;=&#x27;</span>:    code = code[<span class="number">0</span>:-<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">elif</span> code[-<span class="number">1</span>] == <span class="string">&#x27;=&#x27;</span>:  code = code[<span class="number">0</span>:-<span class="number">1</span>]</span><br><span class="line">    bin_code = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">6</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> code])</span><br><span class="line">    text = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_code) // <span class="number">8</span>):</span><br><span class="line">        text += <span class="built_in">chr</span>(<span class="built_in">int</span>(bin_code[i * <span class="number">8</span>: i * <span class="number">8</span> + <span class="number">8</span>], <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>CTF</category>
-        <category>常用知识点</category>
-        <category>Algorithm</category>
-      </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>Crypto</tag>
-        <tag>Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【WP】逆向-CrackMe</title>
-    <url>/2020/12/15/CTF-RE-WP-CRACKME/</url>
-    <content><![CDATA[<p><strong>CrackMe.exe  2020年12月15日</strong></p>
-<ul>
-<li>通过引导字符串确定关键函数；</li>
-<li>常见的比较字符串相同的函数；</li>
-<li>使用断点调试确定函数功能；</li>
-<li>Base 64加密。</li>
-</ul>
-<a id="more"></a>
-
-<h1 id="确定关键函数"><a href="#确定关键函数" class="headerlink" title="确定关键函数"></a>确定关键函数</h1><p>在IDA中打开CrackMe.exe文件，进入反编译窗口，可以看到主函数：</p>
-<p><img src="/2020/12/15/CTF-RE-WP-CRACKME/image-20201215192616383.png" alt="image-20201215192616383"></p>
-<p>主函数中有</p>
-<figure class="highlight lisp"><table><tr><td class="code"><pre><span class="line">puts(<span class="string">&quot;input your flag:&quot;</span>)<span class="comment">;</span></span><br><span class="line">scanf(<span class="string">&quot;%s&quot;</span>, <span class="symbol">&amp;v5</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-
-<p>非常明显的标志，因此可以看出<code>sub_4020A0()</code>函数没有实际用途，并且<code>v5</code>是输入的字符串。</p>
-<p>此外，进入函数<code>sub_401540(&amp;v6, &quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;)</code>，可以看到：</p>
-<p><img src="/2020/12/15/CTF-RE-WP-CRACKME/image-20201215192952032.png" alt="image-20201215192952032"></p>
-<p>下面的语句是<strong>常见的比较两个字符串是相同的</strong>函数。</p>
-<figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">if</span> ( *<span class="built_in">a1</span> == *<span class="built_in">a2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">v3</span> = <span class="number">0</span><span class="comment">;</span></span><br><span class="line">    <span class="meta">while</span> ( len != ++<span class="built_in">v3</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="meta">if</span> ( <span class="built_in">a1</span>[<span class="built_in">v3</span>] != <span class="built_in">a2</span>[<span class="built_in">v3</span>] )</span><br><span class="line">        return puts(<span class="string">&quot;wrong!&quot;</span>)<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    return puts(<span class="string">&quot;you win!!&quot;</span>)<span class="comment">;</span></span><br><span class="line">  &#125;</span><br><span class="line">  return puts(<span class="string">&quot;wrong!&quot;</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-
-<p>因此， 我们可以初步得出程序的结构，即</p>
-<p><strong>程序输入一个字符串<code>v5</code>后，通过函数<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>得到一个字符串<code>v6</code>，如果该字符串为<code>&quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;</code>,则说明该字符串为最后的flag。</strong></p>
-<p>因此，我们需要重点关注<code>sub_401500(aAbcdefghijklmn)</code>和<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>函数。</p>
-<h1 id="函数逆向"><a href="#函数逆向" class="headerlink" title="函数逆向"></a>函数逆向</h1><h2 id="sub-401500-aAbcdefghijklmn"><a href="#sub-401500-aAbcdefghijklmn" class="headerlink" title="sub_401500(aAbcdefghijklmn)"></a><code>sub_401500(aAbcdefghijklmn)</code></h2><p>通过IDA可以看到：</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">.data:<span class="number">00403040</span> aAbcdefghijklmn db &#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<span class="number">0123456789</span>+/&#x27;,<span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-<p>变量<code>aAbcdefghijklmn</code>是一个字符串。该函数如下：</p>
-<p><img src="/2020/12/15/CTF-RE-WP-CRACKME/image-20201215194438600.png" alt="image-20201215194438600"></p>
-<p>该函数对传入的数组进行了一些修改。<strong>由于我们传入的是一个已知的字符串变量，因此我们可以利用调试查出执行该函数后的变量值</strong>。</p>
-<p><img src="/2020/12/15/CTF-RE-WP-CRACKME/image-20201215194802943.png" alt="image-20201215194802943"></p>
-<p>从这里可以看出，修改后的变量为</p>
-<p><code>ghijklmnopqrstuvxxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef</code></p>
-<h2 id="sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4"><a href="#sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4" class="headerlink" title="sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)"></a><code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code></h2><p><strong>如果对Base 64编码比较熟悉的话， 从上一个函数得到的字符串来看，包括A-Z、a-z、0-9以及+和/，很容易想到这可能是一个Base 64的换表加密。再加上一些比较明显的标记，例如</strong></p>
-<p><img src="/2020/12/15/CTF-RE-WP-CRACKME/image-20201215195712853.png" alt="image-20201215195712853"></p>
-<p><strong>和</strong></p>
-<p><img src="/2020/12/15/CTF-RE-WP-CRACKME/image-20201215195755086.png" alt="image-20201215195755086"></p>
-<p><strong>应该可以确定该函数就是一个换表Base 64加密</strong>。</p>
-<p>我们可以利用将最后一个函数的比较字符串通过换表Base 64函数还原到原字符串来确定我们猜测的正确性。</p>
-<p>经过换表Base 64的反编码，我们得到了字符串</p>
-<p><code>flag&#123;th1s_1s_base64_exc1ange!&#125;</code></p>
-<p>我们能够断定我们的猜测是正确的。</p>
-]]></content>
-      <categories>
-        <category>CTF</category>
-        <category>Reverse_逆向</category>
-        <category>WriteUp</category>
-      </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>REVERSE</tag>
-        <tag>WP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>字符串匹配——KMP算法</title>
-    <url>/2020/12/19/KMP/</url>
-    <content><![CDATA[<p><strong>KMP算法是由Knuth、Morris和Pratt三人设计的线性时间字符串匹配算法。该算法通过预先计算辅助函数$\pi$使匹配时间减少一个因子$n$，总的复杂度为$O(N)$。</strong></p>
-<p>参考《算法导论》。</p>
-<a id="more"></a>
-
-<h1 id="模式的前缀函数-pi"><a href="#模式的前缀函数-pi" class="headerlink" title="模式的前缀函数 $\pi$"></a>模式的前缀函数 $\pi$</h1><h2 id="什么是前缀函数-pi"><a href="#什么是前缀函数-pi" class="headerlink" title="什么是前缀函数 $\pi$"></a>什么是前缀函数 $\pi$</h2><p>首先考虑朴素的字符串匹配算法的操作过程。</p>
-<p>假设文本$T$和模式$P=ababaca$.在下面这个情况下，模式$P$的前5个字符已经匹配成功，但是在匹配第6个字符时失败了。对于朴素的字符串匹配算法来说，下一次匹配将尝试匹配$P[1]$和$T[4]$。</p>
-<img src="/2020/12/19/KMP/image-20201219201107723.png" alt="image-20201219201229846" style="zoom:80%;">
-
-<p>但是，在该实例里面，利用我们已知的信息（即模式串$P$和文本串$T[1…7]$），我们可以知道，将$P[1]$和$T[4]$进行匹配一定是失败的，因为在这个偏移量下，<strong>在重新匹配到$T[8]$位置前就会发生失败</strong>。此外，我们还可以看出来，下一个可能的匹配过程出现在将$P$右移两个单位处，因为<strong>如果将模式串向右移动两个距离，直到匹配到$T[7]$，该位置之前的模式字串依然是匹配的</strong>。</p>
-<img src="/2020/12/19/KMP/image-20201219201605890.png" alt="image-20201219201605890" style="zoom:80%;">
-
-<p>从上面的例子抽象出我们的目的，<strong>在朴素字符串匹配过程中，当我们检测到偏移量$s$是无效的时，我们忽略了检测无效$s$时所获得的信息（即当前匹配位置前的字串）。因此，如果我们能够有效地利用我们已知的信息，计算出可能匹配成功的偏移量，我们就能提高匹配的效率。</strong>这种情况下，我们无需让文本$T$上的指针向前移动，而是可以继续匹配当前位置上的字符（因为我们可以确定之前的位置都是匹配的）。</p>
-<p>因此，我们的目的是，对于模式的每一个位置，我们都可以知道<strong>在该位置如果出现不匹配之后，需要将$P$向右移动多少各单位，保证该位置前的模式字串依然是匹配的</strong>，这就是前缀函数$\pi$的目的。</p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>设文本是一个长度为$n$的数组$T[1…n]$，而模式是一个长度为$m$的数组$P[1…m]$。则一般地来说，我们希望知道</p>
-<p><strong>如果$P[q]$和$T[s+q]$是最后一个匹配的位置（即$P[1…q]=T[s+1…s+q]，P[q+1]\neq T[s+q+1]$），那么满足</strong><br>$$<br>P[1…q-k]=T[s+1+k…s+q]<br>$$<br><strong>的最小的偏移量$k$是多少。</strong></p>
-<p>换句话说，**我们希望知道 $P[1…q]$的是$P[1…q]$的真后缀的最长真前缀 **。</p>
-<img src="/2020/12/19/KMP/image-20201219203554704.png" alt="image-20201219203554704" style="zoom:80%;">
-
-<p>而<strong>前缀函数$\pi$并不直接定义为上面的$k$ 。</strong>其形式化定义为<br>$$<br>\pi [q]=max(k:0\leq k&lt;q且P[1…k]是P[1…q]的后缀)<br>$$<br>也就是说，如果可以找到前述的最小偏移量$k$，那么<br>$$<br>\pi [q]=q-k<br>$$<br>否则<br>$$<br>\pi [q]=0<br>$$</p>
-<p>即<strong>在$P[q+1]$的位置匹配失败了（即$P[1…q]$和$T[s+1…s+q]$是最后一个匹配的位置）后，如果位置$q$的前缀函数不为0，那么可以在不移动文本$T$的指针的情况下将模式$P$的指针移动到$P[\pi[q]]=P[q-k]$继续尝试匹配</strong>。</p>
-<p>例如对于模式串$P=ababaca$，其前缀函数为</p>
-<img src="/2020/12/19/KMP/image-20201219204344861.png" alt="image-20201219204344861" style="zoom: 80%;">
-
-<p>即</p>
-<img src="/2020/12/19/KMP/image-20201219210301510.png" alt="image-20201219210301510" style="zoom:80%;">
-
-<h1 id="如何利用前缀函数-pi-进行字符串匹配"><a href="#如何利用前缀函数-pi-进行字符串匹配" class="headerlink" title="如何利用前缀函数 $\pi$ 进行字符串匹配"></a>如何利用前缀函数 $\pi$ 进行字符串匹配</h1><p>利用前缀函数$\pi$进行字符串匹配的KMP算法的伪代码如下。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">KMP-MATCHER(T, P):</span><br><span class="line">	n = T.length()</span><br><span class="line">	m = P.length()</span><br><span class="line">	PI[<span class="number">1.</span>..m] <span class="keyword">is</span> prefix function.</span><br><span class="line">	</span><br><span class="line">	matched_num = <span class="number">0</span>	<span class="comment">#number of characters matched.</span></span><br><span class="line">	<span class="keyword">for</span> (t_ptr=<span class="number">1</span> to n):</span><br><span class="line">		<span class="keyword">while</span> (P[matched_num + <span class="number">1</span>] != T[t_ptr] <span class="keyword">and</span> matched_num &gt; <span class="number">0</span>):</span><br><span class="line">            matched_num = PI[matched_num]</span><br><span class="line">        <span class="keyword">if</span> (P[matched_num + <span class="number">1</span>] == T[t_ptr]):</span><br><span class="line">           	matched_num += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> (matched_num == m):</span><br><span class="line">            <span class="string">&#x27;MATCH_SUCCESSFULLY&#x27;</span></span><br><span class="line">        	matched_num = PI[matched_num]	<span class="comment">#Next mathch.      </span></span><br></pre></td></tr></table></figure>
-
-<p>该算法中，<code>t_ptr</code>是文本$T$的指针，<code>matched_num</code>是当前已经匹配的字串长度。在每层循环中，如果该位置匹配失败，则利用前缀函数寻找下一个可能的匹配位置，不断重复直到已匹配字串为空或者该位置匹配成功。</p>
-<p>以$T=ababababaca，P=ababaca$为例的KMP匹配过程如下。 </p>
-<img src="/2020/12/19/KMP/image-20201220000604237.png" alt="image-20201220000911132" style="zoom: 67%;">
-
-<h1 id="如何计算前缀函数-pi"><a href="#如何计算前缀函数-pi" class="headerlink" title="如何计算前缀函数 $\pi$"></a>如何计算前缀函数 $\pi$</h1><p>实际上计算前缀函数的过程类似于模式串和自身进行匹配的过程，因此他和KMP算法的形式非常类似。计算前缀函数的伪代码如下。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">COMPUTE-PREFIX-FUNCTION(P):</span><br><span class="line">    let PI[<span class="number">1.</span>..m] be a new array.</span><br><span class="line">    PI[<span class="number">1</span>] = <span class="number">0</span></span><br><span class="line">    k = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">2</span> to m):</span><br><span class="line">        <span class="keyword">while</span> (k &gt; <span class="number">0</span> <span class="keyword">and</span> P[k+<span class="number">1</span>] != P[q]):</span><br><span class="line">            k = PI[k]	<span class="comment">#如果当前位置不匹配，利用已经计算出的PI函数进行偏移，以寻找下一个可能的匹配。</span></span><br><span class="line">        <span class="keyword">if</span> (P[k+<span class="number">1</span>] == P[i])</span><br><span class="line">        	k += <span class="number">1</span></span><br><span class="line">        <span class="comment"># 此时，如果P[k+1] == P[q]，则k为模式与自身在该位置之前的最大匹配串长度 + 1</span></span><br><span class="line">        <span class="comment"># 否则，k=0，表示该位置前没有可以匹配的字串</span></span><br><span class="line">      	PI[i] = k</span><br></pre></td></tr></table></figure>
-
-<p>以$P=ababaca$为例的前缀函数计算过程如下。 </p>
-<img src="/2020/12/19/KMP/image-20201220002442115.png" alt="image-20201220002442115" style="zoom:80%;">
-
-<img src="/2020/12/19/KMP/image-20201220002709819.png" alt="image-20201220002709819" style="zoom:80%;">
-
-<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><p><code>Kmp.h</code></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> KMP_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KMP_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Kmp</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">string</span> pat;</span><br><span class="line">	<span class="keyword">int</span>* prefix_func;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Kmp(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Pat);</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">search_in</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Text, <span class="keyword">const</span> <span class="keyword">int</span>&amp; _Start = <span class="number">0</span>)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// !KMP_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>Kmp.cpp</code></p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;KMP.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">Kmp::Kmp(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Pat)</span><br><span class="line">&#123;</span><br><span class="line">	pat = <span class="string">&quot; &quot;</span> + _Pat;	<span class="comment">// Start at pat[1]</span></span><br><span class="line">	<span class="keyword">int</span> m = _Pat.size();</span><br><span class="line">	prefix_func = <span class="keyword">new</span> <span class="keyword">int</span>[m + <span class="number">1</span>];	<span class="comment">//Start at prefix_func[1]</span></span><br><span class="line">	prefix_func[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> matched = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= m; i++) &#123;</span><br><span class="line">		<span class="keyword">while</span> (matched &amp;&amp; pat[matched + <span class="number">1</span>] != pat[i])</span><br><span class="line">			matched = prefix_func[matched];</span><br><span class="line">		<span class="keyword">if</span> (pat[matched + <span class="number">1</span>] == pat[i])</span><br><span class="line">			matched++;</span><br><span class="line">		prefix_func[i] = matched;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Kmp::search_in</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; _Text, <span class="keyword">const</span> <span class="keyword">int</span>&amp; _Start)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n = _Text.size();</span><br><span class="line">	<span class="keyword">int</span> matched = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = _Start; i &lt; n; i++) &#123;</span><br><span class="line">		<span class="keyword">while</span> (matched &amp;&amp; _Text[i] != pat[matched + <span class="number">1</span>])</span><br><span class="line">			matched = prefix_func[matched];</span><br><span class="line">		<span class="keyword">if</span> (_Text[i] == pat[matched + <span class="number">1</span>])</span><br><span class="line">			matched++;</span><br><span class="line">		<span class="keyword">if</span> (matched == pat.size() - <span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> i - (pat.size() - <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kmp_match</span>(<span class="params">text, pat, start = <span class="number">0</span>, end = -<span class="number">1</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> (<span class="built_in">isinstance</span>(text, <span class="built_in">str</span>) <span class="keyword">and</span> <span class="built_in">isinstance</span>(pat, <span class="built_in">str</span>)):</span><br><span class="line">        <span class="keyword">raise</span> TypeError</span><br><span class="line">    n, m = <span class="built_in">len</span>(text), <span class="built_in">len</span>(pat)</span><br><span class="line">    pat = <span class="string">&quot; &quot;</span> + pat     <span class="comment">#Start at 1</span></span><br><span class="line">    </span><br><span class="line">    k = <span class="number">0</span></span><br><span class="line">    prefix_func = [<span class="number">0</span>] * (m + <span class="number">1</span>)     <span class="comment">#Start at 1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, m + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> (k <span class="keyword">and</span> pat[k + <span class="number">1</span>] != pat[i]):</span><br><span class="line">            k = prefix_func[k]</span><br><span class="line">        <span class="keyword">if</span> pat[k + <span class="number">1</span>] == pat[i]:</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">        prefix_func[i] = k</span><br><span class="line"></span><br><span class="line">    matched, ind = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> text[start:end]:</span><br><span class="line">        <span class="keyword">if</span> (matched <span class="keyword">and</span> pat[matched + <span class="number">1</span>] != i):</span><br><span class="line">            matched = prefix_func[matched]</span><br><span class="line">        <span class="keyword">if</span> pat[matched + <span class="number">1</span>] ==i:</span><br><span class="line">            matched += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> matched == m:</span><br><span class="line">            <span class="keyword">return</span> start + ind - m + <span class="number">1</span></span><br><span class="line">        ind += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="字符串的特征向量-next-i"><a href="#字符串的特征向量-next-i" class="headerlink" title="字符串的特征向量 $next[i]$"></a>字符串的特征向量 $next[i]$</h1><p>《数据结构与算法》在讲到KMP算法时没有使用前缀函数$\pi$，而是字符串的特征向量 $next[i]$。使用特征向量在理解上要困难与前缀函数，但<strong>使用字符串的特征向量遵守了在绝大多数编程语言中，数组（包括字符串）下标从0开始的约定，并且减少了不匹配情况出现时的循环次数</strong>，使得在实际实现时更方便一些。</p>
-<h2 id="优化前的特征向量"><a href="#优化前的特征向量" class="headerlink" title="优化前的特征向量"></a>优化前的特征向量</h2><p>字符串的特征向量定义为<br>$$<br>next[i]=<br>\begin{cases}<br>-1,如果i=0,\<br>max(k:0&lt;k&lt;i并且P[0…k-1]=P[i-k…i-1]),如果k存在,\<br>0,otherwise.<br>\end{cases}<br>$$</p>
-<p>和前缀函数进行比较，<strong>在含义上，除了$next[0]$之外，$next[i]$表示如果在位置$i$处匹配失败，则应该将模式$P$上的指针移动到哪一个位置（的下标）</strong>。</p>
-<p>对于模式串$P=abcdaabcab$，其特征向量和前缀函数为</p>
-<img src="/2020/12/19/KMP/image-20201220103510586.png" alt="image-20201220103510586" style="zoom:80%;">
-
-<h2 id="特征向量的优化"><a href="#特征向量的优化" class="headerlink" title="特征向量的优化"></a>特征向量的优化</h2><p>假设求出的$next[i]=k$，当匹配时发现$P[i] \neq T[j]$，按照特征向量的定义，需要把模式向右移动$i-k$位，即用$P[k]$与$T[j]$进行比较。<strong>如果$P[i]=P[k]$，则$T[j] \neq P[k]$。</strong></p>
-<p>因此，在按照上面的步骤计算出特征向量之后，再遍历一次特征向量，不断比较$P[i]$和$P[next[i]]$，如果$P[i]=P[next[i]]$，则令$next[i]=next[next[i]]$，直到$P[i] \neq P[next[i]]$或者$next[i]=-1$。</p>
-<p>对于模式串$P=abcdaabcab$，其特征向量和优化后的特征向量为</p>
-<img src="/2020/12/19/KMP/image-20201220105721483.png" alt="image-20201220105721483" style="zoom:80%;">]]></content>
-      <categories>
-        <category>Algorithm</category>
-      </categories>
-      <tags>
-        <tag>Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python函数参数的提供和接收方式</title>
-    <url>/2020/12/21/python-param/</url>
-    <content><![CDATA[<p><strong>本文包括Python函数参数的提供和接收方式。</strong></p>
-<p>包括位置参数、关键字参数和默认值、参数收集等。</p>
-<a id="more"></a>
-
-<h1 id="各种参数提供和接收方式的介绍"><a href="#各种参数提供和接收方式的介绍" class="headerlink" title="各种参数提供和接收方式的介绍"></a>各种参数提供和接收方式的介绍</h1><h2 id="位置参数"><a href="#位置参数" class="headerlink" title="位置参数"></a>位置参数</h2><p>最常见的Python参数的提供和接收方式是使用<strong>位置参数</strong>，使用方法和绝大多数其他编程语言（如C++）相同。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c, d</span>):</span></span><br><span class="line">    print(a, b, c, d)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="关键字参数"><a href="#关键字参数" class="headerlink" title="关键字参数"></a>关键字参数</h2><p>随着程序规模的扩大，记住各个函数的参数的位置会更加困难。因此Python引入了<strong>关键字参数</strong>，将<strong>参数名称</strong>作为判断依据（而不是位置参数中的参数的位置）。</p>
-<p>和位置参数相比，定义使用关键字参数的函数并不需要对原函数进行任何修改，向函数传递形参时，需要使用类似于赋值语句的形式将值显式地交给某个参数。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c, d</span>):</span></span><br><span class="line">    print(a, b, c, d)</span><br><span class="line"></span><br><span class="line">func(a=<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">func(a=<span class="number">1</span>, c=<span class="number">2</span>, b=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">func(a=<span class="number">1</span>, b=<span class="number">2</span>, d=<span class="number">3</span>, c=<span class="number">4</span>)</span><br><span class="line">func(d=<span class="number">1</span>, c=<span class="number">2</span>, b=<span class="number">3</span>, a=<span class="number">4</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>在使用关键字参数的情况下，参数的顺序就无关轻重了。Python将根据参数名称进行匹配赋值（即使顺序和定义函数时的顺序不一致）。</strong></p>
-<h2 id="默认值参数"><a href="#默认值参数" class="headerlink" title="默认值参数"></a>默认值参数</h2><p>在C++语言中，有默认值参数。例如</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">array_print</span><span class="params">(<span class="keyword">int</span>* beg, <span class="keyword">int</span>* ed, <span class="keyword">unsigned</span> <span class="keyword">int</span> gap = <span class="number">1</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>* i = beg; i != ed; i += gap)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; *i &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>在Python中，也有同样的用法，即<strong>默认值参数</strong>。例如</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rabin_miller</span>(<span class="params">num, s=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Choose s random numbers ranging from 1 to (num - 1) to test WITNESS.&quot;&quot;&quot;</span></span><br><span class="line">    t, u = <span class="number">0</span>, num - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> u % <span class="number">2</span> == <span class="number">0</span>:  t, u = t + <span class="number">1</span>, u // <span class="number">2</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(s):</span><br><span class="line">        a = random.randrange(<span class="number">1</span>, num)</span><br><span class="line">        au1, au2 = <span class="number">0</span>, <span class="built_in">pow</span>(a, u, num)</span><br><span class="line">        <span class="keyword">for</span> __ <span class="keyword">in</span> <span class="built_in">range</span>(t):</span><br><span class="line">            au1, au2 = au2, <span class="built_in">pow</span>(au2, <span class="number">2</span>, num)</span><br><span class="line">            <span class="keyword">if</span> au2 == <span class="number">1</span> <span class="keyword">and</span> au1 != <span class="number">1</span> <span class="keyword">and</span> au1 != num - <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> au2 != <span class="number">1</span>:    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup=<span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>在定义了默认值参数后，<strong>如果调用该函数而跳过默认值参数（不论是位置参数还是关键字参数），则程序将使用该默认值。如果现实地传递了参数，将按照传入的参数为准</strong>。</p>
-<p>实际上，Python很多内置函数就是使用了默认值参数，例如<code>range(start, stop[, step=1])</code>等。</p>
-<p>在使用默认值参数时，有一个需要注意的地方，即<strong>默认值应该设置为不可变的量（例如字符串、整型、元组等），而不应该设置为可变的量（如列表、字典等）</strong>。</p>
-<blockquote>
-<p>在每个程序里，Python函数的默认值仅被声明一次。因此如果多次调用使用默认值参数的函数，并且函数内的操作会修改该（可变的）默认值，那么在下一次调用该函数时，该默认值将是修改后的值。</p>
-<p>例如下面的python代码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">val, arr=[]</span>):</span></span><br><span class="line">    arr.append(val)</span><br><span class="line">    print(arr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>)</span><br><span class="line">func(<span class="number">2</span>)</span><br><span class="line">func(<span class="number">3</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>的运行结果是</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="分配和收集参数（-和-的使用）"><a href="#分配和收集参数（-和-的使用）" class="headerlink" title="分配和收集参数（*和**的使用）"></a>分配和收集参数（<code>*</code>和<code>**</code>的使用）</h2><h3 id="收集参数（对应函数形参）"><a href="#收集参数（对应函数形参）" class="headerlink" title="收集参数（对应函数形参）"></a>收集参数（对应函数形参）</h3><p>有时候，允许用户提供任意数量的参数很有用。（对于C++和其他编程语言来说，想实现这样的功能很困难，并且条件非常苛刻，但是）使用Python实现这样的功能并不困难。</p>
-<p>函数<strong>形参上的（在这里需要严格区分形参和实参）</strong><code>*</code>和<code>**</code>用于<strong>将任意多个传入的形参进行封装</strong>。</p>
-<p><strong>对于一个星号<code>*</code>来说，其用于收集位置参数，将所有值都放在一个元组中，也就是说将这些值收集起来。如果没有可供收集的参数，该参数将会是一个空元组（也就是说无论如何该位置都是一个储存着所有传递给它的参数的元组）。</strong></p>
-<p><strong>对于两个星号<code>**</code>来说，其用于收集关键字参数，将所有的关键字实参<code>name=val</code>按照<code>&#123;str(name): val&#125;</code>的形式放入一个字典中。同样的，如果没有可供收集的参数，该参数将是一个空字典。</strong></p>
-<p><code>*</code>和<code>**</code>是有区别并且严格区分的。也就是说，**<code>**</code>不能用来收集位置参数，而<code>*</code>不能用来收集关键字参数**。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_params</span>(<span class="params">*argv, **argd</span>):</span></span><br><span class="line">    print(argv)</span><br><span class="line">    print(argd)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print_params(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, a=<span class="number">4</span>, b=<span class="number">5</span>, e=<span class="number">6</span>)</span><br></pre></td></tr></table></figure>
-
-<p>运行结果为</p>
-<figure class="highlight gcode"><table><tr><td class="code"><pre><span class="line"><span class="comment">(1, 2, 3)</span></span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;e&#x27;</span>: <span class="number">6</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="分配参数（对应函数实参）"><a href="#分配参数（对应函数实参）" class="headerlink" title="分配参数（对应函数实参）"></a>分配参数（对应函数实参）</h3><p>前面介绍的是如何将参数收集到元组和字典中。同样的两个运算符也可以执行相反的操作。</p>
-<p><strong>一个星号<code>*</code>用于将可迭代序列解包，并形成位置参数。两个星号<code>**</code>用于将字典解包，并形成关键字参数。</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a, b, c</span>):</span></span><br><span class="line">    print(<span class="string">&quot;%d + %d + %d = %d.&quot;</span> % (a, b, c, a + b + c))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add(*(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>))</span><br><span class="line">add(*[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line">add(**&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">9</span>&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>运行结果为</p>
-<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1 </span>+ <span class="number">3</span> + <span class="number">5</span> = <span class="number">9</span>.</span><br><span class="line"><span class="symbol">3 </span>+ <span class="number">4</span> + <span class="number">5</span> = <span class="number">12</span>.</span><br><span class="line"><span class="symbol">3 </span>+ <span class="number">2</span> + <span class="number">9</span> = <span class="number">14</span>.</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="同时使用多种参数"><a href="#同时使用多种参数" class="headerlink" title="同时使用多种参数"></a>同时使用多种参数</h1><h2 id="混用原则"><a href="#混用原则" class="headerlink" title="混用原则"></a>混用原则</h2><p><strong>不论同时使用哪几种参数，首先要满足的一点是，函数的每个（非默认值）实参都需要被赋值，并且实参最多能被显式赋值一次。</strong></p>
-<blockquote>
-<p>下面的函数调用都是错误的：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c=<span class="number">2</span></span>):</span></span><br><span class="line">    print(a, b, c)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, c=<span class="number">1</span>)        	<span class="comment">#b没有被赋值</span></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, a=<span class="number">3</span>)     	<span class="comment">#a被重复赋值</span></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, c=<span class="number">3</span>)		<span class="comment">#c被重复赋值（形参中c=2不属于显式赋值）</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<p><strong>如果一个函数中仅有位置参数和关键字参数，则关键字参数必须在位置参数之后</strong>。</p>
-<blockquote>
-<p>如果关键字参数在位置参数之前，Python在遇到关键字参数后的位置参数时无法解释是跳过关键字参数还是对关键字参数进行了多次重复赋值。</p>
-</blockquote>
-<p><strong>如果在函数形参中有<code>*</code>，并且星号之后有其他的参数，则后面的参数只能使用关键字参数</strong>。</p>
-<blockquote>
-<p>由于<code>*</code>具有贪心的性质（即吸收直到无法继续吸收），因此只能使用关键字参数防止被星号吸收。</p>
-</blockquote>
-<p><strong>如果在一个函数形参中同时使用<code>**</code>，则<code>**</code>必须放在所有参数的最后一个，即<code>**</code>之后不能再有任何位置参数或关键字参数</strong>。</p>
-<blockquote>
-<p><code>**</code>之后不能有位置参数，否则将会与“关键字参数必须在位置参数之后”这一原则相矛盾。</p>
-<p>由于<code>**</code>有贪心的性质（即吸收直到无法继续吸收）。因此即使其后面又有关键字参数，也无法被赋值。因此Python规定了这样的操作是非法的。</p>
-</blockquote>
-<p>如果将所有类型的参数都混合在一起，他们的形式一定为</p>
-<figure class="highlight autoit"><table><tr><td class="code"><pre><span class="line">def <span class="function"><span class="keyword">func</span><span class="params">(位置参数, 带默认值的关键字参数, *元组参数收集, （带默认值的）关键字参数, **字典参数收集)</span></span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b, c=<span class="number">3</span>, *argv, e=<span class="number">3</span>, f=<span class="number">3</span>, g, **argd</span>):</span></span><br><span class="line">    print(a, b, c, argv, e, f, g, argd, sep= <span class="string">&#x27; # &#x27;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, g=<span class="number">3</span>)  <span class="comment">#g的关键字赋值必不可少，然而e和f可以使用默认值</span></span><br><span class="line">func(<span class="number">19</span>, <span class="number">54</span>, [<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>], <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, g=<span class="number">10</span>, h=<span class="number">2</span>, i=<span class="number">3</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>运行结果为</p>
-<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1 </span># <span class="number">2</span> # <span class="number">3</span> # (<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>) # <span class="number">3</span> # <span class="number">3</span> # <span class="number">3</span> # &#123;&#125;</span><br><span class="line"><span class="symbol">19 </span># <span class="number">54</span> # [<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>] # (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) # <span class="number">3</span> # <span class="number">3</span> # <span class="number">10</span> # &#123;<span class="comment">&#x27;h&#x27;: 2, &#x27;i&#x27;: 3&#125;</span></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
+        <tag>C++ Reference</tag>
       </tags>
   </entry>
 </search>
