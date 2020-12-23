@@ -128,11 +128,11 @@
 ]]></content>
       <categories>
         <category>PYTHON</category>
-        <category>其他</category>
+        <category>OTHERS</category>
       </categories>
       <tags>
         <tag>PYTHON</tag>
-        <tag>其他</tag>
+        <tag>OTHERS</tag>
       </tags>
   </entry>
   <entry>
@@ -190,18 +190,18 @@
       </tags>
   </entry>
   <entry>
-    <title>������������</title>
+    <title>二叉树的周游</title>
     <url>/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/</url>
     <content><![CDATA[]]></content>
       <categories>
         <category>MATHMATIC &amp; ALGORITHM</category>
-        <category>���ݽṹ</category>
-        <category>����ͼ</category>
+        <category>DATA STRUCTURE</category>
+        <category>TREE &amp; GRAPH</category>
       </categories>
       <tags>
         <tag>MATHMATIC &amp; ALGORITHM</tag>
-        <tag>���ݽṹ</tag>
-        <tag>����ͼ</tag>
+        <tag>DATA STRUCTURE</tag>
+        <tag>TREE &amp; GRAPH</tag>
       </tags>
   </entry>
   <entry>
@@ -314,11 +314,11 @@
 <img src="/2020/12/19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/image-20201220105721483.png" alt="image-20201220105721483" style="zoom:80%;">]]></content>
       <categories>
         <category>MATHMATIC &amp; ALGORITHM</category>
-        <category>其他</category>
+        <category>OTHERS</category>
       </categories>
       <tags>
-        <tag>其他</tag>
         <tag>MATHMATIC &amp; ALGORITHM</tag>
+        <tag>OTHERS</tag>
       </tags>
   </entry>
   <entry>
@@ -553,13 +553,14 @@
         <category>CTF</category>
         <category>MATHMATIC &amp; ALGORITHM</category>
         <category>CRYPTO</category>
-        <category>数论、密码与编码</category>
+        <category>NUMBER THEORY</category>
+        <category>CRYPTO &amp; CODING</category>
       </categories>
       <tags>
         <tag>CTF</tag>
         <tag>MATHMATIC &amp; ALGORITHM</tag>
         <tag>CRYPTO</tag>
-        <tag>数论、密码与编码</tag>
+        <tag>NUMBER THEORY, CRYPTO &amp; CODING</tag>
       </tags>
   </entry>
   <entry>
