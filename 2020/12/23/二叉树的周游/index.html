@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="DATA STRUCTURE,TREE & GRAPH,MATHEMATICS & ALGORITHM," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="二叉树的周游包括深度优先遍历（包括前序遍历、中序遍历和后序遍历）以及广度优先遍历。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树的周游">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/index.html">
+<meta property="og:site_name" content="Juvenile">
+<meta property="og:description" content="二叉树的周游包括深度优先遍历（包括前序遍历、中序遍历和后序遍历）以及广度优先遍历。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/1.jpg">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/1.jpg">
+<meta property="article:published_time" content="2020-12-23T01:25:25.000Z">
+<meta property="article:modified_time" content="2020-12-23T10:07:19.469Z">
+<meta property="article:author" content="Juvenile @ NiuJuxin">
+<meta property="article:tag" content="DATA STRUCTURE">
+<meta property="article:tag" content="TREE &amp; GRAPH">
+<meta property="article:tag" content="MATHEMATICS &amp; ALGORITHM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/23/二叉树的周游/"/>
+
+
+
+
+
+  <title>二叉树的周游 | Juvenile</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Juvenile</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Juvenile">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">二叉树的周游</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-23T09:25:25+08:00">
+                2020-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MATHEMATICS-ALGORITHM/" itemprop="url" rel="index">
+                    <span itemprop="name">MATHEMATICS & ALGORITHM</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MATHEMATICS-ALGORITHM/DATA-STRUCTURE/" itemprop="url" rel="index">
+                    <span itemprop="name">DATA STRUCTURE</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MATHEMATICS-ALGORITHM/TREE-GRAPH/" itemprop="url" rel="index">
+                    <span itemprop="name">TREE & GRAPH</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>二叉树的周游包括深度优先遍历（包括前序遍历、中序遍历和后序遍历）以及广度优先遍历。</strong></p>
+<a id="more"></a>
+
+<p>本文假定二叉树的数据类型如下。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> data;</span><br><span class="line">	TreeNode* left, * right;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Tree = TreeNode*;</span><br></pre></td></tr></table></figure>
+
+<h1 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h1><p><strong>深度优先遍历包括前序遍历、中序遍历和后续遍历。</strong></p>
+<h2 id="前序遍历（pre-order-traversal）"><a href="#前序遍历（pre-order-traversal）" class="headerlink" title="前序遍历（pre-order traversal）"></a>前序遍历（pre-order traversal）</h2><p><strong>前序遍历的递归定义为：</strong></p>
+<ul>
+<li><strong>访问根节点</strong></li>
+<li><strong>按照前序遍历左子树</strong></li>
+<li><strong>按照前序遍历右子树</strong></li>
+</ul>
+<h3 id="根据二叉树实例写出前序遍历序列"><a href="#根据二叉树实例写出前序遍历序列" class="headerlink" title="根据二叉树实例写出前序遍历序列"></a>根据二叉树实例写出前序遍历序列</h3><p>根据二叉树写前序遍历序列时，最方便稳妥的方法时按照递归定义进行遍历。</p>
+<p>例如，对于如下的二叉树</p>
+<img src="/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/1.jpg" alt="1" style="zoom:50%;">
+
+<p>按照根节点、左子树、右子树的方式遍历，可以得到：</p>
+<p><code>8 [tree of node 3] [tree of node 10]</code></p>
+<p>对两个子树进行递归遍历，有：</p>
+<p><code>8 3 [tree of node 1] [tree of node 6] 10 [tree of node 14]</code></p>
+<p>有：</p>
+<p><code>8 3 1 6 [tree of node 4] [tree of node 7] 10 14 [tree of node 13]</code></p>
+<p>最后有前序遍历序列：</p>
+<p><code>8 3 1 6 4 7 10 14 13</code></p>
+<h3 id="递归实现前序遍历"><a href="#递归实现前序遍历" class="headerlink" title="递归实现前序遍历"></a>递归实现前序遍历</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre_traversal</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; tree-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	<span class="keyword">if</span> (tree-&gt;left)		pre_traversal(tree-&gt;left);</span><br><span class="line">	<span class="keyword">if</span> (tree-&gt;right)		pre_traversal(tree-&gt;right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="非递归实现前序遍历"><a href="#非递归实现前序遍历" class="headerlink" title="非递归实现前序遍历"></a>非递归实现前序遍历</h3><p>前序遍历可以使用栈<strong>完全模拟函数递归的过程</strong>。其方法为<strong>首先将根节点放入栈中完成初始化，之后当栈不为空时进入循环，从栈中弹出一个结点，将其输出，再将其右子结点、左子结点（如果有）按顺序放入栈中，完成本轮循环。</strong></p>
+<p>如果将递归实现前序遍历的过程完全模拟一遍，会发现其过程和上述过程完全相同。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre_traversal_sta</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">stack</span>&lt;Tree&gt; sta;</span><br><span class="line">	sta.push(tree);</span><br><span class="line">	<span class="keyword">while</span> (!sta.empty()) &#123;</span><br><span class="line">		Tree root = sta.top();</span><br><span class="line">		sta.pop();</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; root-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">		<span class="keyword">if</span> (root-&gt;right)		sta.push(root-&gt;right);</span><br><span class="line">		<span class="keyword">if</span> (root-&gt;left)		sta.push(root-&gt;left);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="使用前序遍历构建二叉树"><a href="#使用前序遍历构建二叉树" class="headerlink" title="使用前序遍历构建二叉树"></a>使用前序遍历构建二叉树</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Tree <span class="title">createTree</span><span class="params">(Tree father = <span class="literal">nullptr</span>, <span class="keyword">bool</span> isLeft = <span class="literal">true</span>)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!father)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Enter the index of root node, -1 means nullptr: &quot;</span>;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (isLeft)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Enter the index of the left node of node &quot;</span> &lt;&lt; father-&gt;data &lt;&lt; <span class="string">&quot;, -1 means nullptr: &quot;</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Enter the index of the right node of node &quot;</span> &lt;&lt; father-&gt;data &lt;&lt; <span class="string">&quot;, -1 means nullptr: &quot;</span>;</span><br><span class="line">	<span class="keyword">int</span> ind;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; ind;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (ind == <span class="number">-1</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">	Tree root = <span class="keyword">new</span> TreeNode;</span><br><span class="line">	root-&gt;data = ind;</span><br><span class="line">	root-&gt;left = createTree(root);</span><br><span class="line">	root-&gt;right = createTree(root, <span class="literal">false</span>);</span><br><span class="line">	<span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="中序遍历（in-order-traversal）"><a href="#中序遍历（in-order-traversal）" class="headerlink" title="中序遍历（in-order traversal）"></a>中序遍历（in-order traversal）</h2><p><strong>中序遍历的递归定义为：</strong></p>
+<ul>
+<li><strong>按照中序遍历左子树</strong></li>
+<li><strong>访问根节点</strong></li>
+<li><strong>按照中序遍历右子树</strong></li>
+</ul>
+<h3 id="根据二叉树实例写出中序遍历序列"><a href="#根据二叉树实例写出中序遍历序列" class="headerlink" title="根据二叉树实例写出中序遍历序列"></a>根据二叉树实例写出中序遍历序列</h3><p>方法和前序遍历序列的方法是一样的，最严谨的方法是按照递归定义进行遍历。</p>
+<p>同样对于上面的二叉树，可以依次得到：</p>
+<p><code>[tree of node 3] 8 [tree of node 10]</code></p>
+<p><code>[tree of node 1] 3 [tree of node 6] 8 10 [tree of node 14]</code></p>
+<p><code>1 3 [tree of node 4] 6 [tree of node 7] 8 10 [tree of node 13] 14</code></p>
+<p>最后得到中序遍历序列为</p>
+<p><code>1 3 4 6 7 8 10 13 14</code></p>
+<h3 id="递归实现中序遍历"><a href="#递归实现中序遍历" class="headerlink" title="递归实现中序遍历"></a>递归实现中序遍历</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">in_traversal</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (tree-&gt;left)		in_traversal(tree-&gt;left);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; tree-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	<span class="keyword">if</span> (tree-&gt;right)		in_traversal(tree-&gt;right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="非递归实现中序遍历"><a href="#非递归实现中序遍历" class="headerlink" title="非递归实现中序遍历"></a>非递归实现中序遍历</h3><p>中序遍历无法完全利用栈模拟递归操作。为了非递归实现中序遍历，我们将递归实现中序遍历的操作分为两大部分。</p>
+<ol>
+<li><p><strong>第一部分</strong>包括<code>if (tree-&gt;left) in_traversal(tree-&gt;left);</code>，即访问其左子树。</p>
+</li>
+<li><p><strong>第二部分</strong>包括<code>cout &lt;&lt; tree-&gt;data &lt;&lt; &quot; &quot;;</code>和<code>if (tree-&gt;right) in_traversal(tree-&gt;right);</code>，即输出当前根节点并访问其右子树。</p>
+</li>
+</ol>
+<p>将两部分区分开来之后，我们用得到当前结点的方法作为执行哪一种操作的依据。具体方法如下。</p>
+<ul>
+<li>如果当前结点（不为<code>nullptr</code>）是从其父节点访问得到的（则该该结点是第一次被访问），则执行第一部分的操作。并将当前（根）结点压入栈中。</li>
+<li>如果当前结点为<code>nullptr</code>，则从栈中取出一个结点（此时该结点一定已经访问完其左子树），因此执行第二部分操作，即输出当前根节点，并将当前结点指向其右子结点。</li>
+</ul>
+<p>总结起来，<strong>我们使用获取结点的方式来判断其是首次访问还是已经访问结束其左子树后回溯到该结点的</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">in_traversal_sta</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">stack</span>&lt;Tree&gt; sta;</span><br><span class="line">	Tree root = tree;</span><br><span class="line">	<span class="keyword">while</span> (root || !sta.empty()) &#123;</span><br><span class="line">		<span class="keyword">if</span> (root) &#123;</span><br><span class="line">			sta.push(root);</span><br><span class="line">			root = root-&gt;left;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			root = sta.top();</span><br><span class="line">			sta.pop();</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; root-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">			root = root-&gt;right;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="后序遍历（post-order-traversal）"><a href="#后序遍历（post-order-traversal）" class="headerlink" title="后序遍历（post-order traversal）"></a>后序遍历（post-order traversal）</h2><p><strong>后序遍历的递归定义为：</strong></p>
+<ul>
+<li><strong>按照后序遍历左子树</strong></li>
+<li><strong>按照后序遍历右子树</strong></li>
+<li><strong>访问根节点</strong></li>
+</ul>
+<h3 id="根据二叉树实例写出中序遍历序列-1"><a href="#根据二叉树实例写出中序遍历序列-1" class="headerlink" title="根据二叉树实例写出中序遍历序列"></a>根据二叉树实例写出中序遍历序列</h3><p>对于上面的二叉树，可以依次得到：</p>
+<p><code>[tree of node 3] [tree of node 10] 8</code></p>
+<p><code>[tree of node 1] [tree of node 6] 3 [tree of node 14] 10 8</code></p>
+<p><code>1 [tree of node 4] [tree of node 7] 6 3 [tree of node 13] 14 10 8</code></p>
+<p>最后得到后序遍历序列为</p>
+<p><code>1 4 7 6 3 13 14 10 8</code></p>
+<h3 id="递归实现后序遍历"><a href="#递归实现后序遍历" class="headerlink" title="递归实现后序遍历"></a>递归实现后序遍历</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">post_traversal</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (tree-&gt;left)		post_traversal(tree-&gt;left);</span><br><span class="line">	<span class="keyword">if</span> (tree-&gt;right)		post_traversal(tree-&gt;right);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; tree-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="非递归实现后序遍历"><a href="#非递归实现后序遍历" class="headerlink" title="非递归实现后序遍历"></a>非递归实现后序遍历</h3><p>和中序遍历相似地，我们将递归后序遍历的过程分为三大部分。</p>
+<ol>
+<li><strong>第一部分</strong>包括<code>if (tree-&gt;left)        post_traversal(tree-&gt;left);</code>，即访问其左子结点。</li>
+<li><strong>第二部分</strong>包括<code>if (tree-&gt;right)        post_traversal(tree-&gt;right);</code>，即访问其右子结点。</li>
+<li><strong>第三部分</strong>包括<code>cout &lt;&lt; tree-&gt;data &lt;&lt; &quot; &quot;;</code>，即输出根节点。</li>
+</ol>
+<p>由于我们将整个过程分为三个部分，因此就无法仅利用获取结点的方式进行判断（执行哪一部分）。<strong>我们对每个结点引入一个布尔类型变量<code>isRight</code>，以判断该结点是否是访问完右子结点后入栈的</strong>。具体方法如下。</p>
+<ul>
+<li>如果当前结点（不为<code>nullptr</code> ）是从其父节点访问得到的，则为其引入一个<code>isRight</code>变量并置为<code>false</code>，将该结点和辅助变量一并放入栈中，并将当前结点设置为该结点的左子结点。</li>
+<li>如果当前结点为<code>nullptr</code>，则从栈中取出一个结点。<ul>
+<li>如果该结点的<code>isRight</code>变量为<code>false</code>，则将<code>isRight</code>置为<code>true</code>，并将该结点和辅助变量一并放入栈中，并将当前结点设置为该结点的右子结点。</li>
+<li>如果该结点的<code>isRight</code>变量为<code>true</code>，则输出该结点，以该结点为根节点的子树访问结束，<strong>因此要将当前结点更新为<code>nullptr</code>，以代表该结点没有其他任何子结点可以访问了</strong>。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">post_traversal_sta</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">stack</span>&lt;<span class="built_in">pair</span>&lt;Tree, <span class="keyword">bool</span>&gt;&gt; sta;</span><br><span class="line">	Tree root = tree;</span><br><span class="line">	<span class="keyword">while</span> (root || !sta.empty()) &#123;</span><br><span class="line">		<span class="keyword">if</span> (root) &#123;</span><br><span class="line">			sta.push(<span class="built_in">pair</span>&lt;Tree, <span class="keyword">bool</span>&gt;(root, <span class="literal">false</span>));</span><br><span class="line">			root = root-&gt;left;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			root = sta.top().first;</span><br><span class="line">			<span class="keyword">bool</span> isRight = sta.top().second;</span><br><span class="line">			sta.pop();</span><br><span class="line">			<span class="keyword">if</span> (!isRight) &#123;</span><br><span class="line">				sta.push(<span class="built_in">pair</span>&lt;Tree, <span class="keyword">bool</span>&gt;(root, <span class="literal">true</span>));</span><br><span class="line">				root = root-&gt;right;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="built_in">cout</span> &lt;&lt; root-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">				root = <span class="literal">nullptr</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="根据遍历序列恢复二叉树"><a href="#根据遍历序列恢复二叉树" class="headerlink" title="根据遍历序列恢复二叉树"></a>根据遍历序列恢复二叉树</h2><p>还是以该树为例。</p>
+<img src="/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/1.jpg" alt="1" style="zoom:50%;">
+
+<p>其前序、中序和后序遍历序列分别为：</p>
+<p><strong>前序遍历序列：<code>8 3 1 6 4 7 10 14 13</code></strong></p>
+<p><strong>中序遍历序列：<code>1 3 4 6 7 8 10 13 14</code></strong></p>
+<p><strong>后序遍历序列：<code>1 4 7 6 3 13 14 10 8</code></strong></p>
+<h3 id="前序遍历和中序遍历"><a href="#前序遍历和中序遍历" class="headerlink" title="前序遍历和中序遍历"></a>前序遍历和中序遍历</h3><p><strong>前序遍历可以方便地确定根节点，中序遍历可以方便地根据根节点确定左子树和右子树包括哪些结点。</strong></p>
+<p>根据前序遍历第一个结点为<code>8</code>，可以得到：</p>
+<p><code>root:8 [left-tree of 8: 1 3 4 6 7] [right-tree of 8: 10 13 14]</code></p>
+<p>因为<code>[1 3 4 6 7 ] 8 [10 13 14]</code></p>
+<p>对左右子树进行递归操作，可以依次得到：</p>
+<p><code>8 root:3 [left-tree of 3: 1] [right-tree of 3: 4 6 7] root:10 [right-tree of 10: 13 14]</code></p>
+<p>因为<code>[1] 3 [4 6 7] 8 10 [13 14]</code></p>
+<p><code>8 3 1 root:6 [left-tree of 6: 4] [right-tree of 6: 7] 10 root:14 [left-tree of 14: 13]</code></p>
+<p>因为<code>1 3 [4] 6 [7] 8 10 [13] 14</code></p>
+<h3 id="前序遍历和后序遍历"><a href="#前序遍历和后序遍历" class="headerlink" title="前序遍历和后序遍历"></a>前序遍历和后序遍历</h3><p><strong>仅仅直到前序遍历和后序遍历有时候无法唯一确定树的确定形态（例如对于上面的二叉树来说，将13作为右子结点得到的前序遍历、后序遍历和原来完全相同）。</strong></p>
+<p><strong>如果可以的话，前序遍历和后序遍历进行结合可以方便地确定某一个根节点的左右子结点分别是什么。</strong>对于某个序列（可能是子序列），如果将前序遍历的第一个结点作为根节点，则考虑其后面的第一个结点，并在后序遍历中找到该结点。则再后序遍历中该结点左侧的结点属于该子树，将这些结点再前序遍历序列中划分开来，则剩下的结点属于根节点的右子树。</p>
+<p><strong>一次迭代</strong></p>
+<p>前序遍历序列：<code>[root:8] [3 1 6 4 7] [10 14 13]</code></p>
+<p>后序遍历序列：<code>[1 4 7 6 3] [13 14 10] [root:8]</code></p>
+<p><strong>二次迭代</strong></p>
+<p>前序遍历序列：<code>3 [1] [6 4 7]</code> <code>10 [14 13]</code></p>
+<p>后序遍历序列：<code>[1] [4 7 6] 3</code> <code>[13 14] 10</code></p>
+<p><strong>三次迭代</strong></p>
+<p>前序遍历序列：<code>3</code> <code>1</code> <code>6 [4] [7]</code> <code>10</code> <code>14 13</code></p>
+<p>后序遍历序列：<code>1</code>  <code>[4] [7] 6</code> <code>3</code> <code>13 14</code> <code>10</code></p>
+<p>这里<code>14 13</code>无法继续判断，<strong>但我们已经从前序序列和后序序列得到了足够多的信息了。</strong></p>
+<p><strong>进一步地，如果子结点的左右顺序无关，或者二叉树中要不是叶结点，要不是出度为2的结点的话，我们就可以根据前序遍历和后序遍历完全恢复出树的状态。</strong></p>
+<h3 id="中序遍历和后序遍历"><a href="#中序遍历和后序遍历" class="headerlink" title="中序遍历和后序遍历"></a>中序遍历和后序遍历</h3><p>后序遍历和前序遍历有很多相似性。因此和利用前序遍历、中序遍历恢复二叉树的方法非常类似。</p>
+<p>例如：</p>
+<p>中序遍历序列：<code>[1 3 4 6 7] root:8 [10 13 14]</code></p>
+<p>后序遍历序列：[]<code>1 4 7 6 3] [13 14 10] root:8</code></p>
+<p>对剩余的序列进行递归即可。</p>
+<h1 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h1><p>广度优先搜索一般使用队列进行模拟。其思路非常简单，不断从队列中取出结点，输出该结点信息，并将该结点的左右子节点放入队列中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">b_traversal</span><span class="params">(Tree tree)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">queue</span>&lt;Tree&gt; que;</span><br><span class="line">	que.push(tree);</span><br><span class="line">	<span class="keyword">while</span> (!que.empty()) &#123;</span><br><span class="line">		Tree root = que.front();</span><br><span class="line">		que.pop();</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; root-&gt;data &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">		<span class="keyword">if</span> (root-&gt;left)		que.push(root-&gt;left);</span><br><span class="line">		<span class="keyword">if</span> (root-&gt;right)		que.push(root-&gt;right);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DATA-STRUCTURE/" rel="tag"># DATA STRUCTURE</a>
+          
+            <a href="/tags/TREE-GRAPH/" rel="tag"># TREE & GRAPH</a>
+          
+            <a href="/tags/MATHEMATICS-ALGORITHM/" rel="tag"># MATHEMATICS & ALGORITHM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/21/Python%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E6%8F%90%E4%BE%9B%E5%92%8C%E6%8E%A5%E6%94%B6%E6%96%B9%E5%BC%8F/" rel="next" title="Python函数参数的提供和接收方式">
+                <i class="fa fa-chevron-left"></i> Python函数参数的提供和接收方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/23/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8%E2%80%94%E2%80%94%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" rel="prev" title="二叉树的应用——二叉搜索树">
+                二叉树的应用——二叉搜索树 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/juvenile-sdu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="niujuxin_sdu@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86"><span class="nav-number">1.</span> <span class="nav-text">深度优先遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%88pre-order-traversal%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">前序遍历（pre-order traversal）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E4%BA%8C%E5%8F%89%E6%A0%91%E5%AE%9E%E4%BE%8B%E5%86%99%E5%87%BA%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97"><span class="nav-number">1.1.1.</span> <span class="nav-text">根据二叉树实例写出前序遍历序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">递归实现前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.1.3.</span> <span class="nav-text">非递归实现前序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%E6%9E%84%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.1.4.</span> <span class="nav-text">使用前序遍历构建二叉树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%88in-order-traversal%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">中序遍历（in-order traversal）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E4%BA%8C%E5%8F%89%E6%A0%91%E5%AE%9E%E4%BE%8B%E5%86%99%E5%87%BA%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97"><span class="nav-number">1.2.1.</span> <span class="nav-text">根据二叉树实例写出中序遍历序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">递归实现中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.2.3.</span> <span class="nav-text">非递归实现中序遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%88post-order-traversal%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">后序遍历（post-order traversal）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E4%BA%8C%E5%8F%89%E6%A0%91%E5%AE%9E%E4%BE%8B%E5%86%99%E5%87%BA%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">根据二叉树实例写出中序遍历序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.3.2.</span> <span class="nav-text">递归实现后序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.3.3.</span> <span class="nav-text">非递归实现后序遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97%E6%81%A2%E5%A4%8D%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.4.</span> <span class="nav-text">根据遍历序列恢复二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%E5%92%8C%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.4.1.</span> <span class="nav-text">前序遍历和中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%E5%92%8C%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.4.2.</span> <span class="nav-text">前序遍历和后序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E5%92%8C%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.4.3.</span> <span class="nav-text">中序遍历和后序遍历</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="nav-number">2.</span> <span class="nav-text">广度优先搜索</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Juvenile @ NiuJuxin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
