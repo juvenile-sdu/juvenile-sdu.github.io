@@ -1,37 +1,1380 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+  
 
 
-{% block content %}
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CTF,CRYPTO,NUMBER THEORY & CRYPTO & CODING,MATHEMATICS & ALGORITHM," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Base 64编码算法详解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码算法——Base 64">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/13/%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Base%2064/index.html">
+<meta property="og:site_name" content="Juvenile">
+<meta property="og:description" content="Base 64编码算法详解">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-13T12:24:38.000Z">
+<meta property="article:modified_time" content="2020-12-23T09:58:40.256Z">
+<meta property="article:author" content="Juvenile @ NiuJuxin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="CRYPTO">
+<meta property="article:tag" content="NUMBER THEORY &amp; CRYPTO &amp; CODING">
+<meta property="article:tag" content="MATHEMATICS &amp; ALGORITHM">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/13/编码算法——Base 64/"/>
+
+
+
+
+
+  <title>编码算法——Base 64 | Juvenile</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Juvenile</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
 
   <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/13/%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Base%2064/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Juvenile">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">编码算法——Base 64</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-13T20:24:38+08:00">
+                2020-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/CRYPTO/" itemprop="url" rel="index">
+                    <span itemprop="name">CRYPTO</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MATHEMATICS-ALGORITHM/" itemprop="url" rel="index">
+                    <span itemprop="name">MATHEMATICS & ALGORITHM</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MATHEMATICS-ALGORITHM/NUMBER-THEORY-CRYPTO-CODING/" itemprop="url" rel="index">
+                    <span itemprop="name">NUMBER THEORY & CRYPTO & CODING</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>Base 64编码算法详解</strong></p>
+<a id="more"></a>
+
+<h1 id="编码原理"><a href="#编码原理" class="headerlink" title="编码原理"></a>编码原理</h1><p>在计算机中。字符一般使用8位（即1个字节）大小的内存进行存储，该1个字节大小的内存可以表示从0到255之间的整数。而ASCII编码表在这里就定义了数字到字符的一一对应关系。因此，给定一个二进制串，计算机可以按照每八位为一个单位，查表得到整个字符串；反过来，给定一个字符串，也可以查表得到该字符串对应的二进制串。</p>
+<p><strong>而对于Base 64来说，其使用六位来表示一个字符</strong>。因此，编码后的字符串仅包括64个不同的字符（还有一个字符<code>=</code>用于补位，因此准确地说是65个不同的字符）。下面通过实例来说明Base 64的编码原理。</p>
+<p>标准的Base 64也有一个<strong>编码表</strong>，通常表示为</p>
+<p><code>lookup = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</code></p>
+<p>具体如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+<th align="center"><strong>索引</strong></th>
+<th align="center"><strong>对应字符</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center"><strong>A</strong></td>
+<td align="center">17</td>
+<td align="center"><strong>R</strong></td>
+<td align="center">34</td>
+<td align="center"><strong>i</strong></td>
+<td align="center">51</td>
+<td align="center"><strong>z</strong></td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>B</strong></td>
+<td align="center">18</td>
+<td align="center"><strong>S</strong></td>
+<td align="center">35</td>
+<td align="center"><strong>j</strong></td>
+<td align="center">52</td>
+<td align="center"><strong>0</strong></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>C</strong></td>
+<td align="center">19</td>
+<td align="center"><strong>T</strong></td>
+<td align="center">36</td>
+<td align="center"><strong>k</strong></td>
+<td align="center">53</td>
+<td align="center"><strong>1</strong></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>D</strong></td>
+<td align="center">20</td>
+<td align="center"><strong>U</strong></td>
+<td align="center">37</td>
+<td align="center"><strong>l</strong></td>
+<td align="center">54</td>
+<td align="center"><strong>2</strong></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>E</strong></td>
+<td align="center">21</td>
+<td align="center"><strong>V</strong></td>
+<td align="center">38</td>
+<td align="center"><strong>m</strong></td>
+<td align="center">55</td>
+<td align="center"><strong>3</strong></td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>F</strong></td>
+<td align="center">22</td>
+<td align="center"><strong>W</strong></td>
+<td align="center">39</td>
+<td align="center"><strong>n</strong></td>
+<td align="center">56</td>
+<td align="center"><strong>4</strong></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><strong>G</strong></td>
+<td align="center">23</td>
+<td align="center"><strong>X</strong></td>
+<td align="center">40</td>
+<td align="center"><strong>o</strong></td>
+<td align="center">57</td>
+<td align="center"><strong>5</strong></td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><strong>H</strong></td>
+<td align="center">24</td>
+<td align="center"><strong>Y</strong></td>
+<td align="center">41</td>
+<td align="center"><strong>p</strong></td>
+<td align="center">58</td>
+<td align="center"><strong>6</strong></td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center"><strong>I</strong></td>
+<td align="center">25</td>
+<td align="center"><strong>Z</strong></td>
+<td align="center">42</td>
+<td align="center"><strong>q</strong></td>
+<td align="center">59</td>
+<td align="center"><strong>7</strong></td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center"><strong>J</strong></td>
+<td align="center">26</td>
+<td align="center"><strong>a</strong></td>
+<td align="center">43</td>
+<td align="center"><strong>r</strong></td>
+<td align="center">60</td>
+<td align="center"><strong>8</strong></td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center"><strong>K</strong></td>
+<td align="center">27</td>
+<td align="center"><strong>b</strong></td>
+<td align="center">44</td>
+<td align="center"><strong>s</strong></td>
+<td align="center">61</td>
+<td align="center"><strong>9</strong></td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center"><strong>L</strong></td>
+<td align="center">28</td>
+<td align="center"><strong>c</strong></td>
+<td align="center">45</td>
+<td align="center"><strong>t</strong></td>
+<td align="center">62</td>
+<td align="center"><strong>+</strong></td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center"><strong>M</strong></td>
+<td align="center">29</td>
+<td align="center"><strong>d</strong></td>
+<td align="center">46</td>
+<td align="center"><strong>u</strong></td>
+<td align="center">63</td>
+<td align="center"><strong>/</strong></td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center"><strong>N</strong></td>
+<td align="center">30</td>
+<td align="center"><strong>e</strong></td>
+<td align="center">47</td>
+<td align="center"><strong>v</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center"><strong>O</strong></td>
+<td align="center">31</td>
+<td align="center"><strong>f</strong></td>
+<td align="center">48</td>
+<td align="center"><strong>w</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center"><strong>P</strong></td>
+<td align="center">32</td>
+<td align="center"><strong>g</strong></td>
+<td align="center">49</td>
+<td align="center"><strong>x</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="center"><strong>Q</strong></td>
+<td align="center">33</td>
+<td align="center"><strong>h</strong></td>
+<td align="center">50</td>
+<td align="center"><strong>y</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101</code></p>
+<p>如果我们将其按照三个一组进行分组，就可以得到<code>001 110 101 110 101 011 101 011 101 010 000 101</code></p>
+<p>现在，我们每两组作为一个单位，可以得到<code>\14\46\43\43\42\5</code></p>
+<p>通过查表，既可以得到编码后的字符串为**<code>OurrqF</code>**</p>
+</blockquote>
+<p>上面说的是理想的情况，通常情况下，<strong>字符串对应的二进制串的长度是8的倍数，但很有可不是6的倍数</strong>。为了解决这个办法，Base 64要求在原二进制串后填0，将该字符串扩充为长度是6的倍数，并使用字符<code>=</code>进行补位（等号的个数取决于补位的0的数量）。补位有两种可能出现的情况，接下来将分别说明。</p>
+<blockquote>
+<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111 1110</code></p>
+<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 111 10</code></p>
+<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
+<p><strong><code>001110 101110 101011 101011 101010 000101 111111 10[0000]</code></strong></p>
+<p>另一种情况，假设我们有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111</code></p>
+<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 1</code></p>
+<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
+<p><strong><code>001110 101110 101011 101011 101010 000101 1111[00]</code></strong></p>
+</blockquote>
+<p>实际上我们可以证明，补位仅有两种情况。因此Base 64编码规定，如果在二进制串末尾补0的个数为2，则在编码后字符串末尾添加一个等号<code>=</code>。如果补0的个数为4，则添加两个等号<code>==</code>。</p>
+<blockquote>
+<p>因此，上面两个二进制串经过编码得到的字符串为：</p>
+<p><strong><code>OurrqF/g==</code>**和</strong><code>OurrqF8=</code>**</p>
+</blockquote>
+<p>在知道编码原理之后，解码的过程就容易理解了。</p>
+<h1 id="换表Base-64"><a href="#换表Base-64" class="headerlink" title="换表Base 64"></a>换表Base 64</h1><p>由上面的讨论可以看出，如果知道了Base 64的检索表，就可以完全将编码反编码。因此，为了保证更高的安全性（或者提高问题的难度），通常会使用新的检索表（而不是标准检索表）。</p>
+<p>对于换表Base 64，一种方法是在函数中定义新的检索表，直接进行编码和文本之间的转换，另一种方法是做两次变换，将换表Base 64看作<strong>Text &lt;-&gt; 旧表下的Code &lt;-&gt;新表下的Code</strong>这样的函数的复合。</p>
+<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><p><strong><a target="_blank" rel="noopener" href="https://base64.us/">在线编码网站</a></strong></p>
+<p>Python中内置了Base 64编码库：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;加密&quot;&quot;&quot;</span></span><br><span class="line">byte_text = text.encode()   </span><br><span class="line">		<span class="comment">#base64模块使用byte而不是str类型</span></span><br><span class="line">code = base64.b64encode(byte_text).decode()</span><br><span class="line">		<span class="comment">#b64encode()函数用于将字符串进行转换，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(code)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;解密&quot;&quot;&quot;</span></span><br><span class="line">de_text = base64.b64decode(code.encode()).decode()   </span><br><span class="line">		<span class="comment">#b64decode()函数是b64encode()的逆过程，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(de_text)</span><br></pre></td></tr></table></figure>
+
+<p>Python函数实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_decode</span>(<span class="params">code, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(code, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> code[-<span class="number">2</span>] == <span class="string">&#x27;=&#x27;</span>:    code = code[<span class="number">0</span>:-<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">elif</span> code[-<span class="number">1</span>] == <span class="string">&#x27;=&#x27;</span>:  code = code[<span class="number">0</span>:-<span class="number">1</span>]</span><br><span class="line">    bin_code = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">6</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> code])</span><br><span class="line">    text = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_code) // <span class="number">8</span>):</span><br><span class="line">        text += <span class="built_in">chr</span>(<span class="built_in">int</span>(bin_code[i * <span class="number">8</span>: i * <span class="number">8</span> + <span class="number">8</span>], <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/CRYPTO/" rel="tag"># CRYPTO</a>
+          
+            <a href="/tags/NUMBER-THEORY-CRYPTO-CODING/" rel="tag"># NUMBER THEORY & CRYPTO & CODING</a>
+          
+            <a href="/tags/MATHEMATICS-ALGORITHM/" rel="tag"># MATHEMATICS & ALGORITHM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/" rel="next" title="使用IDA的技巧汇总">
+                <i class="fa fa-chevron-left"></i> 使用IDA的技巧汇总
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/" rel="prev" title="【WP】逆向-CrackMe">
+                【WP】逆向-CrackMe <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
 
     <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+      
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+          </div>
+          
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/juvenile-sdu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="niujuxin_sdu@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">编码原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8D%A2%E8%A1%A8Base-64"><span class="nav-number">2.</span> <span class="nav-text">换表Base 64</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">算法实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Juvenile @ NiuJuxin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
