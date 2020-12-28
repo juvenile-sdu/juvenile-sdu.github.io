@@ -79,21 +79,23 @@
 
 
 
-<meta name="description" content="Base 64编码算法详解">
+<meta name="description" content="本文汇总CTF密码学中和RSA问题相关的问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="编码算法——Base 64">
-<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/13/%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Base%2064/index.html">
+<meta property="og:title" content="CTF密码学中RSA问题总结">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2020/12/26/CTF%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%ADRSA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Juvenile">
-<meta property="og:description" content="Base 64编码算法详解">
+<meta property="og:description" content="本文汇总CTF密码学中和RSA问题相关的问题。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-12-13T12:24:38.000Z">
-<meta property="article:modified_time" content="2020-12-23T09:58:40.256Z">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/26/CTF%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%ADRSA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/image-20201228090323794.png">
+<meta property="article:published_time" content="2020-12-26T00:27:17.000Z">
+<meta property="article:modified_time" content="2020-12-28T02:24:46.620Z">
 <meta property="article:author" content="Juvenile @ NiuJuxin">
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="CRYPTO">
 <meta property="article:tag" content="NUMBER THEORY &amp; CRYPTO &amp; CODING">
 <meta property="article:tag" content="MATHEMATICS &amp; ALGORITHM">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://juvenile-sdu.github.io/2020/12/26/CTF%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%ADRSA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/image-20201228090323794.png">
 
 
 
@@ -123,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/13/编码算法——Base 64/"/>
+  <link rel="canonical" href="https://juvenile-sdu.github.io/2020/12/26/CTF密码学中RSA问题总结/"/>
 
 
 
 
 
-  <title>编码算法——Base 64 | Juvenile</title>
+  <title>CTF密码学中RSA问题总结 | Juvenile</title>
   
 
 
@@ -290,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/13/%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Base%2064/">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2020/12/26/CTF%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%ADRSA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -307,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">编码算法——Base 64</h1>
+          <h1 class="post-title" itemprop="name headline">CTF密码学中RSA问题总结</h1>
         
 
         <div class="post-meta">
@@ -319,8 +321,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-13T20:24:38+08:00">
-                2020-12-13
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-26T08:27:17+08:00">
+                2020-12-26
               </time>
             
 
@@ -412,230 +414,74 @@
       
 
       
-        <p><strong>Base 64编码算法详解</strong></p>
+        <p><strong>本文汇总CTF密码学中和RSA问题相关的问题。</strong></p>
 <a id="more"></a>
 
-<h1 id="编码原理"><a href="#编码原理" class="headerlink" title="编码原理"></a>编码原理</h1><p>在计算机中。字符一般使用8位（即1个字节）大小的内存进行存储，该1个字节大小的内存可以表示从0到255之间的整数。而ASCII编码表在这里就定义了数字到字符的一一对应关系。因此，给定一个二进制串，计算机可以按照每八位为一个单位，查表得到整个字符串；反过来，给定一个字符串，也可以查表得到该字符串对应的二进制串。</p>
-<p><strong>而对于Base 64来说，其使用六位来表示一个字符</strong>。因此，编码后的字符串仅包括64个不同的字符（还有一个字符<code>=</code>用于补位，因此准确地说是65个不同的字符）。下面通过实例来说明Base 64的编码原理。</p>
-<p>标准的Base 64也有一个<strong>编码表</strong>，通常表示为</p>
-<p><code>lookup = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</code></p>
-<p>具体如下：</p>
-<table>
-<thead>
-<tr>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-<th align="center"><strong>索引</strong></th>
-<th align="center"><strong>对应字符</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">0</td>
-<td align="center"><strong>A</strong></td>
-<td align="center">17</td>
-<td align="center"><strong>R</strong></td>
-<td align="center">34</td>
-<td align="center"><strong>i</strong></td>
-<td align="center">51</td>
-<td align="center"><strong>z</strong></td>
-</tr>
-<tr>
-<td align="center">1</td>
-<td align="center"><strong>B</strong></td>
-<td align="center">18</td>
-<td align="center"><strong>S</strong></td>
-<td align="center">35</td>
-<td align="center"><strong>j</strong></td>
-<td align="center">52</td>
-<td align="center"><strong>0</strong></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><strong>C</strong></td>
-<td align="center">19</td>
-<td align="center"><strong>T</strong></td>
-<td align="center">36</td>
-<td align="center"><strong>k</strong></td>
-<td align="center">53</td>
-<td align="center"><strong>1</strong></td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><strong>D</strong></td>
-<td align="center">20</td>
-<td align="center"><strong>U</strong></td>
-<td align="center">37</td>
-<td align="center"><strong>l</strong></td>
-<td align="center">54</td>
-<td align="center"><strong>2</strong></td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"><strong>E</strong></td>
-<td align="center">21</td>
-<td align="center"><strong>V</strong></td>
-<td align="center">38</td>
-<td align="center"><strong>m</strong></td>
-<td align="center">55</td>
-<td align="center"><strong>3</strong></td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center"><strong>F</strong></td>
-<td align="center">22</td>
-<td align="center"><strong>W</strong></td>
-<td align="center">39</td>
-<td align="center"><strong>n</strong></td>
-<td align="center">56</td>
-<td align="center"><strong>4</strong></td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center"><strong>G</strong></td>
-<td align="center">23</td>
-<td align="center"><strong>X</strong></td>
-<td align="center">40</td>
-<td align="center"><strong>o</strong></td>
-<td align="center">57</td>
-<td align="center"><strong>5</strong></td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center"><strong>H</strong></td>
-<td align="center">24</td>
-<td align="center"><strong>Y</strong></td>
-<td align="center">41</td>
-<td align="center"><strong>p</strong></td>
-<td align="center">58</td>
-<td align="center"><strong>6</strong></td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center"><strong>I</strong></td>
-<td align="center">25</td>
-<td align="center"><strong>Z</strong></td>
-<td align="center">42</td>
-<td align="center"><strong>q</strong></td>
-<td align="center">59</td>
-<td align="center"><strong>7</strong></td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="center"><strong>J</strong></td>
-<td align="center">26</td>
-<td align="center"><strong>a</strong></td>
-<td align="center">43</td>
-<td align="center"><strong>r</strong></td>
-<td align="center">60</td>
-<td align="center"><strong>8</strong></td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="center"><strong>K</strong></td>
-<td align="center">27</td>
-<td align="center"><strong>b</strong></td>
-<td align="center">44</td>
-<td align="center"><strong>s</strong></td>
-<td align="center">61</td>
-<td align="center"><strong>9</strong></td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="center"><strong>L</strong></td>
-<td align="center">28</td>
-<td align="center"><strong>c</strong></td>
-<td align="center">45</td>
-<td align="center"><strong>t</strong></td>
-<td align="center">62</td>
-<td align="center"><strong>+</strong></td>
-</tr>
-<tr>
-<td align="center">12</td>
-<td align="center"><strong>M</strong></td>
-<td align="center">29</td>
-<td align="center"><strong>d</strong></td>
-<td align="center">46</td>
-<td align="center"><strong>u</strong></td>
-<td align="center">63</td>
-<td align="center"><strong>/</strong></td>
-</tr>
-<tr>
-<td align="center">13</td>
-<td align="center"><strong>N</strong></td>
-<td align="center">30</td>
-<td align="center"><strong>e</strong></td>
-<td align="center">47</td>
-<td align="center"><strong>v</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">14</td>
-<td align="center"><strong>O</strong></td>
-<td align="center">31</td>
-<td align="center"><strong>f</strong></td>
-<td align="center">48</td>
-<td align="center"><strong>w</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">15</td>
-<td align="center"><strong>P</strong></td>
-<td align="center">32</td>
-<td align="center"><strong>g</strong></td>
-<td align="center">49</td>
-<td align="center"><strong>x</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">16</td>
-<td align="center"><strong>Q</strong></td>
-<td align="center">33</td>
-<td align="center"><strong>h</strong></td>
-<td align="center">50</td>
-<td align="center"><strong>y</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101</code></p>
-<p>如果我们将其按照三个一组进行分组，就可以得到<code>001 110 101 110 101 011 101 011 101 010 000 101</code></p>
-<p>现在，我们每两组作为一个单位，可以得到<code>\14\46\43\43\42\5</code></p>
-<p>通过查表，既可以得到编码后的字符串为**<code>OurrqF</code>**</p>
-</blockquote>
-<p>上面说的是理想的情况，通常情况下，<strong>字符串对应的二进制串的长度是8的倍数，但很有可不是6的倍数</strong>。为了解决这个办法，Base 64要求在原二进制串后填0，将该字符串扩充为长度是6的倍数，并使用字符<code>=</code>进行补位（等号的个数取决于补位的0的数量）。补位有两种可能出现的情况，接下来将分别说明。</p>
-<blockquote>
-<p>假设我们现在有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111 1110</code></p>
-<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 111 10</code></p>
-<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
-<p><strong><code>001110 101110 101011 101011 101010 000101 111111 10[0000]</code></strong></p>
-<p>另一种情况，假设我们有一个二进制串为<code>0011 1010 1110 1010 1110 1011 1010 1000 0101 1111</code></p>
-<p>同样的：<code>001 110 101 110 101 011 101 011 101 010 000 101 111 1</code></p>
-<p>此时，整个二进制串长度不是6的倍数，因此我们使用0进行补位：</p>
-<p><strong><code>001110 101110 101011 101011 101010 000101 1111[00]</code></strong></p>
-</blockquote>
-<p>实际上我们可以证明，补位仅有两种情况。因此Base 64编码规定，如果在二进制串末尾补0的个数为2，则在编码后字符串末尾添加一个等号<code>=</code>。如果补0的个数为4，则添加两个等号<code>==</code>。</p>
-<blockquote>
-<p>因此，上面两个二进制串经过编码得到的字符串为：</p>
-<p><strong><code>OurrqF/g==</code>**和</strong><code>OurrqF8=</code>**</p>
-</blockquote>
-<p>在知道编码原理之后，解码的过程就容易理解了。</p>
-<h1 id="换表Base-64"><a href="#换表Base-64" class="headerlink" title="换表Base 64"></a>换表Base 64</h1><p>由上面的讨论可以看出，如果知道了Base 64的检索表，就可以完全将编码反编码。因此，为了保证更高的安全性（或者提高问题的难度），通常会使用新的检索表（而不是标准检索表）。</p>
-<p>对于换表Base 64，一种方法是在函数中定义新的检索表，直接进行编码和文本之间的转换，另一种方法是做两次变换，将换表Base 64看作<strong>Text &lt;-&gt; 旧表下的Code &lt;-&gt;新表下的Code</strong>这样的函数的复合。</p>
-<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><p><strong><a target="_blank" rel="noopener" href="https://base64.us/">在线编码网站</a></strong></p>
-<p>Python中内置了Base 64编码库：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;加密&quot;&quot;&quot;</span></span><br><span class="line">byte_text = text.encode()   </span><br><span class="line">		<span class="comment">#base64模块使用byte而不是str类型</span></span><br><span class="line">code = base64.b64encode(byte_text).decode()</span><br><span class="line">		<span class="comment">#b64encode()函数用于将字符串进行转换，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(code)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;解密&quot;&quot;&quot;</span></span><br><span class="line">de_text = base64.b64decode(code.encode()).decode()   </span><br><span class="line">		<span class="comment">#b64decode()函数是b64encode()的逆过程，其返回一byte类型变量，因此需要解码</span></span><br><span class="line">print(de_text)</span><br></pre></td></tr></table></figure>
 
-<p>Python函数实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_encode</span>(<span class="params">text, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(text, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">8</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(<span class="built_in">ord</span>(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> text])</span><br><span class="line">    remainder = <span class="built_in">len</span>(bin_str) % <span class="number">6</span></span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        bin_str += <span class="string">&quot;0&quot;</span> * (<span class="number">6</span> - remainder)</span><br><span class="line">    bin_str += <span class="string">&#x27;X&#x27;</span></span><br><span class="line">    code = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_str) // <span class="number">6</span>):</span><br><span class="line">        code += lookup[<span class="built_in">int</span>(bin_str[i * <span class="number">6</span>: i * <span class="number">6</span> + <span class="number">6</span>], <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">if</span> remainder:</span><br><span class="line">        code += <span class="string">&quot;=&quot;</span> * ((<span class="number">6</span> - remainder) // <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_decode</span>(<span class="params">code, lookup = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span>):</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">isinstance</span>(code, <span class="built_in">str</span>), <span class="string">&quot;param &#x27;text&#x27; must be type &lt;str&gt;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> code[-<span class="number">2</span>] == <span class="string">&#x27;=&#x27;</span>:    code = code[<span class="number">0</span>:-<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">elif</span> code[-<span class="number">1</span>] == <span class="string">&#x27;=&#x27;</span>:  code = code[<span class="number">0</span>:-<span class="number">1</span>]</span><br><span class="line">    bin_code = <span class="string">&#x27;&#x27;</span>.join([<span class="string">&#x27;0&#x27;</span> * (<span class="number">6</span> - <span class="built_in">len</span>(<span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:])) + <span class="built_in">bin</span>(lookup.index(ch))[<span class="number">2</span>:] <span class="keyword">for</span> ch <span class="keyword">in</span> code])</span><br><span class="line">    text = <span class="built_in">str</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(bin_code) // <span class="number">8</span>):</span><br><span class="line">        text += <span class="built_in">chr</span>(<span class="built_in">int</span>(bin_code[i * <span class="number">8</span>: i * <span class="number">8</span> + <span class="number">8</span>], <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
 
+<h1 id="RSA简介"><a href="#RSA简介" class="headerlink" title="RSA简介"></a>RSA简介</h1><p>RSA算法的具体描述如下：</p>
+<ul>
+<li>任意选择两个不同的大素数$p$和$q$，计算$n=pq$和$\phi(n)=(p-1)(q-1)$。</li>
+<li>任意选择一个整数$e$，满足$gcd(e,\phi(n))=1$。</li>
+<li>计算$d=e^{-1}(mod \space \phi(n))$。</li>
+<li>公布公钥$(e,n)$，保存私钥$(d,n)$。</li>
+</ul>
+<p>（使用公钥）将明文$m(m&lt;n)$加密成密文$c$的加密算法为：<br>$$<br>c=E(m)=m^e(mod \space n)<br>$$</p>
+<p>（使用私钥）将密文$c$解密的解密算法为：<br>$$<br>m=D(c)=c^d(mod \space n)<br>$$</p>
+<h1 id="和RSA算法有关的Python-Libraries和Tools"><a href="#和RSA算法有关的Python-Libraries和Tools" class="headerlink" title="和RSA算法有关的Python Libraries和Tools"></a>和RSA算法有关的Python Libraries和Tools</h1><ul>
+<li><p><strong>利用Python中的库<a target="_blank" rel="noopener" href="https://www.pycryptodome.org/en/latest/index.html">Crypto.Util.number</a>中的<code>long_to_bytes</code>、<code>bytes_to_long</code>函数可以进行<code>bytes</code>类型和<code>int</code>类型的互换（使用方法见<a target="_blank" rel="noopener" href="https://www.programcreek.com/python/index/1372/Crypto.Util.number%EF%BC%89%E3%80%82">https://www.programcreek.com/python/index/1372/Crypto.Util.number）。</a></strong></p>
+</li>
+<li><p><strong>Python中的库<a target="_blank" rel="noopener" href="https://gmpy2.readthedocs.io/en/latest/index.html">gmpy2</a>可以进行包括扩展欧几里得、求逆、求<code>x</code>次方根等常见的操作。（使用方法见<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42250840/article/details/105153227%E5%92%8Chttps://vimsky.com/examples/detail/python-module-gmpy2.html%EF%BC%89%E3%80%82">https://blog.csdn.net/qq_42250840/article/details/105153227和https://vimsky.com/examples/detail/python-module-gmpy2.html）。</a></strong></p>
+</li>
+<li><p><strong>Python中的库<a target="_blank" rel="noopener" href="https://github.com/hellman/libnum">libnum</a>集成了模运算、椭圆曲线运算等常见的操作。</strong></p>
+</li>
+</ul>
+<p><strong>常见的整数分解工具包括</strong></p>
+<ul>
+<li><p><strong><a target="_blank" rel="noopener" href="https://sourceforge.net/projects/yafu/">Windows kafu</a>，使用命令<code>factor(N)</code>即可。</strong></p>
+</li>
+<li><p><strong>Python Library <a target="_blank" rel="noopener" href="https://github.com/hellman/libnum">libnum</a>，使用命令<code>factorize(n)</code>即可（使用rho-Pollard method）。</strong></p>
+</li>
+</ul>
+<h1 id="常见的攻击方法"><a href="#常见的攻击方法" class="headerlink" title="常见的攻击方法"></a>常见的攻击方法</h1><h2 id="暴力破解-N-pq"><a href="#暴力破解-N-pq" class="headerlink" title="暴力破解 $N=pq$"></a>暴力破解 $N=pq$</h2><p>如果题目中$n$较小，我们可以利用数学工具对$N$进行整数分解。</p>
+<p><strong>有时候，将$N$进行整数分解后会得到三个或多个整数。</strong>可以根据如下定理</p>
+<blockquote>
+<p>设$m=p_1^{\alpha _1}p_2^{\alpha _2},…,p_r^{\alpha _r}$，其中$p_1,p_2,…,p_r$为不同的素因子，则<br>$$<br>\phi(m)=\phi(p_1^{\alpha _1})\phi(p_2^{\alpha _2})…\phi(p_r^{\alpha _r})=p_1^{\alpha _1-1}(p_1-1)p_2^{\alpha _2-1}(p_2 -1)…p_r^{\alpha _r-1}(p_r -1)<br>$$</p>
+</blockquote>
+<p>计算出$\phi(N)$。</p>
+<p>例如（CTF新生赛Crypto 2）：</p>
+<blockquote>
+<p>c=67692316911846383515666937548215377516026242122014572162117994514425606283681<br>N=103461035900816914121390101299049044413950405173712170434161686539878160984549<br>e=65537</p>
+</blockquote>
+<p>首先使用kafu计算出N的整数分解。</p>
+<img src="/2020/12/26/CTF%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%ADRSA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/image-20201228090323794.png" alt="image-20201228090323794" style="zoom: 67%;">
+
+<p>得到<br>$$<br>p=366669102002966856876605669837014229419, q=282164587459512124844245113950593348271<br>$$<br>编写脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">c = <span class="number">67692316911846383515666937548215377516026242122014572162117994514425606283681</span></span><br><span class="line">N = <span class="number">103461035900816914121390101299049044413950405173712170434161686539878160984549</span></span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">p = <span class="number">366669102002966856876605669837014229419</span></span><br><span class="line">q = <span class="number">282164587459512124844245113950593348271</span></span><br><span class="line"></span><br><span class="line">d = libnum.invmod(e, (p-<span class="number">1</span>)*(q-<span class="number">1</span>))</span><br><span class="line">m = <span class="built_in">pow</span>(c, d, N)</span><br><span class="line">print(long_to_bytes(m).decode())</span><br></pre></td></tr></table></figure>
+
+<p>得到答案<code>flag&#123;hello_hash_team&#125;</code>。</p>
+<h2 id="RSA共模攻击"><a href="#RSA共模攻击" class="headerlink" title="RSA共模攻击"></a>RSA共模攻击</h2><p>在大多数情况下，$N$无法被有效地分解。此时，<strong>如果题目中出现了两对$(e_1,c_1),(e_2,c_2)$，并且有$gcd(e_1,e_2)=1$，则可以考虑使用RSA共模攻击</strong>。</p>
+<p><strong>共模攻击原理</strong></p>
+<p>由于$gcd(e_1,e_2)=1$，因此根据拓展欧几里得原理，可以得到唯一的$s_1,s_2$，使得<br>$$<br>e_1s_1+e_2s_2=1<br>$$<br>又由于<br>$$<br>c_1=m^{e_1}(mod \space n),\space c_2=m^{e_2}(mod\space n)<br>$$<br>可以得到<br>$$<br>c_1^{s_1}c_2^{s_2}=[m^{e_1}(mod \space n)]^{s_1}[m^{e_2}(mod \space n)]^{s_2}(mod \space n)<br>$$<br>根据同余性质和幂运算性质，可以得到<br>$$<br>c_1^{s_1}c_2^{s_2}=(m^{e_1})^{s_1}(m^{e_2})^{s_2}(mod \space n)=m^{e_1s_1+e_2s_2}(mod \space n)<br>$$<br>因此<br>$$<br>c_1^{s_1}c_2^{s_2}=m^1(mod \space n)=m(mod n)<br>$$</p>
+<p><strong>利用共模攻击，可以在不求出$d$的情况下（即不需要分解大整数$N$）将$m$计算出来</strong>。</p>
+<p>例如（CTF新生赛Crypto 3）：</p>
+<blockquote>
+<p>n = 0xa1d4d377001f1b8d5b2740514ce699b49dc8a02f12df9a960e80e2a6ee13b7a97d9f508721e3dd7a6842c24ab25ab87d1132358de7c6c4cee3fb3ec9b7fd873626bd0251d16912de1f0f1a2bba52b082339113ad1a262121db31db9ee1bf9f26023182acce8f84612bfeb075803cf610f27b7b16147f7d29cc3fd463df7ea31ca860d59aae5506479c76206603de54044e7b778e21082c4c4da795d39dc2b9c0589e577a773133c89fa8e3a4bd047b8e7d6da0d9a0d8a3c1a3607ce983deb350e1c649725cccb0e9d756fc3107dd4352aa18c45a65bab7772a4c5aef7020a1e67e6085cc125d9fc042d96489a08d885f448ece8f7f254067dfff0c4e72a63557L<br>e1 = 0xf4c1158fL<br>c1 = 12051796366524088489284445109295502686341498426965277230069915294159131976231473789977279364263965099422235647723775278060569378071469131866368399394772898224166518089593340803913798327451963589996734323497943301819051718709807518655868569656941242449109980876397661605271517459716669684900920279597477446629607627693769738733623143693170696779851882404994923673483971528314806130892416509854017091137325195201225617407959645788145876202882024723106204183257094755002924708009138560347432552090905489132135154932987521239299578509008290614398700799670928805692609756924823628055245227290288940649158862576448537833423L<br>e2 = 0xf493f7d1L<br>c2 = 16648382384980770705624348910895797622774711113202207693584907182552301186239613809347201161450012615995859738410661452438496756353485538305614949211776668793864984429696790944750894691957799234264508530084026894611228513698963347402329109838109621609770406925700520983387811451074838470370044678634099202003480925903267508744006195455234025325060817223813858985074720872124168142943926467694676717713503559007112874381750005406371400109962943508349497151148446064846096531445037416174913915923050332242843403926133165817310272633884358263778516770288515592959832151762499526363131801945163501999337808208074381212795L</p>
+</blockquote>
+<p>编写脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">n = <span class="number">0xa1d4d377001f1b8d5b2740514ce699b49dc8a02f12df9a960e80e2a6ee13b7a97d9f508721e3dd7a6842c24ab25ab87d1132358de7c6c4cee3fb3ec9b7fd873626bd0251d16912de1f0f1a2bba52b082339113ad1a262121db31db9ee1bf9f26023182acce8f84612bfeb075803cf610f27b7b16147f7d29cc3fd463df7ea31ca860d59aae5506479c76206603de54044e7b778e21082c4c4da795d39dc2b9c0589e577a773133c89fa8e3a4bd047b8e7d6da0d9a0d8a3c1a3607ce983deb350e1c649725cccb0e9d756fc3107dd4352aa18c45a65bab7772a4c5aef7020a1e67e6085cc125d9fc042d96489a08d885f448ece8f7f254067dfff0c4e72a63557</span></span><br><span class="line">e1 = <span class="number">0xf4c1158f</span></span><br><span class="line">c1 = <span class="number">12051796366524088489284445109295502686341498426965277230069915294159131976231473789977279364263965099422235647723775278060569378071469131866368399394772898224166518089593340803913798327451963589996734323497943301819051718709807518655868569656941242449109980876397661605271517459716669684900920279597477446629607627693769738733623143693170696779851882404994923673483971528314806130892416509854017091137325195201225617407959645788145876202882024723106204183257094755002924708009138560347432552090905489132135154932987521239299578509008290614398700799670928805692609756924823628055245227290288940649158862576448537833423</span></span><br><span class="line">e2 = <span class="number">0xf493f7d1</span></span><br><span class="line">c2 = <span class="number">16648382384980770705624348910895797622774711113202207693584907182552301186239613809347201161450012615995859738410661452438496756353485538305614949211776668793864984429696790944750894691957799234264508530084026894611228513698963347402329109838109621609770406925700520983387811451074838470370044678634099202003480925903267508744006195455234025325060817223813858985074720872124168142943926467694676717713503559007112874381750005406371400109962943508349497151148446064846096531445037416174913915923050332242843403926133165817310272633884358263778516770288515592959832151762499526363131801945163501999337808208074381212795</span></span><br><span class="line"></span><br><span class="line">s1, s2, g = libnum.xgcd(e1, e2)</span><br><span class="line"><span class="keyword">assert</span> g == <span class="number">1</span>, <span class="string">&quot;gcd(e1, e2) is not 1&quot;</span></span><br><span class="line"></span><br><span class="line">ans = (<span class="built_in">pow</span>(c1, s1, n) * <span class="built_in">pow</span>(c2, s2, n)) % n</span><br><span class="line">print(long_to_bytes(ans).decode())</span><br></pre></td></tr></table></figure>
+
+<p>得到答案<code>flag&#123;8c16c91be3f3287ff5a10167e922b33b&#125;</code>。</p>
+<h2 id="低加密指数分解攻击"><a href="#低加密指数分解攻击" class="headerlink" title="低加密指数分解攻击"></a>低加密指数分解攻击</h2><p><strong>在 RSA 中$ e $也称为加密指数。由于$ e $是可以随意选取的，选取小一点的$ e $可以缩短加密时间，但是选取不当的话，就会造成安全问题。</strong></p>
+<p>由于（使用公钥）将明文$m(m&lt;n)$加密成密文$c$的加密算法为：<br>$$<br>c=E(m)=m^e(mod \space n)<br>$$<br>因此，当$e$过小时，例如$e=2,e=3$，就会有<br>$$<br>m^e=c+kn(k=0,1,…)<br>$$<br>即，<strong>RSA问题转换为了求$c+kn(k=…,-1,0,1,…)$的二次方根或者三次方根问题。和大整数分解问题相比，该算法的时间复杂度非常低，因此可以利用这种方法获得$m$。</strong></p>
+<p>例如（CTF训练赛Crypto 2）：</p>
+<blockquote>
+<p>n =     0x504422886880999134164106129232979493447288711838128518343366212225318903644618300817499198750840212643148846352592538512783005736164297583799147064883313355294028416687642306709706943887551457028035973777229371815062651312421640647068096189113496379135101287943752591797440940734536167859259186040466011910888475712958297303535087426800506564240900638884432216737231731773972981109497611446103590015141017384041792747752222369077462487716099140258216028669719577413647641486036733175734648934918607792606929986333056819301666536526344527151782292255144358594370104124433857693900000227671975512733846188265519758430055649020007978758166309930265697614982513218273073454928983660048528331097010828958096468299776488744993182315936148627876851809422331280471073551417956563668197068676126722734534188127471611402864677938887115908916553544845110143563736559450970252229445667691496767868123951081712872604935508183737147849971835008184807472987711316180320099624812832405397468923025162496735247263616654895797084799784974584932678025655358910480843010221725985491740823985360121695310692419773463141212113933823487148306326402421665145808422963033346161969635009951581265915013730077344870284008003690168143322781170105437085918993663<br>c = 0x10652CDFAA8D984F5B582D65A9357ADA464CA4E9BF0C3914A5AD2DC291D9EC8310E9BFF83E4B0545B61806A4FC0DAC3FCA5A0917D98052320317208292B6F4B472AA032D4E48CFFEAFF387A44F7FCDD91DC103BB2B9C66FFA987C4A3E038F65C46CC66A00965<br>e = 3</p>
+</blockquote>
+<p>编写脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> libnum</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">n = <span class="number">0x504422886880999134164106129232979493447288711838128518343366212225318903644618300817499198750840212643148846352592538512783005736164297583799147064883313355294028416687642306709706943887551457028035973777229371815062651312421640647068096189113496379135101287943752591797440940734536167859259186040466011910888475712958297303535087426800506564240900638884432216737231731773972981109497611446103590015141017384041792747752222369077462487716099140258216028669719577413647641486036733175734648934918607792606929986333056819301666536526344527151782292255144358594370104124433857693900000227671975512733846188265519758430055649020007978758166309930265697614982513218273073454928983660048528331097010828958096468299776488744993182315936148627876851809422331280471073551417956563668197068676126722734534188127471611402864677938887115908916553544845110143563736559450970252229445667691496767868123951081712872604935508183737147849971835008184807472987711316180320099624812832405397468923025162496735247263616654895797084799784974584932678025655358910480843010221725985491740823985360121695310692419773463141212113933823487148306326402421665145808422963033346161969635009951581265915013730077344870284008003690168143322781170105437085918993663</span></span><br><span class="line">c = <span class="number">0x10652CDFAA8D984F5B582D65A9357ADA464CA4E9BF0C3914A5AD2DC291D9EC8310E9BFF83E4B0545B61806A4FC0DAC3FCA5A0917D98052320317208292B6F4B472AA032D4E48CFFEAFF387A44F7FCDD91DC103BB2B9C66FFA987C4A3E038F65C46CC66A00965</span></span><br><span class="line">e = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">x = c</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    msg, istrue = gmpy2.iroot(gmpy2.mpz(x), (gmpy2.mpz(e)))</span><br><span class="line">    <span class="keyword">if</span>(istrue):</span><br><span class="line">        print(long_to_bytes(<span class="built_in">int</span>(msg)).decode())</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:   x += n</span><br></pre></td></tr></table></figure>
+
+<p>得到答案<code>flag&#123;you_are_clever_than_i_thount&#125;</code>。</p>
 
       
     </div>
@@ -672,8 +518,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/12/13/%E4%BD%BF%E7%94%A8IDA%E7%9A%84%E6%8A%80%E5%B7%A7%E6%B1%87%E6%80%BB/" rel="next" title="使用IDA的技巧汇总">
-                <i class="fa fa-chevron-left"></i> 使用IDA的技巧汇总
+              <a href="/2020/12/24/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8%E2%80%94%E2%80%94%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" rel="next" title="二叉树的应用——堆与优先队列">
+                <i class="fa fa-chevron-left"></i> 二叉树的应用——堆与优先队列
               </a>
             
           </div>
@@ -681,10 +527,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/12/15/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-CrackMe/" rel="prev" title="【WP】逆向-CrackMe">
-                【WP】逆向-CrackMe <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -826,7 +668,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">编码原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8D%A2%E8%A1%A8Base-64"><span class="nav-number">2.</span> <span class="nav-text">换表Base 64</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">算法实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">RSA简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%92%8CRSA%E7%AE%97%E6%B3%95%E6%9C%89%E5%85%B3%E7%9A%84Python-Libraries%E5%92%8CTools"><span class="nav-number">2.</span> <span class="nav-text">和RSA算法有关的Python Libraries和Tools</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">常见的攻击方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3-N-pq"><span class="nav-number">3.1.</span> <span class="nav-text">暴力破解 $N&#x3D;pq$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA%E5%85%B1%E6%A8%A1%E6%94%BB%E5%87%BB"><span class="nav-number">3.2.</span> <span class="nav-text">RSA共模攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8E%E5%8A%A0%E5%AF%86%E6%8C%87%E6%95%B0%E5%88%86%E8%A7%A3%E6%94%BB%E5%87%BB"><span class="nav-number">3.3.</span> <span class="nav-text">低加密指数分解攻击</span></a></li></ol></li></ol></div>
             
 
           </div>
