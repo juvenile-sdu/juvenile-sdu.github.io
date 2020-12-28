@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://juvenile-sdu.github.io/2020/12/26/CTF%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%ADRSA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/image-20201228090323794.png">
 <meta property="article:published_time" content="2020-12-26T00:27:17.000Z">
-<meta property="article:modified_time" content="2020-12-28T02:24:46.620Z">
+<meta property="article:modified_time" content="2020-12-28T02:28:28.853Z">
 <meta property="article:author" content="Juvenile @ NiuJuxin">
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="CRYPTO">
@@ -428,14 +428,14 @@
 </ul>
 <p>（使用公钥）将明文$m(m&lt;n)$加密成密文$c$的加密算法为：<br>$$<br>c=E(m)=m^e(mod \space n)<br>$$</p>
 <p>（使用私钥）将密文$c$解密的解密算法为：<br>$$<br>m=D(c)=c^d(mod \space n)<br>$$</p>
-<h1 id="和RSA算法有关的Python-Libraries和Tools"><a href="#和RSA算法有关的Python-Libraries和Tools" class="headerlink" title="和RSA算法有关的Python Libraries和Tools"></a>和RSA算法有关的Python Libraries和Tools</h1><ul>
-<li><p><strong>利用Python中的库<a target="_blank" rel="noopener" href="https://www.pycryptodome.org/en/latest/index.html">Crypto.Util.number</a>中的<code>long_to_bytes</code>、<code>bytes_to_long</code>函数可以进行<code>bytes</code>类型和<code>int</code>类型的互换（使用方法见<a target="_blank" rel="noopener" href="https://www.programcreek.com/python/index/1372/Crypto.Util.number%EF%BC%89%E3%80%82">https://www.programcreek.com/python/index/1372/Crypto.Util.number）。</a></strong></p>
-</li>
-<li><p><strong>Python中的库<a target="_blank" rel="noopener" href="https://gmpy2.readthedocs.io/en/latest/index.html">gmpy2</a>可以进行包括扩展欧几里得、求逆、求<code>x</code>次方根等常见的操作。（使用方法见<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42250840/article/details/105153227%E5%92%8Chttps://vimsky.com/examples/detail/python-module-gmpy2.html%EF%BC%89%E3%80%82">https://blog.csdn.net/qq_42250840/article/details/105153227和https://vimsky.com/examples/detail/python-module-gmpy2.html）。</a></strong></p>
-</li>
-<li><p><strong>Python中的库<a target="_blank" rel="noopener" href="https://github.com/hellman/libnum">libnum</a>集成了模运算、椭圆曲线运算等常见的操作。</strong></p>
-</li>
-</ul>
+<h1 id="和RSA算法有关的Python-Libraries和Tools"><a href="#和RSA算法有关的Python-Libraries和Tools" class="headerlink" title="和RSA算法有关的Python Libraries和Tools"></a>和RSA算法有关的Python Libraries和Tools</h1><p><strong>利用Python中的库<a target="_blank" rel="noopener" href="https://www.pycryptodome.org/en/latest/index.html">Crypto.Util.number</a>中的<code>long_to_bytes</code>、<code>bytes_to_long</code>函数可以进行<code>bytes</code>类型和<code>int</code>类型的互换</strong>。</p>
+<p>使用方法：</p>
+<p> <a target="_blank" rel="noopener" href="https://www.programcreek.com/python/index/1372/Crypto.Util.number">https://www.programcreek.com/python/index/1372/Crypto.Util.number</a></p>
+<p><strong>Python中的库<a target="_blank" rel="noopener" href="https://gmpy2.readthedocs.io/en/latest/index.html">gmpy2</a>可以进行包括扩展欧几里得、求逆、求<code>x</code>次方根等常见的操作。</strong></p>
+<p>使用方法：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42250840/article/details/105153227">https://blog.csdn.net/qq_42250840/article/details/105153227</a></p>
+<p><a target="_blank" rel="noopener" href="https://vimsky.com/examples/detail/python-module-gmpy2.html">https://vimsky.com/examples/detail/python-module-gmpy2.html</a></p>
+<p><strong>Python中的库<a target="_blank" rel="noopener" href="https://github.com/hellman/libnum">libnum</a>集成了模运算、椭圆曲线运算等常见的操作。</strong></p>
 <p><strong>常见的整数分解工具包括</strong></p>
 <ul>
 <li><p><strong><a target="_blank" rel="noopener" href="https://sourceforge.net/projects/yafu/">Windows kafu</a>，使用命令<code>factor(N)</code>即可。</strong></p>
@@ -446,7 +446,7 @@
 <h1 id="常见的攻击方法"><a href="#常见的攻击方法" class="headerlink" title="常见的攻击方法"></a>常见的攻击方法</h1><h2 id="暴力破解-N-pq"><a href="#暴力破解-N-pq" class="headerlink" title="暴力破解 $N=pq$"></a>暴力破解 $N=pq$</h2><p>如果题目中$n$较小，我们可以利用数学工具对$N$进行整数分解。</p>
 <p><strong>有时候，将$N$进行整数分解后会得到三个或多个整数。</strong>可以根据如下定理</p>
 <blockquote>
-<p>设$m=p_1^{\alpha _1}p_2^{\alpha _2},…,p_r^{\alpha _r}$，其中$p_1,p_2,…,p_r$为不同的素因子，则<br>$$<br>\phi(m)=\phi(p_1^{\alpha _1})\phi(p_2^{\alpha _2})…\phi(p_r^{\alpha _r})=p_1^{\alpha _1-1}(p_1-1)p_2^{\alpha _2-1}(p_2 -1)…p_r^{\alpha _r-1}(p_r -1)<br>$$</p>
+<p>设$m=p_1^{\alpha _1}p_2^{\alpha _2},…,p_r^{\alpha _r}$，其中$p_1,p_2,…,p_r$为不同的素因 子，则<br>$$<br>\phi(m)=\phi(p_1^{\alpha _1})\phi(p_2^{\alpha _2})…\phi(p_r^{\alpha _r})=p_1^{\alpha _1-1}(p_1-1)p_2^{\alpha _2-1}(p_2 -1)…p_r^{\alpha _r-1}(p_r -1)<br>$$</p>
 </blockquote>
 <p>计算出$\phi(N)$。</p>
 <p>例如（CTF新生赛Crypto 2）：</p>
