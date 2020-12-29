@@ -1674,15 +1674,5 @@
 
 <h3 id="父指针表示法"><a href="#父指针表示法" class="headerlink" title="父指针表示法"></a>父指针表示法</h3><p>在某些情况下，只需要知道父节点的情况（例如并查集操作）。因此每个结点仅需要保存一个指向其父节点的指针（或下标）。这种实现方法被称作父指针表示法。</p>
 <h2 id="Ⅱ-顺序存储结构"><a href="#Ⅱ-顺序存储结构" class="headerlink" title="Ⅱ - 顺序存储结构"></a>Ⅱ - 顺序存储结构</h2>]]></content>
-      <categories>
-        <category>MATHEMATICS &amp; ALGORITHM</category>
-        <category>DATA STRUCTURE</category>
-        <category>TREE &amp; GRAPH</category>
-      </categories>
-      <tags>
-        <tag>DATA STRUCTURE</tag>
-        <tag>TREE &amp; GRAPH</tag>
-        <tag>MATHEMATICS &amp; ALGORITHM</tag>
-      </tags>
   </entry>
 </search>
