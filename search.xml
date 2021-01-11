@@ -1750,4 +1750,93 @@
         <tag>TREE &amp; GRAPH</tag>
       </tags>
   </entry>
+  <entry>
+    <title>加壳与脱壳</title>
+    <url>/2021/01/11/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3/</url>
+    <content><![CDATA[<p><strong>1. 介绍CTF加壳与脱壳的含义</strong></p>
+<p><strong>2. 收集常见的加壳脱壳方式</strong></p>
+<p>在一些计算机软件里有一段专门负责保护软件不被非法修改或反编译的程序。它们一般都是先于程序运行，拿到控制权，然后完成它们保护软件的任务。这个过程被称为加壳。脱壳一般是指除掉程序的保护，用来修改程序资源。</p>
+<p>在CTF逆向中，程序加壳可以保证其不被反汇编和破解。因此，对于一个被加壳的二进制文件，我们首先需要对其脱壳。</p>
+<a id="more"></a>
+
+
+
+<h1 id="ExeinfoPe-exe"><a href="#ExeinfoPe-exe" class="headerlink" title="ExeinfoPe.exe"></a><code>ExeinfoPe.exe</code></h1><p><code>ExeinfoPe.exe</code>是常见的检测加壳种类的软件。</p>
+<p>下载地址： <a href="http://www.sd173.com/soft/63.html">http://www.sd173.com/soft/63.html</a></p>
+<p>打开软件后将带检测文件拖到程序中， 在最下方可以看到文件的信息以及加壳方式。</p>
+<p><img src="/2021/01/11/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3/image-20210111092205116.png" alt="image-20210111092205116"></p>
+<h1 id="常见加壳类型收集"><a href="#常见加壳类型收集" class="headerlink" title="常见加壳类型收集"></a>常见加壳类型收集</h1><h2 id="UPX"><a href="#UPX" class="headerlink" title="UPX"></a>UPX</h2><p>题目链接：</p>
+<p><a href="https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=0&amp;id=5077&amp;page=1">https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=0&amp;id=5077&amp;page=1</a></p>
+<p>使用<code>ExeinfoPe</code>可以查出该程序使用的是UPX加壳。</p>
+<p><strong>Kali系统中自带了UPX的脱壳程序。</strong>在Kali系统中使用<code>upx -d &#39;filename&#39;</code>即可对其脱壳。</p>
+<img src="/2021/01/11/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3/image-20210111092544075.png" alt="image-20210111092544075" style="zoom:80%;">
+
+<p>脱壳之后的程序可以正常地使用IDA进行反汇编，得到</p>
+<p><img src="/2021/01/11/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3/image-20210111092636208.png" alt="image-20210111092636208"></p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>REVERSE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【WP】逆向-re_easyvm</title>
+    <url>/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/</url>
+    <content><![CDATA[<p><strong>SDU CTF第一次实训 <code>re_easyvm</code></strong></p>
+<p><strong><a href="http://10.102.32.142:8000/challenges#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%9E%E8%AE%AD%20re_easyvm">http://10.102.32.142:8000/challenges#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%9E%E8%AE%AD%20re_easyvm</a></strong></p>
+<a id="more"></a>
+
+<h1 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h1><p>首先将文件拖入IDA中执行反汇编，并进入<code>main</code>函数中。</p>
+<p><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111103523147.png" alt="image-20210111103523147"></p>
+<p><strong>破解该程序的第一步是要理解这些循环跳转的逻辑。</strong>下面是在分析代码逻辑的基础上对一些标识符、函数的命名和注释。</p>
+<img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111104432120.png" alt="image-20210111104432120" style="zoom:67%;">
+
+<ul>
+<li>在初始化下，<code>v5 == 0</code>，因此进入循环后首先到第46行，输出欢迎语句，并赋值<code>v5 = 65324</code>。</li>
+<li>之后到达第24行，赋值<code>v5 = 2541</code>，并输入字符串。**<code>Handler[0] = input</code>可以看出来<code>Handler[0]</code>是一个数组指针，在这里它指向输入字符串的第一个字符。**</li>
+<li>之后到达第22行，<code>DoSomething</code>函数是整个程序的核心函数，该函数返回值包括<code>28</code>和<code>31</code>。</li>
+<li>如果上面一步返回的是<code>28</code> ，程序将到53行，在执行<code>sub_401340</code>函数之后，重新回到第22行。因此，我们可以看出来<strong>程序的第22行<code>DoSomething</code>函数和第53行<code>sub_401340</code>函数之间构成了一个循环</strong>。而如果上一步程序返回<code>31</code>，啧执行到第33到第42行，这一块是一个检查程序，<code>sub_401360</code>函数即为检查程序是否通过的函数。</li>
+</ul>
+<p>因此，理解程序的核心就是理解<code>DoSomething</code>和<code>sub_401340</code>两个函数。</p>
+<h1 id="DoSomething和sub-401340两个函数构成的循环"><a href="#DoSomething和sub-401340两个函数构成的循环" class="headerlink" title="DoSomething和sub_401340两个函数构成的循环"></a><code>DoSomething</code>和<code>sub_401340</code>两个函数构成的循环</h1><h2 id="函数DoSomething"><a href="#函数DoSomething" class="headerlink" title="函数DoSomething"></a>函数<code>DoSomething</code></h2><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111110040088.png" alt="image-20210111110040088" style="zoom: 80%;">
+
+<p>理解该函数有一个核心的点需要理解，将这个点理解清楚之后，整个函数就可以很容易地理解。</p>
+<p><strong><code>a1 + 4</code>和<code>a1 + 8</code>是什么意思？</strong></p>
+<p>为了理解这两个的含义，我们首先跳出该函数。在调用该函数的地方，我们可以看到<code>v5 = DoSomething(&amp;v5);</code>。因此在这里<code>a1</code>是一个指针，因此<code>a1 + 4</code>和<code>a1 + 8</code>是基于偏移量的指针移动。那么下一个问题就是它偏移到什么位置了。</p>
+<p>在<code>main</code>函数的开始部分，有这样的变量声明。</p>
+<img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111111105695.png" alt="image-20210111111105695" style="zoom: 80%;">
+
+<p>在一个函数内部，<strong>变量在内存中的存储是相邻的，并且是遵照声明的顺序</strong>。<strong>因此<code>a1 + 4</code>指向的就是<code>Handler[0]</code>，而<code>a1 + 8</code>指向的就是<code>Handler[1]</code>。</strong></p>
+<p>因此，我们就可以掌握该函数的逻辑，<code>return 31</code>是判断循环结束的标志，当<code>Handler[0]</code>（前面说过是一个字符串数组指针）位置的字符为<code>\0</code>（即字符串结束标志），则结束整个循环。（因此我们可以首先猜测这个函数需要对每一位字符串进行处理）如果没有结束，则将该位置的字符异或上<code>Handler[1]</code>（<strong>的低八位</strong>），并递增<code>Handler[1]++</code>。最后返回<code>28</code>。</p>
+<h2 id="函数sub-401340"><a href="#函数sub-401340" class="headerlink" title="函数sub_401340"></a>函数<code>sub_401340</code></h2><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111111703713.png" alt="image-20210111111703713" style="zoom:80%;">
+
+<p>在这里，**<code>a1</code>是<code>main</code>函数中的<code>Handler</code>，而<code>Handler</code>是一个数组。因此<code>*a1</code>即<code>*Handler</code>即<code>Handler[0]</code>**。因此，该函数第3行的目的是令<code>Handler[0]++</code>，（之前提到过<code>Handler</code>是一个字符串指针），即指向字符串的下一个位置。</p>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>结合两个函数各自的功能，我们就可以总结出整个程序的目的是<strong>将输入字符串的第零位异或上0，第一位异或上1，第二位异或上2……依次类推</strong>。</p>
+<h1 id="Check块"><a href="#Check块" class="headerlink" title="Check块"></a>Check块</h1><p>最后我们关注程序的最后检查部分。</p>
+<img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111113945414.png" alt="image-20210111113945414" style="zoom:80%;">
+
+
+
+<p><strong>在这里，我们还有一个点需要注意。计算机的存储是小端开始的，因此，例如上面的<code>Jl2d</code>是输入字符串的前四位，但是<code>d</code>应该是这四位字符串的最低位，而<code>J</code>则是这四位字符串的最高位。</strong></p>
+<p>最后，我们可以看出来，在对原始字符串进行处理之后，得到的新的字符串应该是<code>d2lJft|E_pUy=8j5</code>。</p>
+<p>编写脚本获得转换前的字符串（<code>b XOR (a XOR b) == a</code>）。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">code = <span class="string">&#x27;d2lJft|E_pUy=8j5&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">    print(<span class="built_in">chr</span>(<span class="built_in">ord</span>(code[i]) ^ i), end=<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>得到输入<code>d3nIbqzBWy_r15d:</code></p>
+<p><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111114200558.png" alt="image-20210111114200558"></p>
+<p>最后用MD5进行加密，就可以得到flag为<code>flag&#123;579243b4c7b52756583888d9e7bfbf2f&#125;</code>。</p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>REVERSE</tag>
+      </tags>
+  </entry>
 </search>

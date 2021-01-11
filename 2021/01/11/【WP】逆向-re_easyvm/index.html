@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CTF,REVERSE," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SDU CTF第一次实训 re_easyvm http:&#x2F;&#x2F;10.102.32.142:8000&#x2F;challenges#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%9E%E8%AE%AD%20re_easyvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【WP】逆向-re_easyvm">
+<meta property="og:url" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/index.html">
+<meta property="og:site_name" content="Juvenile">
+<meta property="og:description" content="SDU CTF第一次实训 re_easyvm http:&#x2F;&#x2F;10.102.32.142:8000&#x2F;challenges#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%9E%E8%AE%AD%20re_easyvm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111103523147.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111104432120.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111110040088.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111111105695.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111111703713.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111113945414.png">
+<meta property="og:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111114200558.png">
+<meta property="article:published_time" content="2021-01-11T02:30:37.000Z">
+<meta property="article:modified_time" content="2021-01-11T03:44:43.431Z">
+<meta property="article:author" content="Juvenile @ NiuJuxin">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="REVERSE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111103523147.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://juvenile-sdu.github.io/2021/01/11/【WP】逆向-re_easyvm/"/>
+
+
+
+
+
+  <title>【WP】逆向-re_easyvm | Juvenile</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Juvenile</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Juvenile @ NiuJuxin Personal Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://juvenile-sdu.github.io/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Juvenile">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【WP】逆向-re_easyvm</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-11T10:30:37+08:00">
+                2021-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/REVERSE/" itemprop="url" rel="index">
+                    <span itemprop="name">REVERSE</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>SDU CTF第一次实训 <code>re_easyvm</code></strong></p>
+<p><strong><a target="_blank" rel="noopener" href="http://10.102.32.142:8000/challenges#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%9E%E8%AE%AD%20re_easyvm">http://10.102.32.142:8000/challenges#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AE%9E%E8%AE%AD%20re_easyvm</a></strong></p>
+<a id="more"></a>
+
+<h1 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h1><p>首先将文件拖入IDA中执行反汇编，并进入<code>main</code>函数中。</p>
+<p><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111103523147.png" alt="image-20210111103523147"></p>
+<p><strong>破解该程序的第一步是要理解这些循环跳转的逻辑。</strong>下面是在分析代码逻辑的基础上对一些标识符、函数的命名和注释。</p>
+<img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111104432120.png" alt="image-20210111104432120" style="zoom:67%;">
+
+<ul>
+<li>在初始化下，<code>v5 == 0</code>，因此进入循环后首先到第46行，输出欢迎语句，并赋值<code>v5 = 65324</code>。</li>
+<li>之后到达第24行，赋值<code>v5 = 2541</code>，并输入字符串。**<code>Handler[0] = input</code>可以看出来<code>Handler[0]</code>是一个数组指针，在这里它指向输入字符串的第一个字符。**</li>
+<li>之后到达第22行，<code>DoSomething</code>函数是整个程序的核心函数，该函数返回值包括<code>28</code>和<code>31</code>。</li>
+<li>如果上面一步返回的是<code>28</code> ，程序将到53行，在执行<code>sub_401340</code>函数之后，重新回到第22行。因此，我们可以看出来<strong>程序的第22行<code>DoSomething</code>函数和第53行<code>sub_401340</code>函数之间构成了一个循环</strong>。而如果上一步程序返回<code>31</code>，啧执行到第33到第42行，这一块是一个检查程序，<code>sub_401360</code>函数即为检查程序是否通过的函数。</li>
+</ul>
+<p>因此，理解程序的核心就是理解<code>DoSomething</code>和<code>sub_401340</code>两个函数。</p>
+<h1 id="DoSomething和sub-401340两个函数构成的循环"><a href="#DoSomething和sub-401340两个函数构成的循环" class="headerlink" title="DoSomething和sub_401340两个函数构成的循环"></a><code>DoSomething</code>和<code>sub_401340</code>两个函数构成的循环</h1><h2 id="函数DoSomething"><a href="#函数DoSomething" class="headerlink" title="函数DoSomething"></a>函数<code>DoSomething</code></h2><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111110040088.png" alt="image-20210111110040088" style="zoom: 80%;">
+
+<p>理解该函数有一个核心的点需要理解，将这个点理解清楚之后，整个函数就可以很容易地理解。</p>
+<p><strong><code>a1 + 4</code>和<code>a1 + 8</code>是什么意思？</strong></p>
+<p>为了理解这两个的含义，我们首先跳出该函数。在调用该函数的地方，我们可以看到<code>v5 = DoSomething(&amp;v5);</code>。因此在这里<code>a1</code>是一个指针，因此<code>a1 + 4</code>和<code>a1 + 8</code>是基于偏移量的指针移动。那么下一个问题就是它偏移到什么位置了。</p>
+<p>在<code>main</code>函数的开始部分，有这样的变量声明。</p>
+<img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111111105695.png" alt="image-20210111111105695" style="zoom: 80%;">
+
+<p>在一个函数内部，<strong>变量在内存中的存储是相邻的，并且是遵照声明的顺序</strong>。<strong>因此<code>a1 + 4</code>指向的就是<code>Handler[0]</code>，而<code>a1 + 8</code>指向的就是<code>Handler[1]</code>。</strong></p>
+<p>因此，我们就可以掌握该函数的逻辑，<code>return 31</code>是判断循环结束的标志，当<code>Handler[0]</code>（前面说过是一个字符串数组指针）位置的字符为<code>\0</code>（即字符串结束标志），则结束整个循环。（因此我们可以首先猜测这个函数需要对每一位字符串进行处理）如果没有结束，则将该位置的字符异或上<code>Handler[1]</code>（<strong>的低八位</strong>），并递增<code>Handler[1]++</code>。最后返回<code>28</code>。</p>
+<h2 id="函数sub-401340"><a href="#函数sub-401340" class="headerlink" title="函数sub_401340"></a>函数<code>sub_401340</code></h2><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111111703713.png" alt="image-20210111111703713" style="zoom:80%;">
+
+<p>在这里，**<code>a1</code>是<code>main</code>函数中的<code>Handler</code>，而<code>Handler</code>是一个数组。因此<code>*a1</code>即<code>*Handler</code>即<code>Handler[0]</code>**。因此，该函数第3行的目的是令<code>Handler[0]++</code>，（之前提到过<code>Handler</code>是一个字符串指针），即指向字符串的下一个位置。</p>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>结合两个函数各自的功能，我们就可以总结出整个程序的目的是<strong>将输入字符串的第零位异或上0，第一位异或上1，第二位异或上2……依次类推</strong>。</p>
+<h1 id="Check块"><a href="#Check块" class="headerlink" title="Check块"></a>Check块</h1><p>最后我们关注程序的最后检查部分。</p>
+<img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111113945414.png" alt="image-20210111113945414" style="zoom:80%;">
+
+
+
+<p><strong>在这里，我们还有一个点需要注意。计算机的存储是小端开始的，因此，例如上面的<code>Jl2d</code>是输入字符串的前四位，但是<code>d</code>应该是这四位字符串的最低位，而<code>J</code>则是这四位字符串的最高位。</strong></p>
+<p>最后，我们可以看出来，在对原始字符串进行处理之后，得到的新的字符串应该是<code>d2lJft|E_pUy=8j5</code>。</p>
+<p>编写脚本获得转换前的字符串（<code>b XOR (a XOR b) == a</code>）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">code = <span class="string">&#x27;d2lJft|E_pUy=8j5&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">    print(<span class="built_in">chr</span>(<span class="built_in">ord</span>(code[i]) ^ i), end=<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>得到输入<code>d3nIbqzBWy_r15d:</code></p>
+<p><img src="/2021/01/11/%E3%80%90WP%E3%80%91%E9%80%86%E5%90%91-re_easyvm/image-20210111114200558.png" alt="image-20210111114200558"></p>
+<p>最后用MD5进行加密，就可以得到flag为<code>flag&#123;579243b4c7b52756583888d9e7bfbf2f&#125;</code>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/REVERSE/" rel="tag"># REVERSE</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/11/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3/" rel="next" title="加壳与脱壳">
+                <i class="fa fa-chevron-left"></i> 加壳与脱壳
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Juvenile @ NiuJuxin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
