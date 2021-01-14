@@ -1839,4 +1839,48 @@
         <tag>REVERSE</tag>
       </tags>
   </entry>
+  <entry>
+    <title>【WP】answer_to_everything elrond32</title>
+    <url>/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/</url>
+    <content><![CDATA[<p><strong>题目1： answer_to_everything</strong></p>
+<p><a href="https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=5511&amp;page=1">https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=5511&amp;page=1</a></p>
+<p><strong>题目2：elrond32</strong></p>
+<p><a href="https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=4750&amp;page=1">https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=4750&amp;page=1</a></p>
+<a id="more"></a>
+
+<h1 id="answer-to-everything"><a href="#answer-to-everything" class="headerlink" title="answer_to_everything"></a>answer_to_everything</h1><p>拖到IDA中，是一个非常简单的程序。</p>
+<img src="/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/image-20210114194523044.png" alt="image-20210114194523044" style="zoom:80%;">
+
+<p>可以看出来flag就是<code>kdudpeh</code>。但是如果直接将<code>flag&#123;kdudpeh&#125;</code>提交是错误的。这里要关注题目。</p>
+<img src="/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/image-20210114194646180.png" alt="image-20210114194646180" style="zoom:80%;">
+
+<p>因此需要将<code>kdudpeh</code>进行SHA1加密。得到的最后的flag是<code>flag&#123;80ee2a3fe31da904c596d993f7f1de4827c1450a&#125;</code>。</p>
+<h1 id="elrond32"><a href="#elrond32" class="headerlink" title="elrond32"></a>elrond32</h1><p>拖到IDA中。</p>
+<img src="/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/image-20210114195004613.png" alt="image-20210114195004613" style="zoom:80%;">
+
+<p>这里<code>a2[1]</code>就是输入字符串的指针，函数<code>do_something</code>首先对输入字符串进行检查，如果通过了，则继续执行<code>change_input</code>函数。</p>
+<h2 id="do-something"><a href="#do-something" class="headerlink" title="do_something"></a><code>do_something</code></h2><img src="/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/image-20210114195207424.png" alt="image-20210114195207424" style="zoom:80%;">
+
+<p>函数实际上完成了一个迭代。<code>a1</code>是输入字符串的指针，<code>ival</code>在初始条件下<code>ival = 0</code>，之后每次迭代都有<code>ival = 7 * (ival + 1) % 11</code>，我们已经计算出来（在图中）<code>ival</code>的序列为<code>0 7 1 3 6 5 9 4 2 0</code>。</p>
+<p>实际上<code>switch</code>对字符串进行了一个检查，将字符串的每个位置与<code>ival</code>序列进行对应（例如<code>0</code>对应<code>*a1 = &#39;i&#39;</code>，<code>7</code>对应<code>*(a1 + 1) = s</code>等），可以看出我们的输入字符串应该是<code>isengard</code>。</p>
+<h2 id="change-input"><a href="#change-input" class="headerlink" title="change_input"></a><code>change_input</code></h2><img src="/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/image-20210114195837272.png" alt="image-20210114195837272" style="zoom:80%;">
+
+<p><code>change_input</code>实际上就是将输入字符串按顺序循环与<code>unk_8048760</code>进行异或。我们首先需要知道<code>unk_8048760</code>的信息。</p>
+<img src="/2021/01/14/%E3%80%90WP%E3%80%91answer_to_everything%20elrond32/image-20210114195944959.png" alt="image-20210114195944959" style="zoom:80%;">
+
+<p>由于数组在内存中是按顺序存储的，所以我们可以直接在内存中查看信息。<strong>另外这里同样用到的一个知识点是计算机是小端存储的，因此进行异或的应该是每四个字节中的第一个字节。</strong></p>
+<p>编写脚本辅助我们进行计算。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">lst = [</span><br><span class="line">    <span class="number">0xf</span>, <span class="number">0x1f</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">0x1c</span>, <span class="number">0x12</span>, <span class="number">0x42</span>, <span class="number">9</span>, </span><br><span class="line">    <span class="number">0xc</span>, <span class="number">0x44</span>, <span class="number">0xd</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">6</span>, <span class="number">0x2d</span>, <span class="number">0x37</span>, </span><br><span class="line">    <span class="number">0x59</span>, <span class="number">0x1e</span>, <span class="number">0</span>, <span class="number">0x59</span>, <span class="number">0xf</span>, <span class="number">8</span>, <span class="number">0x1c</span>, <span class="number">0x23</span>, </span><br><span class="line">    <span class="number">0x36</span>, <span class="number">0x7</span>, <span class="number">0x55</span>, <span class="number">0x2</span>, <span class="number">0xc</span>, <span class="number">8</span>, <span class="number">0x41</span>, <span class="number">0xa</span>,</span><br><span class="line">    <span class="number">0x14</span></span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line"><span class="built_in">input</span> = <span class="string">&quot;isengard&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">33</span>):</span><br><span class="line">    print(<span class="built_in">chr</span>(lst[i] ^ <span class="built_in">ord</span>(<span class="built_in">input</span>[i % <span class="number">8</span>])), end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">print()</span><br></pre></td></tr></table></figure>
+
+<p>就可以得到flag为<code>flag&#123;s0me7hing_S0me7hinG_t0lki3n&#125;</code>。</p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>REVERSE</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>REVERSE</tag>
+      </tags>
+  </entry>
 </search>
