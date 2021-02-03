@@ -1016,7 +1016,66 @@
   <entry>
     <title>【WP】EASYHOOK</title>
     <url>/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p>攻防世界Reverse高手进阶区<code>EASYHOOK</code>，题目链接：</p>
+<p><a class="link" href="https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=4664&amp;page=2">https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=4664&amp;page=2<i class="fas fa-external-link-alt"></i></a></p>
+<p><strong>这道题主要用到了OD动态调试。</strong></p>
+<a id="more"></a>
+
+
+
+<h1 id="main函数分析"><a href="#main函数分析" class="headerlink" title="main函数分析"></a><code>main</code>函数分析</h1><p>将程序拖入IDA中，进入<code>main</code>函数，得到：</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/Outline.png" alt="Outline" style="zoom:80%;">
+
+<p>首先可以看出，<strong>要求输入的字符串长度应该为19</strong>.</p>
+<p>除此之外，16行开始的<code>if</code>语句应该是关键的判断函数，其通过判断<code>NumberOfBytesWritten</code>是否为<code>1</code>确定输入的字符串是否正确。从12行到第16行，程序一共调用了4个函数，分别是<code>sub_401220</code>、<code>CreateFileA</code>、<code>WriteFile</code>和<code>sub_401240</code>。</p>
+<p>似乎前三个函数都是关于文件写入的。而最后一个函数的参数出现了<code>&amp;NumberOfBytesWritten</code>，因此我们猜测最后一个函数可能是关键的判断函数。</p>
+<h1 id="sub-401240函数"><a href="#sub-401240函数" class="headerlink" title="sub_401240函数"></a><code>sub_401240</code>函数</h1><img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/sub401240.png" alt="sub401240" style="zoom:80%;">
+
+<p>实际上该函数并没有任何意义（或者说该函数只是起到迷惑作用）。<strong>关键在于第12行</strong>，即图中阴影行。在第8行能看出来<code>v4 = &#39;This_is_not_the_flag&#39;</code>，而<strong>第12行对<code>v4</code>的不同位置进行了比较，其结果一定是不同的</strong>。</p>
+<p>因此我们只能从前三个函数进行入手。如果我们随意输入一个长度为19的字符串，看一下输出的文件中的内容，我们可以看出<strong>程序似乎对这一串字符串进行了类似加密的操作</strong>。因此我们可以考虑从这里入手。</p>
+<h1 id="写文件函数"><a href="#写文件函数" class="headerlink" title="写文件函数"></a>写文件函数</h1><p>在IDA进入前三个函数，我们可以得到：</p>
+<p><code>sub_401220</code></p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/sub401220.png" alt="sub401220" style="zoom:80%;">
+
+<p><code>WriteFile</code></p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/writefile.png" alt="writefile" style="zoom:80%;">
+
+<p><code>CreateFileA</code></p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/createfilea.png" alt="createfilea" style="zoom:80%;">
+
+<p>从这里我们很难得到有用的信息。因此在这里我们需要使用OD进行动态调试。</p>
+<h1 id="动态调试"><a href="#动态调试" class="headerlink" title="动态调试"></a>动态调试</h1><img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/1.png" alt="1" style="zoom:80%;">
+
+<p>使用单步步过，程序首先在<code>0x004014fd</code>处停止，要求我们输入字符串，如果我们在<code>0x00401502</code>设置断点，随意输入字符串，可以发现程序直接输出了<code>Wrong</code>。因此我们可以判断所有操作都在<code>CALL</code>处调用的函数内部结束。</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/cmp.png" alt="cmp" style="zoom:80%;">
+
+<p>在这里我们找到了和静态调试结果相符的长度比较函数，其比较<code>ECX</code>寄存器（存储字符串长度）和<code>0x13</code>。</p>
+<p>继续向后，我们发现了和写文件相关的三个函数：</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/4func.png" alt="4func" style="zoom:80%;">
+
+<p>所以我们目前的任务就是判断到底哪一个（或者几个）函数是关键函数。</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/bef.png" alt="bef" style="zoom:80%;">
+
+<p>我们可以看到，在执行到<code>WriteFile</code>函数前，我们的输入还是正常的（随机输入的长度为19的字符串<code>1234567890123456789</code>）。</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/aft.png" alt="aft" style="zoom:80%;">
+
+<p>但是在执行这个函数之后，看起来我们的输入被做了转换。<strong>因此我们可以认为在<code>WriteFile</code>函数内部对输入字符串进行了操作</strong>。</p>
+<p>我们进入该函数进行逐步分析。</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/2.png" alt="2" style="zoom:80%;">
+
+<p>在这里是字符串发生变化的地方。因此我们可以判断<code>0x00401000</code>函数对字符串进行了操作。</p>
+<h1 id="sub-401000"><a href="#sub-401000" class="headerlink" title="sub_401000"></a><code>sub_401000</code></h1><p>我们用IDA，找到该地址对应的函数。<strong>原函数的两个参数都是<code>int</code>型变量。但实际上我们从刚才的动态调试已经发现第一个参数是输入字符串的指针。因此我们将其类型进行转化，就可以得到非常直观的代码：</strong></p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/sub401000.png" alt="sub401000" style="zoom:80%;">
+
+<p>而<code>byte_40A030</code>也是一个字符串，即：</p>
+<img src="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/byte.png" alt="byte" style="zoom:80%;">
+
+<p>因此该函数就是对原字符串进行了一系列修改，并与<code>byte_40A030</code>字符串进行比较。接下来要做的就是对该过程进行逆向。</p>
+<p>编写逆向脚本。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cnt = <span class="number">0x13</span></span><br><span class="line">code = [<span class="number">0x61</span>, <span class="number">0x6a</span>, <span class="number">0x79</span>, <span class="number">0x67</span>, <span class="number">0x6b</span>, <span class="number">0x46</span>, <span class="number">0x6d</span>, <span class="number">0x2e</span>, <span class="number">0x7f</span>, <span class="number">0x5f</span>, <span class="number">0x7e</span>, <span class="number">0x2d</span>, <span class="number">0x53</span>, <span class="number">0x56</span>, <span class="number">0x7b</span>, <span class="number">0x38</span>, <span class="number">0x6d</span>, <span class="number">0x4c</span>, <span class="number">0x6e</span>]</span><br><span class="line">text = code.copy()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, cnt):</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">18</span>: text[i] = code[i] ^ <span class="number">0x13</span></span><br><span class="line">    <span class="keyword">elif</span> i % <span class="number">2</span>: text[i] = (code[i] ^ i) + i</span><br><span class="line">    <span class="keyword">else</span>:       text[i] = code[i - <span class="number">2</span>] ^ (i - <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(cnt):</span><br><span class="line">    text[i] = <span class="built_in">chr</span>(text[i])</span><br><span class="line"></span><br><span class="line">print(<span class="string">&quot;&quot;</span>.join(text))</span><br></pre></td></tr></table></figure>
+
+<p>可以得到输出<code>alag&#123;Ho0k_w1th_Fun&#125;</code>.这里第一个字符可能是出题人设置的失误，最后的flag为<code>flag&#123;Ho0k_w1th_Fun&#125;</code>。</p>
+]]></content>
       <categories>
         <category>CTF</category>
       </categories>
