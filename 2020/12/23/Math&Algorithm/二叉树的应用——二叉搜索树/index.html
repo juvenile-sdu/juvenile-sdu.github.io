@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Juvenile @ Niu Juxin">
+    
+    <title>
+        
+            二叉树的应用——二叉搜索树 |
+        
+        Juvenile Blog
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"juvenile-sdu.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"The sooner you start to code, the longer the program will take."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"trigger":"auto","unescape":false,"preload":true},"code_copy":{"enable":true,"style":"mac"},"side_tools":{"enable":true},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.3.2"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 月前","year":"%s 年前"};
+  </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            <a class="logo-title" href="/">
+                Juvenile Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">二叉树的应用——二叉搜索树</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Juvenile @ Niu Juxin</span>
+                        <span class="level">Lv2</span>
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2020-12-23 18:09:55
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/MATHEMATICS-ALGORITHM/">MATHEMATICS &amp; ALGORITHM</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.1k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>9 分钟</span>
+        </span>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p><strong>在数据存储过程中，为了满足高效的插入、删除以及检索功能，需要用到二叉搜索树这一数据结构。</strong></p>
+<p>二叉搜索树是一种满足以下属性的特殊的二叉树：<strong>二叉搜索树中每个非空结点表示一个记录，若某节点左子树不为空，则左子树上所有结点的值均小于该结点的关键码值；若其右子树不为空，则右子树上所有结点的值均大于该结点的关键码值。</strong></p>
+<p>简单地说，二叉搜索树在理想情况下递归地将数据分为左右两部分，在搜索过程中，每次比较可以将所搜范围减少一半。</p>
+<a id="more"></a>
+
+<h1 id="二叉搜索树相关操作"><a href="#二叉搜索树相关操作" class="headerlink" title="二叉搜索树相关操作"></a>二叉搜索树相关操作</h1><p>本文假定二叉搜索树的结点数据定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> value;</span><br><span class="line">	TreeNode* left, * right;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">using</span> Tree = TreeNode*;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="元素的插入"><a href="#元素的插入" class="headerlink" title="元素的插入"></a>元素的插入</h2><p>通常在考虑元素的插入时要额外判断是否插入的是根节点。<strong>如果是根节点，则直接创建根节点即可</strong>。</p>
+<p>如果不是根节点，设待插入结点的关键码为<code>val</code>。引入一个辅助变量<code>cur</code>，从根结点开始，进入循环，判断：</p>
+<ul>
+<li>如果<code>cur-&gt;value == val</code>，则说明插入元素已经存在，则抛出异常。</li>
+<li>如果<code>cur-&gt;value &gt; val</code>并且<code>cur-&gt;left</code>不为<code>nullptr</code>，则说明插入元素应该在当前结点的左子树中。因此<code>cur = cur-&gt;left</code>。</li>
+<li>如果<code>cur-&gt;value &lt; val</code>并且<code>cur-&gt;left</code>不为<code>nullptr</code>，则说明插入元素应该在当前结点的右子树中。因此<code>cur = cur-&gt;right</code>。</li>
+</ul>
+<p>如果在上面的后两个判断条件中，出现了<code>cur-&gt;left</code>或者<code>cur-&gt;right</code>为<code>nullptr</code>，则退出循环。此时，<code>cur-&gt;left</code>（或者<code>cur-&gt;right</code>）即为待插入的位置。</p>
+<p>插入元素的代码如下。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">binary_search_tree::insert</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) &#123;</span><br><span class="line">		root = <span class="keyword">new</span> TreeNode();</span><br><span class="line">		root-&gt;value = val;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	Tree cur = root;</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value == val)</span><br><span class="line">			<span class="keyword">throw</span> <span class="string">&quot;Repeating Element Error.&quot;</span>;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &gt; val &amp;&amp; cur-&gt;left) &#123;</span><br><span class="line">			cur = cur-&gt;left;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &lt; val &amp;&amp; cur-&gt;right) &#123;</span><br><span class="line">			cur = cur-&gt;right;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &gt; val)		cur-&gt;left = <span class="keyword">new</span> TreeNode&#123; val, <span class="literal">nullptr</span>, <span class="literal">nullptr</span> &#125;;</span><br><span class="line">		<span class="keyword">else</span>		cur-&gt;right = <span class="keyword">new</span> TreeNode&#123; val, <span class="literal">nullptr</span>, <span class="literal">nullptr</span> &#125;;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="元素的检索"><a href="#元素的检索" class="headerlink" title="元素的检索"></a>元素的检索</h2><p>检索元素引入辅助变量<code>cur</code>，从根节点开始循环，判断：</p>
+<ul>
+<li>如果<code>cur-&gt;value == val</code>，则查找结束，返回结果。</li>
+<li>如果<code>cur-&gt;value &gt; val</code>并且<code>cur-&gt;left</code>不为<code>nullptr</code>，则说明待查找元素应该在当前结点的左子树中。因此<code>cur = cur-&gt;left</code>。</li>
+<li>如果<code>cur-&gt;value &lt; val</code>并且<code>cur-&gt;left</code>不为<code>nullptr</code>，则说明待查找元素应该在当前结点的右子树中。因此<code>cur = cur-&gt;right</code>。</li>
+</ul>
+<p>如果在上面的后两个判断条件中，出现了<code>cur-&gt;left</code>或者<code>cur-&gt;right</code>为<code>nullptr</code>，则说明待查找元素不在搜索树中。因此退出循环。</p>
+<p><strong>实际上元素插入和元素删除实质是等价的，如果查找一个元素失败，则失败的位置就可以插入这个元素。</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">binary_search_tree::find</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Tree cur = root;</span><br><span class="line">	<span class="keyword">while</span> (cur) &#123;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value == val)	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &gt; val)		cur = cur-&gt;left;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (cur-&gt;value &lt; val)	cur = cur-&gt;right;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="元素的删除"><a href="#元素的删除" class="headerlink" title="元素的删除"></a>元素的删除</h2><p>二叉搜索树的结点删除算法思想为：<strong>如果待删除结点<code>pos</code>没有左子树，则用其右子树的根节点代替该结点。若有左子树，则在左子树中找到最大的一个结点（设为<code>rep</code>），将<code>rep</code>和<code>pos</code>结点交换，并删除<code>rep</code>。</strong></p>
+<p>删除元素的逻辑比较复杂，有很多情况需要考虑。下面进行详细的说明。</p>
+<p>在删除函数中，我们<strong>一共引入了四个辅助变量，分别为<code>toDel</code>、<code>father_toDel</code>、<code>replace</code>、<code>father_replace</code>，分别表示待删除结点指针、待删除结点的父节点指针（如果待删除结点为<code>root</code>，则<code>father_toDel == nullptr</code>）、待替换结点指针（如果需要）和待替换结点的父节点指针（如果需要）</strong>。    </p>
+<ul>
+<li><strong>首先函数根据关键码在二叉搜索树中查找待删除的结点<code>toDel</code>，并在向下搜索的过程中保存<code>father_toDel</code>（初始化<code>father_toDel == nullptr</code>）。如果没有找到，则返回<code>false</code>。</strong></li>
+</ul>
+<p>删除结点需要分为两种情况考虑。</p>
+<p><strong>Situation 1</strong></p>
+<ul>
+<li><strong>如果该结点的左子树不为空，则需要在左子树中找到一个最大的替换结点<code>replace</code>。</strong>寻找方法是首先进入左子树**(即<code>replace = toDel-&gt;left, father_replace = toDel</code>)<strong>，之后不断向当前结点的右子树深入，直到当前节点的右子树为空。</strong>在搜索过程中，更新<code>father_replace</code>使其始终为<code>toDel</code>的父节点**。<ul>
+<li>之后，分析一下我们的思路。我们需要做的是将<code>replace</code>和<code>toDel</code>互换。之后将替换后的<code>toDel</code>删除。</li>
+</ul>
+</li>
+<li>我们按照顺序做如下的操作：<ol>
+<li>将<code>father_replace</code>和<code>replace</code>的连接断开，并将<code>father_replace</code>和<code>replace-&gt;left</code>连接上（**即<code>father_replace-&gt;left/right = replace-&gt;left</code>**）。（我们可以断定<code>replace</code>右子树一定为空。否则在查找替换结点的过程中一定会进入该右子树）。【到这一步，我们将<code>replace</code>从二叉搜索树中抽出来（并保持其他的结构不变）】</li>
+<li>之后，我们将抽出的<code>replace</code>结点插到<code>father_toDel</code>的子树上。<strong>这里需要考虑<code>father_toDel</code>为空的情况。此时，需要删除的结点即为<code>root</code>，这种情况我们只需要将<code>root = replace</code>即可。</strong>如果<code>father_toDel</code>不为空，则令<code>father_toDel-&gt;left/right = replace</code>。</li>
+<li>之后，**<code>replace</code>将继承<code>toDel</code>的左右子树**。即<code>replace-&gt;left = toDel-&gt;left, replace-&gt;right = toDel-&gt;right</code>。</li>
+<li>最后，删除<code>toDel</code>即可。</li>
+</ol>
+</li>
+</ul>
+<p><strong>总结一下，我们的思路是将<code>replace</code>从原位置抽出来（保持其他结构不变），插入到<code>toDel</code>的位置，并继承<code>toDel</code>的左右子树，完成替换。</strong></p>
+<p><strong>Situation 2</strong></p>
+<p>如果该子树的左结点为空，则我们仅需要<strong>用右子树的根节点代替当前结点即可</strong>。在这里，我们同样需要考虑<code>father_toDel</code>为空的情况。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">binary_search_tree::erase</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Tree toDel = root, father_toDel = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="keyword">while</span> (toDel) &#123;</span><br><span class="line">		<span class="keyword">if</span> (toDel-&gt;value == val)	</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">if</span> (toDel-&gt;value &gt; val)	</span><br><span class="line">			father_toDel = toDel, toDel = toDel-&gt;left;</span><br><span class="line">		<span class="keyword">if</span> (toDel-&gt;value &lt; val)	</span><br><span class="line">			father_toDel = toDel, toDel = toDel-&gt;right;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!toDel)		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (toDel-&gt;left) &#123;</span><br><span class="line">		Tree replace = toDel-&gt;left, father_replace = toDel;</span><br><span class="line">		<span class="keyword">while</span> (replace-&gt;right)</span><br><span class="line">			father_replace = replace, replace = replace-&gt;right;</span><br><span class="line">	</span><br><span class="line">		(father_replace-&gt;left == replace ? father_replace-&gt;left : father_replace-&gt;right) = replace-&gt;left;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!father_toDel)</span><br><span class="line">			root = replace;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			(father_toDel-&gt;left == toDel ? father_toDel-&gt;left : father_toDel-&gt;right) = replace;</span><br><span class="line"></span><br><span class="line">		replace-&gt;left = toDel-&gt;left, replace-&gt;right = toDel-&gt;right;</span><br><span class="line">		<span class="keyword">delete</span> toDel;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;		<span class="comment">//if toDel-&gt;left == nullptr</span></span><br><span class="line">		<span class="keyword">if</span> (!father_toDel)	</span><br><span class="line">			root = toDel-&gt;right;</span><br><span class="line">		<span class="keyword">else</span>	 </span><br><span class="line">			(father_toDel-&gt;left == toDel ? father_toDel-&gt;left : father_toDel-&gt;right) = toDel-&gt;right;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">delete</span> toDel;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>最后给出完整的C++代码实现。</p>
+<p><code>binary_search_tree.h</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> BINARY_SEARCH_TREE_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BINARY_SEARCH_TREE_H</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> value;</span><br><span class="line">	TreeNode* left, * right;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">using</span> Tree = TreeNode*;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">binary_search_tree</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	Tree root;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	binary_search_tree();</span><br><span class="line">	binary_search_tree(<span class="keyword">int</span>* _Arr, <span class="keyword">size_t</span> len);</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> val)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> val)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">erase</span><span class="params">(<span class="keyword">int</span> val)</span></span>;</span><br><span class="line">	~binary_search_tree();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// !BINARY_SEARCH_TREE_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p><code>binary_search_tree.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;binary_search_tree.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line">binary_search_tree::binary_search_tree()</span><br><span class="line">&#123;</span><br><span class="line">	root = <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">binary_search_tree::binary_search_tree(<span class="keyword">int</span>* _Arr, <span class="keyword">size_t</span> len)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">		insert(_Arr[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">binary_search_tree::insert</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) &#123;</span><br><span class="line">		root = <span class="keyword">new</span> TreeNode();</span><br><span class="line">		root-&gt;value = val;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	Tree cur = root;</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value == val)</span><br><span class="line">			<span class="keyword">throw</span> <span class="string">&quot;Repeating Element Error.&quot;</span>;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &gt; val &amp;&amp; cur-&gt;left) &#123;</span><br><span class="line">			cur = cur-&gt;left;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &lt; val &amp;&amp; cur-&gt;right) &#123;</span><br><span class="line">			cur = cur-&gt;right;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &gt; val)		cur-&gt;left = <span class="keyword">new</span> TreeNode&#123; val, <span class="literal">nullptr</span>, <span class="literal">nullptr</span> &#125;;</span><br><span class="line">		<span class="keyword">else</span>		cur-&gt;right = <span class="keyword">new</span> TreeNode&#123; val, <span class="literal">nullptr</span>, <span class="literal">nullptr</span> &#125;;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">binary_search_tree::find</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Tree cur = root;</span><br><span class="line">	<span class="keyword">while</span> (cur) &#123;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value == val)	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;value &gt; val)		cur = cur-&gt;left;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (cur-&gt;value &lt; val)	cur = cur-&gt;right;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">binary_search_tree::erase</span><span class="params">(<span class="keyword">int</span> val)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Tree toDel = root, father_toDel = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="keyword">while</span> (toDel) &#123;</span><br><span class="line">		<span class="keyword">if</span> (toDel-&gt;value == val)	</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">if</span> (toDel-&gt;value &gt; val)	</span><br><span class="line">			father_toDel = toDel, toDel = toDel-&gt;left;</span><br><span class="line">		<span class="keyword">if</span> (toDel-&gt;value &lt; val)	</span><br><span class="line">			father_toDel = toDel, toDel = toDel-&gt;right;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!toDel)		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (toDel-&gt;left) &#123;</span><br><span class="line">		Tree replace = toDel-&gt;left, father_replace = toDel;</span><br><span class="line">		<span class="keyword">while</span> (replace-&gt;right)</span><br><span class="line">			father_replace = replace, replace = replace-&gt;right;</span><br><span class="line">	</span><br><span class="line">		(father_replace-&gt;left == replace ? father_replace-&gt;left : father_replace-&gt;right) = replace-&gt;left;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!father_toDel)</span><br><span class="line">			root = replace;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			(father_toDel-&gt;left == toDel ? father_toDel-&gt;left : father_toDel-&gt;right) = replace;</span><br><span class="line"></span><br><span class="line">		replace-&gt;left = toDel-&gt;left, replace-&gt;right = toDel-&gt;right;</span><br><span class="line">		<span class="keyword">delete</span> toDel;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;		<span class="comment">//if toDel-&gt;left == nullptr</span></span><br><span class="line">		<span class="keyword">if</span> (!father_toDel)	</span><br><span class="line">			root = toDel-&gt;right;</span><br><span class="line">		<span class="keyword">else</span>	 </span><br><span class="line">			(father_toDel-&gt;left == toDel ? father_toDel-&gt;left : father_toDel-&gt;right) = toDel-&gt;right;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">delete</span> toDel;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">binary_search_tree::~binary_search_tree()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">queue</span>&lt;Tree&gt; que;</span><br><span class="line">	<span class="keyword">if</span> (root)		que.push(root);</span><br><span class="line">	<span class="keyword">while</span> (!que.empty()) &#123;</span><br><span class="line">		Tree cur = que.front();</span><br><span class="line">		que.pop();</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;left)	que.push(cur-&gt;left);</span><br><span class="line">		<span class="keyword">if</span> (cur-&gt;right)	que.push(cur-&gt;right);</span><br><span class="line">		<span class="keyword">delete</span> cur;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2020/12/24/Math&amp;Algorithm/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BA%94%E7%94%A8%E2%80%94%E2%80%94%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">二叉树的应用——堆与优先队列</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2020/12/23/Math&amp;Algorithm/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%91%A8%E6%B8%B8/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">二叉树的周游</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>&nbsp;-&nbsp;
+            
+            2021&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Juvenile @ Niu Juxin</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.3.2</a>
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">二叉搜索树相关操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E7%9A%84%E6%8F%92%E5%85%A5"><span class="nav-number">1.1.</span> <span class="nav-text">元素的插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E7%9A%84%E6%A3%80%E7%B4%A2"><span class="nav-number">1.2.</span> <span class="nav-text">元素的检索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E7%9A%84%E5%88%A0%E9%99%A4"><span class="nav-number">1.3.</span> <span class="nav-text">元素的删除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">代码实现</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+<script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/header-shrink.js"></script><script src="/js/back2top.js"></script><script src="/js/dark-light-toggle.js"></script>
+
+
+    <script src="/js/local-search.js"></script>
+
+
+
+    <script src="/js/code-copy.js"></script>
+
+
+
+
+<div class="post-scripts">
+    
+        <script src="/js/left-side-toggle.js"></script><script src="/js/libs/anime.min.js"></script><script src="/js/toc.js"></script>
+    
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
