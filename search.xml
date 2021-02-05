@@ -1060,4 +1060,76 @@
         <category>MATHEMATICS &amp; ALGORITHM</category>
       </categories>
   </entry>
+  <entry>
+    <title>DeepEventMine for EventExtraction 使用说明</title>
+    <url>/2021/02/05/AI/DeepEventMine%20for%20EventExtraction%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/</url>
+    <content><![CDATA[<p><strong>本文参考该项目的Github官方文档，介绍了DeepEventMine工具的安装与使用。</strong></p>
+<p>DeepEventMine工具是NLP-EventExtraction领域的一个开源工具，用于针对<strong>生物学文本（或者科技文献）</strong>进行事件提取。</p>
+<p>Github Link：<a class="link" href="https://github.com/aistairc/DeepEventMine">https://github.com/aistairc/DeepEventMine<i class="fas fa-external-link-alt"></i></a></p>
+<p>该项目基于论文<a class="link" href="https://doi.org/10.1093/bioinformatics/btaa540">DeepEventMine: End-to-end Neural Nested Event Extraction from Biomedical Texts<i class="fas fa-external-link-alt"></i></a>, Bioinformatics, 2020.</p>
+<h1 id="Linux-Environment"><a href="#Linux-Environment" class="headerlink" title="Linux Environment"></a>Linux Environment</h1><p>该工具需要在Linux环境下进行。推荐使用VMware安装Debian或者Ubuntu的虚拟机。本文的环境为VMware虚拟机中的Debian GNU/Linux 10 (buster)。</p>
+<p>Debian官网网站：<a class="link" href="https://www.debian.org/">https://www.debian.org/<i class="fas fa-external-link-alt"></i></a></p>
+<p>Ubuntu下载地址：<a class="link" href="https://ubuntu.com/download/desktop">https://ubuntu.com/download/desktop<i class="fas fa-external-link-alt"></i></a></p>
+<h1 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h1><h2 id="Python-3-6-5"><a href="#Python-3-6-5" class="headerlink" title="Python 3.6.5"></a>Python 3.6.5</h2><p>该项目需要使用3.6.5版本的Python。</p>
+<p>Python3.6.5版本下载地址：<a class="link" href="https://www.python.org/downloads/release/python-365/">https://www.python.org/downloads/release/python-365/<i class="fas fa-external-link-alt"></i></a></p>
+<h2 id="Github程序"><a href="#Github程序" class="headerlink" title="Github程序"></a>Github程序</h2><p>将该项目在Github上的Code下载下来，解压后进入解压的文件夹下。<strong>如果没有特殊说明，之后的终端操作全部在该文件夹下进行</strong>。</p>
+<h2 id="Python虚拟环境搭建以及Pytorch安装"><a href="#Python虚拟环境搭建以及Pytorch安装" class="headerlink" title="Python虚拟环境搭建以及Pytorch安装"></a>Python虚拟环境搭建以及Pytorch安装</h2><p>首先执行命令</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">apt-<span class="builtin-name">get</span> install virtualenv</span><br></pre></td></tr></table></figure>
+
+<p>安装Virtual Environment。</p>
+<p>之后执行命令</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">virtualenv -p python3 pytorch-env</span><br><span class="line">source pytorch-env/bin/activate</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">CUDA_VISIBLE_DEVICES</span>=0</span><br><span class="line"><span class="attribute">CUDA_PATH</span>=/usr/local/cuda pip install <span class="attribute">torch</span>==1.1.0 <span class="attribute">torchvision</span>==0.3.0</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>virtualenv -p python3 pytorch-env</code>将在该文件夹下新建一个用于Pytorch的虚拟环境，<code>source pytorch-env/bin/activate</code>将激活该虚拟环境。当激活虚拟环境之后，可以看到在终端提示符前有<code>(pytorch-env)</code>的说明。</p>
+<img src="/2021/02/05/AI/DeepEventMine%20for%20EventExtraction%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/1.png" alt="1" style="zoom:80%;">
+
+<p><code>pip install torch==1.1.0 torchvision==0.3.0</code>将安装所需要的Pytorch。如果下载速度过慢，可以考虑换源。例如可以将指令修改为</p>
+<p><code>pip install torch==1.1.0 torchvision==0.3.0 -i https://pypi.mirrors.ustc.edu.cn/simple/ </code></p>
+<h2 id="Python-packages-安装"><a href="#Python-packages-安装" class="headerlink" title="Python packages 安装"></a>Python packages 安装</h2><p>执行命令</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sh</span> install.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+
+<p>安装程序所需要的安装包。<strong>这个过程需要保证全部正常，如果中间出现ERROR等信息，需要重新执行命令。</strong></p>
+<h2 id="BERT模型下载"><a href="#BERT模型下载" class="headerlink" title="BERT模型下载"></a>BERT模型下载</h2><p>执行命令</p>
+<figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sh </span>download.<span class="keyword">sh </span><span class="keyword">bert</span></span><br></pre></td></tr></table></figure>
+
+<p>从PyTorch AllenNLP安装SciBERT BERT model。</p>
+<h2 id="DeepEventMine模型下载"><a href="#DeepEventMine模型下载" class="headerlink" title="DeepEventMine模型下载"></a>DeepEventMine模型下载</h2><p>根据官方文档的介绍，该项目对下面的7个任务都进行了训练：</p>
+<ol>
+<li>cg: <a class="link" href="http://2013.bionlp-st.org/tasks/cancer-genetics">Cancer Genetics (CG), 2013<i class="fas fa-external-link-alt"></i></a></li>
+<li>ge11: <a class="link" href="http://2011.bionlp-st.org/home/genia-event-extraction-genia">GENIA Event Extraction (GENIA), 2011<i class="fas fa-external-link-alt"></i></a></li>
+<li>ge13: <a class="link" href="http://bionlp.dbcls.jp/projects/bionlp-st-ge-2013/wiki/Overview">GENIA Event Extraction (GENIA), 2013<i class="fas fa-external-link-alt"></i></a></li>
+<li>id: <a class="link" href="http://2011.bionlp-st.org/home/infectious-diseases">Infectious Diseases (ID), 2011<i class="fas fa-external-link-alt"></i></a></li>
+<li>epi: <a class="link" href="http://2011.bionlp-st.org/home/epigenetics-and-post-translational-modifications">Epigenetics and Post-translational Modifications (EPI), 2011<i class="fas fa-external-link-alt"></i></a></li>
+<li>pc: <a class="link" href="http://2013.bionlp-st.org/tasks/pathway-curation">Pathway Curation (PC), 2013<i class="fas fa-external-link-alt"></i></a></li>
+<li>mlee: <a class="link" href="http://nactem.ac.uk/MLEE/">Multi-Level Event Extraction (MLEE)<i class="fas fa-external-link-alt"></i></a></li>
+</ol>
+<p>我们需要通过指令</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">sh</span> <span class="selector-tag">download</span><span class="selector-class">.sh</span> <span class="selector-tag">deepeventmine</span> <span class="selector-attr">[tast]</span></span><br></pre></td></tr></table></figure>
+
+<p>安装我们需要的模型。<strong>其中<code>[tast]</code>是前面列表中提到的任务。例如，如果我们需要第七个任务，指令为<code>sh download.sh deepeventmine mlee</code>。</strong>还有一点需要注意的是，<strong>这里任务的选择需要和后面相匹配</strong>。</p>
+<h2 id="Brat工具下载"><a href="#Brat工具下载" class="headerlink" title="Brat工具下载"></a>Brat工具下载</h2><p>该项目使用Brat工具进行可视化。</p>
+<p>依次执行命令</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sh</span> download.<span class="keyword">sh</span> brat</span><br><span class="line"><span class="keyword">cd</span> brat/brat-v1.3_Crunchy_Frog/</span><br><span class="line">./install.<span class="keyword">sh</span> -<span class="keyword">u</span></span><br></pre></td></tr></table></figure>
+
+<p>安装Brat。在最后会要求输入用户名、密码和管理员邮箱。用户名和密码需要记住，之后使用Brat工具需要用到。</p>
+<h1 id="Event-Predict"><a href="#Event-Predict" class="headerlink" title="Event Predict"></a>Event Predict</h1><p>Github文档中介绍了多种方法。这里我仅需要End-to-end的raw text方式，所以仅针对这种方式说明。</p>
+<p><strong>进行事件提取需要在前面安装的虚拟环境下进行。</strong></p>
+<p>首先创建<code>/data/[dirname]/text</code>目录用于存储需要进行事件提取的文本，<code>[dirname]</code>可以任意命名，可以认为是该数据集的名称。</p>
+<p>之后将需要进行事件提取的文本放入该文件夹中（我不确定是否需要命名为<code>PMID-XXX.txt</code>，保险可以加上这一步），<strong>执行命令</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">sh</span> <span class="selector-tag">pubmed</span><span class="selector-class">.sh</span> <span class="selector-tag">e2e</span> <span class="selector-tag">rawtext</span> <span class="selector-attr">[dirname]</span> <span class="selector-attr">[task]</span> <span class="selector-attr">[0,-1]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>进行事件提取。</strong>其中<code>[dirname]</code>是前面提到的数据集的名称，<code>task</code>需要和前面的模型匹配，如果需要用到GPU，则<code>[0,-1]</code>为<code>0</code>，否则为<code>-1</code>。</p>
+<p>之后我们可以在目录<code>/brat/brat-v1.3_Crunchy_Frog/data/[dirname]-brat</code>中找到我们的结果。</p>
+<h1 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h1><p>进入文件夹<code>brat/brat-v1.3_Crunchy_Frog</code>下打开终端，执行命令</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">python2</span> <span class="selector-tag">standalone</span><span class="selector-class">.py</span></span><br></pre></td></tr></table></figure>
+
+<p>如果前述的Brat安装成功，会出现<code>Serving brat at http://XXX.XXX.XXX.XXX:XXXX</code>，表示该工具已经开始运行。使用浏览器访问前面提示中的网站，可以看到下面的界面</p>
+<img src="/2021/02/05/AI/DeepEventMine%20for%20EventExtraction%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/2.png" alt="2" style="zoom:80%;">
+
+<p>之后根据提示打开我们需要可视化的文件，就可以看到结果。</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+  </entry>
 </search>
