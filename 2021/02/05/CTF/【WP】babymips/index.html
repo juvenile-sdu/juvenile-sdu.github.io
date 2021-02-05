@@ -9,7 +9,7 @@
     
     <title>
         
-            【WP】CrackMe |
+            【WP】babymips |
         
         Juvenile Blog
     </title>
@@ -132,7 +132,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">【WP】CrackMe</span>
+            <span class="title-hover-animation">【WP】babymips</span>
         </div>
 
         
@@ -148,7 +148,7 @@
                     <div class="meta-info">
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2020-12-15 19:21:45
+        <i class="fas fa-edit"></i>&nbsp;2021-02-05 15:21:35
     </span>
     
         <span class="article-categories article-meta-item">
@@ -167,7 +167,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>584 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>468 字</span>
         </span>
     
     
@@ -184,47 +184,27 @@
         
 
         <div class="article-content markdown-body">
-            <p><strong>CrackMe.exe  2020年12月15日</strong></p>
-<ul>
-<li>通过引导字符串确定关键函数；</li>
-<li>常见的比较字符串相同的函数；</li>
-<li>使用断点调试确定函数功能；</li>
-<li>Base 64加密。</li>
-</ul>
+            <p><strong>攻防世界Reverse高手进阶区 babymips，题目链接：</strong></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=4690&amp;page=2">https://adworld.xctf.org.cn/task/answer?type=reverse&amp;number=4&amp;grade=1&amp;id=4690&amp;page=2<i class="fas fa-external-link-alt"></i></a></p>
 <a id="more"></a>
 
-<h1 id="确定关键函数"><a href="#确定关键函数" class="headerlink" title="确定关键函数"></a>确定关键函数</h1><p>在IDA中打开CrackMe.exe文件，进入反编译窗口，可以看到主函数：</p>
-<p><img src="/2020/12/15/CTF/%E3%80%90WP%E3%80%91CrackMe/image-20201215192616383.png" alt="image-20201215192616383"></p>
-<p>主函数中有</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">puts(<span class="string">&quot;input your flag:&quot;</span>)<span class="comment">;</span></span><br><span class="line">scanf(<span class="string">&quot;%s&quot;</span>, <span class="symbol">&amp;v5</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>将程序拖入IDA中，直接定位到<code>main</code>函数，可以得到：</p>
+<img src="/2021/02/05/CTF/%E3%80%90WP%E3%80%91babymips/main.png" alt="main" style="zoom:80%;">
 
-<p>非常明显的标志，因此可以看出<code>sub_4020A0()</code>函数没有实际用途，并且<code>v5</code>是输入的字符串。</p>
-<p>此外，进入函数<code>sub_401540(&amp;v6, &quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;)</code>，可以看到：</p>
-<p><img src="/2020/12/15/CTF/%E3%80%90WP%E3%80%91CrackMe/image-20201215192952032.png" alt="image-20201215192952032"></p>
-<p>下面的语句是<strong>常见的比较两个字符串是相同的</strong>函数。</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">if</span> ( *<span class="built_in">a1</span> == *<span class="built_in">a2</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">v3</span> = <span class="number">0</span><span class="comment">;</span></span><br><span class="line">    <span class="meta">while</span> ( len != ++<span class="built_in">v3</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="meta">if</span> ( <span class="built_in">a1</span>[<span class="built_in">v3</span>] != <span class="built_in">a2</span>[<span class="built_in">v3</span>] )</span><br><span class="line">        return puts(<span class="string">&quot;wrong!&quot;</span>)<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    return puts(<span class="string">&quot;you win!!&quot;</span>)<span class="comment">;</span></span><br><span class="line">  &#125;</span><br><span class="line">  return puts(<span class="string">&quot;wrong!&quot;</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>程序的结构非常清楚。</p>
+<p><strong>这道题重要的点在于第11行开始的<code>for</code>循环，初看感觉所有的语句都是和<code>i</code>这样一个循环计数器有关的，因此可能会将其认为是一些混淆代码而略过去。但是需要关注的是第四行第五行，<code>i</code>的下一个位置就是我们的输入<code>v5</code>。而<code>for</code>循环内部，<code>((_BYTE *)&amp;i + 4)</code>实际上就是<code>&amp;v5</code>，因此这个<code>for</code>循环实际上是对我们的输入首先进行了一次逐位异或。</strong></p>
+<p>这个细节实际上和<code>re_easyvm</code>（见<a class="link" target="_blank" rel="noopener" href="http://www.niujuxin.com/2021/01/11/CTF/%E3%80%90WP%E3%80%91re_easyvm/">WP链接<i class="fas fa-external-link-alt"></i></a>）非常相似，应该是reverse经常出现的一个点。</p>
+<p>之后的结构也都非常清楚了。在13行，程序首先对输入字符串的前五个字符进行比较，<code>fdata</code>字符串的内容是<code>&quot;Q|j&#123;g&quot;</code>。</p>
+<p>进入第14行的函数内部，得到：</p>
+<img src="/2021/02/05/CTF/%E3%80%90WP%E3%80%91babymips/func1.png" alt="func1" style="zoom:80%;">
 
-<p>因此， 我们可以初步得出程序的结构，即</p>
-<p><strong>程序输入一个字符串<code>v5</code>后，通过函数<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>得到一个字符串<code>v6</code>，如果该字符串为<code>&quot;5GRB5XNU6jlT3TlT3WpB8W0WtldF+msR42ZH5yld&quot;</code>,则说明该字符串为最后的flag。</strong></p>
-<p>因此，我们需要重点关注<code>sub_401500(aAbcdefghijklmn)</code>和<code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code>函数。</p>
-<h1 id="函数逆向"><a href="#函数逆向" class="headerlink" title="函数逆向"></a>函数逆向</h1><h2 id="sub-401500-aAbcdefghijklmn"><a href="#sub-401500-aAbcdefghijklmn" class="headerlink" title="sub_401500(aAbcdefghijklmn)"></a><code>sub_401500(aAbcdefghijklmn)</code></h2><p>通过IDA可以看到：</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.data:<span class="number">00403040</span> aAbcdefghijklmn db &#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<span class="number">0123456789</span>+/&#x27;,<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>程序从第五行开始对输入字符串的每一位都进行了操作，最后和<code>cmpstr</code>进行比较，<code>cmpstr</code>的值也可以在栈中找到，如下。</p>
+<img src="/2021/02/05/CTF/%E3%80%90WP%E3%80%91babymips/cmpstr.png" alt="cmpstr" style="zoom:80%;">
 
-<p>变量<code>aAbcdefghijklmn</code>是一个字符串。该函数如下：</p>
-<p><img src="/2020/12/15/CTF/%E3%80%90WP%E3%80%91CrackMe/image-20201215194438600.png" alt="image-20201215194438600"></p>
-<p>该函数对传入的数组进行了一些修改。<strong>由于我们传入的是一个已知的字符串变量，因此我们可以利用调试查出执行该函数后的变量值</strong>。</p>
-<p><img src="/2020/12/15/CTF/%E3%80%90WP%E3%80%91CrackMe/image-20201215194802943.png" alt="image-20201215194802943"></p>
-<p>从这里可以看出，修改后的变量为</p>
-<p><code>ghijklmnopqrstuvxxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef</code></p>
-<h2 id="sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4"><a href="#sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4" class="headerlink" title="sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)"></a><code>sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</code></h2><p><strong>如果对Base 64编码比较熟悉的话， 从上一个函数得到的字符串来看，包括A-Z、a-z、0-9以及+和/，很容易想到这可能是一个Base 64的换表加密。再加上一些比较明显的标记，例如</strong></p>
-<p><img src="/2020/12/15/CTF/%E3%80%90WP%E3%80%91CrackMe/image-20201215195712853.png" alt="image-20201215195712853"></p>
-<p><strong>和</strong></p>
-<p><img src="/2020/12/15/CTF/%E3%80%90WP%E3%80%91CrackMe/image-20201215195755086.png" alt="image-20201215195755086"></p>
-<p><strong>应该可以确定该函数就是一个换表Base 64加密</strong>。</p>
-<p>我们可以利用将最后一个函数的比较字符串通过换表Base 64函数还原到原字符串来确定我们猜测的正确性。</p>
-<p>经过换表Base 64的反编码，我们得到了字符串</p>
-<p><code>flag&#123;th1s_1s_base64_exc1ange!&#125;</code></p>
-<p>我们能够断定我们的猜测是正确的。</p>
+<p>最后，可以根据程序编写逆向脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">code = [<span class="built_in">ord</span>(<span class="string">&#x27;Q&#x27;</span>), <span class="built_in">ord</span>(<span class="string">&#x27;|&#x27;</span>), <span class="built_in">ord</span>(<span class="string">&#x27;j&#x27;</span>), <span class="built_in">ord</span>(<span class="string">&#x27;&#123;&#x27;</span>), <span class="built_in">ord</span>(<span class="string">&#x27;g&#x27;</span>),</span><br><span class="line">        <span class="number">0x52</span>, <span class="number">0xfd</span>, <span class="number">0x16</span>, <span class="number">0xa4</span>, <span class="number">0x89</span>, <span class="number">0xbd</span>, <span class="number">0x92</span>, <span class="number">0x80</span>, <span class="number">0x13</span>,</span><br><span class="line">        <span class="number">0x41</span>, <span class="number">0x54</span>, <span class="number">0xa0</span>, <span class="number">0x8d</span>, <span class="number">0x45</span>, <span class="number">0x18</span>, <span class="number">0x81</span>, <span class="number">0xde</span>, <span class="number">0xfc</span>,</span><br><span class="line">        <span class="number">0x95</span>, <span class="number">0xf0</span>, <span class="number">0x16</span>, <span class="number">0x79</span>, <span class="number">0x1a</span>, <span class="number">0x15</span>, <span class="number">0x5b</span>, <span class="number">0x75</span>, <span class="number">0x1f</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>, <span class="built_in">len</span>(code)):</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">2</span>:   code[i] = ((code[i] &lt;&lt; <span class="number">2</span>) | (code[i] &gt;&gt; <span class="number">6</span>))</span><br><span class="line">    <span class="keyword">else</span>:       code[i] = ((code[i] &lt;&lt; <span class="number">6</span>) | (code[i] &gt;&gt; <span class="number">2</span>))</span><br><span class="line">    code[i] = code[i] &amp; <span class="number">0b11111111</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(code)):</span><br><span class="line">    code[i] ^= <span class="number">32</span> - i</span><br><span class="line">    code[i] = <span class="built_in">chr</span>(code[i])</span><br><span class="line"></span><br><span class="line">print(<span class="string">&quot;&quot;</span>.join(code))</span><br></pre></td></tr></table></figure>
+
+<p>得到最后的flag为<code>qctf&#123;ReA11y_4_B@89_mlp5_4_XmAn_&#125;</code>。</p>
 
         </div>
 
@@ -233,29 +213,14 @@
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2020/12/19/Math&amp;Algorithm/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E2%80%94%E2%80%94KMP%E7%AE%97%E6%B3%95/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item">字符串匹配——KMP算法</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2020/12/13/Math&amp;Algorithm/%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Base%2064/"
+                           href="/2021/02/03/CTF/%E3%80%90WP%E3%80%91EASYHOOK/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">编码算法——Base 64</span>
+                                <span class="post-nav-title-item">【WP】EASYHOOK</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -363,7 +328,7 @@
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E5%85%B3%E9%94%AE%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">确定关键函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%80%86%E5%90%91"><span class="nav-number">2.</span> <span class="nav-text">函数逆向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sub-401500-aAbcdefghijklmn"><span class="nav-number">2.1.</span> <span class="nav-text">sub_401500(aAbcdefghijklmn)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sub-4015B0-amp-input-strlen-amp-input-amp-v6-amp-v4"><span class="nav-number">2.2.</span> <span class="nav-text">sub_4015B0(&amp;input, strlen(&amp;input), &amp;v6, &amp;v4)</span></a></li></ol></li></ol>
+        
     </div>
 </div>
         </aside>
